@@ -62,9 +62,6 @@ function Scan({ onNext }: { onNext: () => void }) {
       <div className="flex-1 flex items-center justify-center px-7">
         <div className="relative w-[260px] h-[260px] flex items-center justify-center">
           <div className="absolute inset-0 rounded-full bg-[var(--sq-surface)]" />
-          <div className="sq-pulse-ring" style={{ animationDelay: "0s" }} />
-          <div className="sq-pulse-ring" style={{ animationDelay: ".6s" }} />
-          <div className="sq-pulse-ring" style={{ animationDelay: "1.2s" }} />
 
           <div className="relative w-[180px] h-[112px] rounded-2xl bg-white border border-[var(--sq-line)] shadow-[0_10px_30px_-12px_rgba(0,0,0,0.18)] p-3 flex flex-col justify-between">
             <div className="flex items-center justify-between">
