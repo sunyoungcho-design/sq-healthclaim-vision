@@ -156,8 +156,7 @@
 
 @layer utilities {
   .sq-screen {
-    height: 100%;
-    min-height: 100dvh;
+    height: 100dvh;
     background: #fff;
     color: var(--sq-ink);
     display: flex;
@@ -166,7 +165,7 @@
     position: relative;
   }
   @media (min-width: 768px) {
-    .sq-screen { min-height: 0 !important; height: 100%; }
+    .sq-screen { height: 844px; }
   }
   .sq-statusbar {
     display:flex; justify-content:space-between; align-items:center;
