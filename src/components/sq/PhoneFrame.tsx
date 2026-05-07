@@ -2,8 +2,10 @@ import { ReactNode } from "react";
 
 export function PhoneFrame({ children }: { children: ReactNode }) {
   return (
-    <div className="min-h-dvh w-full bg-[var(--sq-surface)] flex items-stretch md:items-center justify-center md:py-10">
-      <div className="w-full md:w-[390px] md:h-[844px] md:rounded-[48px] md:border md:border-[var(--sq-line)] md:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.25)] bg-white overflow-hidden relative">
+    <div className="min-h-dvh w-full bg-[var(--sq-surface)] flex items-stretch md:items-center justify-center md:py-6">
+      <div
+        className="w-full md:w-[390px] md:rounded-[48px] md:border md:border-[var(--sq-line)] md:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.25)] bg-white overflow-hidden relative flex flex-col md:h-[min(844px,calc(100dvh-48px))]"
+      >
         {children}
       </div>
     </div>
