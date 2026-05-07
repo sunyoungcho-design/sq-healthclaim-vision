@@ -87,9 +87,24 @@ function Scan({ onNext }: { onNext: () => void }) {
         <p className="text-[13px] text-[var(--sq-muted)]">Hold card near the top of your device</p>
       </div>
 
-      <div className="px-6 pb-8 pt-4">
+      <div className="px-6 pt-4">
         <button onClick={onNext} className="sq-btn sq-btn-primary">Start</button>
-        <div className="text-center mt-5 text-[11px] tracking-[0.2em] font-semibold text-[var(--sq-muted)]">SQUARE&nbsp;HEALTH</div>
+      </div>
+
+      <div className="px-6 pt-5 pb-6">
+        <div className="text-center text-[10px] tracking-[0.18em] font-semibold text-[var(--sq-muted)] mb-3">
+          ACCEPTED IN AUSTRALIA
+        </div>
+        <div className="flex flex-wrap items-center justify-center gap-1.5">
+          {["Medicare", "Bupa", "Medibank", "HCF", "nib", "AHM", "HBF"].map((b) => (
+            <span
+              key={b}
+              className="px-2.5 h-6 inline-flex items-center rounded-full border border-[var(--sq-line)] bg-white text-[11px] font-semibold tracking-tight text-[var(--sq-ink-2)]"
+            >
+              {b}
+            </span>
+          ))}
+        </div>
       </div>
     </>
   );
