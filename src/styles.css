@@ -162,12 +162,11 @@
     color: var(--sq-ink);
     display: flex;
     flex-direction: column;
-    max-width: 430px;
     margin: 0 auto;
     position: relative;
   }
   @media (min-width: 768px) {
-    .sq-screen { min-height: 0; }
+    .sq-screen { min-height: 0 !important; height: 100%; }
   }
   .sq-statusbar {
     display:flex; justify-content:space-between; align-items:center;
