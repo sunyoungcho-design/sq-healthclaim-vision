@@ -75,7 +75,7 @@ function Index() {
 
   return (
     <PhoneFrame
-      sideContent={printed ? <PrintedReceipt amount={amount} patientName={selectedPatients[0]?.name ?? ""} /> : undefined}
+      sideContent={printed ? <PrintedReceipt amount={amount} selectedPatients={selectedPatients} claimsByIrn={claimsByIrn} /> : undefined}
       belowContent={step === "scan" ? (
         <button
           type="button"
@@ -735,11 +735,20 @@ function Receipt({ amount, onSelect, onPrint }: { amount: number; onSelect: () =
 }
 
 /* ---------------- PRINTED RECEIPT (outside the device) ---------------- */
-function PrintedReceipt({ amount, patientName }: { amount: number; patientName: string }) {
-  const charge = 220;
-  const benefit = (160).toFixed(2);
+function PrintedReceipt({
+  amount,
+  selectedPatients,
+  claimsByIrn,
+}: {
+  amount: number;
+  selectedPatients: Patient[];
+  claimsByIrn: Record<string, LineItem[]>;
+}) {
   const now = new Date();
   const date = `${String(now.getDate()).padStart(2,"0")}/${String(now.getMonth()+1).padStart(2,"0")}/${String(now.getFullYear()).slice(2)} ${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+  const allItems = selectedPatients.flatMap((p) => claimsByIrn[p.irn] ?? []);
+  const totalCharge = allItems.reduce((s, li) => s + (li.charge || 0), 0);
+  const totalBenefit = +(totalCharge * 0.73).toFixed(2);
   return (
     <div className="sq-receipt-print">
       <div
@@ -788,26 +797,33 @@ function PrintedReceipt({ amount, patientName }: { amount: number; patientName: 
         </div>
         <div className="my-1 border-t border-dashed border-black/40" />
 
-        <div className="text-[10px] mt-2">Patient Id: {patientName.toUpperCase()}</div>
-        <div className="grid grid-cols-12 gap-1 text-[10px]">
-          <div className="col-span-3">023</div>
-          <div className="col-span-4">CONSULT</div>
-          <div className="col-span-2 text-right">DOS</div>
-          <div className="col-span-3 text-right">{date.slice(0,5)}</div>
-        </div>
-        <div className="grid grid-cols-12 gap-1 text-[10px]">
-          <div className="col-span-3">APPROVED</div>
-          <div className="col-span-4">00</div>
-          <div className="col-span-2 text-right">${charge}.00</div>
-          <div className="col-span-3 text-right">${benefit}</div>
-        </div>
+        {selectedPatients.map((p) => {
+          const items = claimsByIrn[p.irn] ?? [];
+          if (items.length === 0) return null;
+          return (
+            <div key={p.irn} className="mt-2">
+              <div className="text-[10px]">Patient: {p.name.toUpperCase()} (IRN {p.irn})</div>
+              {items.map((li, idx) => {
+                const benefit = +((li.charge || 0) * 0.73).toFixed(2);
+                return (
+                  <div key={idx} className="grid grid-cols-12 gap-1 text-[10px]">
+                    <div className="col-span-3">{li.item.code || "—"}</div>
+                    <div className="col-span-4 truncate uppercase">{li.item.description.slice(0,14)}</div>
+                    <div className="col-span-2 text-right">${(li.charge || 0).toFixed(2)}</div>
+                    <div className="col-span-3 text-right">${benefit.toFixed(2)}</div>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
 
         <div className="mt-2 text-[10px]">RRN: 000031234217</div>
         <div className="my-2 border-t border-dashed border-black/40" />
 
         <div className="flex justify-between text-[11px] font-semibold">
           <span>CLAIM TOTAL</span>
-          <span>${charge}.00 &nbsp; ${benefit}</span>
+          <span>${totalCharge.toFixed(2)} &nbsp; ${totalBenefit.toFixed(2)}</span>
         </div>
         <div className="my-2 border-t border-dashed border-black/40" />
 
