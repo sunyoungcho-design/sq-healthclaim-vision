@@ -191,7 +191,7 @@ function Summary({ onNext, onBack }: { onNext: () => void; onBack: () => void })
   return (
     <>
       <TopBar onBack={onBack} title="Statement of Claim" />
-      <div className="px-6 pt-2">
+      <div className="flex-1 overflow-y-auto px-6 pt-2 pb-2">
         <div className="sq-card p-5">
           <div className="flex items-start justify-between">
             <div>
@@ -254,8 +254,7 @@ function Summary({ onNext, onBack }: { onNext: () => void; onBack: () => void })
         </div>
       </div>
 
-      <div className="flex-1" />
-      <div className="px-6 pb-8 pt-6">
+      <div className="px-6 pb-8 pt-4 border-t border-[var(--sq-line)] bg-white">
         <button onClick={onNext} className="sq-btn sq-btn-primary">Continue</button>
       </div>
     </>
