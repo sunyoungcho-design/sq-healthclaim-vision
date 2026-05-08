@@ -169,17 +169,14 @@ function Scan({ onNext, cardCursor }: { onNext: () => void; cardCursor?: boolean
   return (
     <div
       ref={wrapRef}
-      className="contents"
+      className="flex-1 min-h-0 flex flex-col relative"
       onMouseMove={cardCursor ? (e) => {
-        const host = wrapRef.current?.parentElement;
-        if (!host) return;
-        const r = host.getBoundingClientRect();
+        const r = e.currentTarget.getBoundingClientRect();
         setPos({ x: e.clientX - r.left, y: e.clientY - r.top });
       } : undefined}
       onMouseLeave={() => setPos(null)}
       style={cardCursor ? { cursor: "none" } : undefined}
     >
-    <>
       <TopBar />
       <div className="px-6 pt-2 text-center">
         <h1 className="sq-h1">Check your cover</h1>
