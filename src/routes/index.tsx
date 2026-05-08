@@ -213,7 +213,10 @@ function Summary({ onNext, onBack }: { onNext: () => void; onBack: () => void })
           </div>
           <div className="sq-divider my-4" />
           <div className="sq-row">
-            <span className="text-[15px] font-semibold">You Pay Today</span>
+            <div className="flex flex-col">
+              <span className="text-[15px] font-semibold">You Pay Today</span>
+              <span className="text-[12px] font-medium text-[var(--sq-ink-2)] mt-0.5">Gap amount</span>
+            </div>
             <span className="text-[28px] font-semibold tracking-tight">$60.00</span>
           </div>
         </div>
