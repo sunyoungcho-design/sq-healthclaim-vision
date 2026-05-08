@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Step = "scan" | "verify" | "summary" | "reject" | "approve" | "tap" | "done";
+type Step = "scan" | "verify" | "summary" | "tap" | "done";
 
 function Index() {
   const [step, setStep] = useState<Step>("scan");
@@ -32,14 +32,12 @@ function Index() {
           {step === "verify" && <Verify onDone={() => setStep("summary")} />}
           {step === "summary" && (
             <Summary
-              onAccept={() => { setAmount(60); setStep("approve"); }}
-              onReject={() => { setAmount(220); setStep("reject"); }}
+              onAccept={() => { setAmount(60); setStep("tap"); }}
+              onReject={() => { setAmount(220); setStep("tap"); }}
               onBack={() => setStep("scan")}
             />
           )}
-          {step === "reject" && <Reject onContinue={() => setStep("tap")} onBack={() => setStep("summary")} />}
-          {step === "approve" && <Approve onApprove={() => setStep("tap")} onDecline={() => setStep("scan")} onBack={() => setStep("summary")} />}
-          {step === "tap" && <Tap amount={amount} onPaid={() => setStep("done")} onBack={() => setStep("approve")} />}
+          {step === "tap" && <Tap amount={amount} onPaid={() => setStep("done")} onBack={() => setStep("summary")} />}
           {step === "done" && <Done amount={amount} selfClaim={amount === 220} onDone={() => { setAmount(60); setStep("scan"); }} />}
         </div>
       </div>
