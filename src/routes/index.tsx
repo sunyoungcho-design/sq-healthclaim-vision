@@ -17,10 +17,11 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Step = "scan" | "verify" | "summary" | "approve" | "tap" | "done";
+type Step = "scan" | "verify" | "summary" | "reject" | "approve" | "tap" | "done";
 
 function Index() {
   const [step, setStep] = useState<Step>("scan");
+  const [amount, setAmount] = useState<number>(60);
 
   return (
     <PhoneFrame>
@@ -29,10 +30,17 @@ function Index() {
         <div className="flex-1 min-h-0 flex flex-col sq-fadein">
           {step === "scan" && <Scan onNext={() => setStep("verify")} />}
           {step === "verify" && <Verify onDone={() => setStep("summary")} />}
-          {step === "summary" && <Summary onNext={() => setStep("approve")} onBack={() => setStep("scan")} />}
+          {step === "summary" && (
+            <Summary
+              onAccept={() => { setAmount(60); setStep("approve"); }}
+              onReject={() => { setAmount(220); setStep("reject"); }}
+              onBack={() => setStep("scan")}
+            />
+          )}
+          {step === "reject" && <Reject onContinue={() => setStep("tap")} onBack={() => setStep("summary")} />}
           {step === "approve" && <Approve onApprove={() => setStep("tap")} onDecline={() => setStep("scan")} onBack={() => setStep("summary")} />}
-          {step === "tap" && <Tap onPaid={() => setStep("done")} onBack={() => setStep("approve")} />}
-          {step === "done" && <Done onDone={() => setStep("scan")} />}
+          {step === "tap" && <Tap amount={amount} onPaid={() => setStep("done")} onBack={() => setStep("approve")} />}
+          {step === "done" && <Done amount={amount} selfClaim={amount === 220} onDone={() => { setAmount(60); setStep("scan"); }} />}
         </div>
       </div>
     </PhoneFrame>
@@ -187,7 +195,7 @@ function Verify({ onDone }: { onDone: () => void }) {
 }
 
 /* ---------------- 3. SUMMARY ---------------- */
-function Summary({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
+function Summary({ onAccept, onReject, onBack }: { onAccept: () => void; onReject: () => void; onBack: () => void }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const gapRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -260,8 +268,8 @@ function Summary({ onNext, onBack }: { onNext: () => void; onBack: () => void })
       </div>
 
       <div className="px-6 pb-3 pt-3 border-t border-[var(--sq-line)] bg-white flex gap-2">
-        <button onClick={onBack} className="sq-btn sq-btn-secondary">Reject</button>
-        <button onClick={onNext} className="sq-btn sq-btn-primary">Accept</button>
+        <button onClick={onReject} className="sq-btn sq-btn-secondary">Reject</button>
+        <button onClick={onAccept} className="sq-btn sq-btn-primary">Accept</button>
       </div>
     </>
   );
@@ -321,18 +329,19 @@ function Approve({ onApprove, onDecline, onBack }: { onApprove: () => void; onDe
 }
 
 /* ---------------- 5. TAP TO PAY ---------------- */
-function Tap({ onPaid, onBack }: { onPaid: () => void; onBack: () => void }) {
+function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; onBack: () => void }) {
   useEffect(() => {
     const t = setTimeout(onPaid, 3200);
     return () => clearTimeout(t);
   }, [onPaid]);
+  const [dollars, cents] = amount.toFixed(2).split(".");
 
   return (
     <>
       <TopBar onBack={onBack} title="Tap to Pay" />
       <div className="px-7 pt-6 text-center">
         <div className="text-[13px] uppercase tracking-[0.18em] text-[var(--sq-muted)] font-semibold">Amount Due</div>
-        <div className="mt-2 text-[64px] leading-none font-semibold tracking-tight">$60<span className="text-[32px] text-[var(--sq-muted)] align-top">.00</span></div>
+        <div className="mt-2 text-[64px] leading-none font-semibold tracking-tight">${dollars}<span className="text-[32px] text-[var(--sq-muted)] align-top">.{cents}</span></div>
       </div>
 
       <div className="flex-1 flex items-center justify-center">
@@ -361,7 +370,7 @@ function Tap({ onPaid, onBack }: { onPaid: () => void; onBack: () => void }) {
 }
 
 /* ---------------- 6. DONE ---------------- */
-function Done({ onDone }: { onDone: () => void }) {
+function Done({ amount, selfClaim, onDone }: { amount: number; selfClaim: boolean; onDone: () => void }) {
   return (
     <>
       <TopBar />
@@ -370,11 +379,17 @@ function Done({ onDone }: { onDone: () => void }) {
           <Check className="w-10 h-10" strokeWidth={2.5} />
         </div>
         <h2 className="mt-7 text-[26px] font-semibold tracking-tight">Payment Complete</h2>
-        <p className="sq-sub mt-2">Your receipt has been recorded.</p>
+        <p className="sq-sub mt-2">
+          {selfClaim ? "Submit your receipt to Medicare and your fund to claim back." : "Your receipt has been recorded."}
+        </p>
 
         <div className="sq-card mt-8 p-5 w-full text-left space-y-3.5">
-          <Line label="Paid Today" value="$60.00" />
-          <Line label="Insurance Covered" value="$160.00" muted />
+          <Line label="Paid Today" value={`$${amount.toFixed(2)}`} />
+          {selfClaim ? (
+            <Line label="To Claim Back" value="$160.00" muted />
+          ) : (
+            <Line label="Insurance Covered" value="$160.00" muted />
+          )}
           <div className="sq-divider" />
           <div className="sq-row">
             <span className="text-[13px] text-[var(--sq-muted)]">Confirmation</span>
@@ -385,6 +400,64 @@ function Done({ onDone }: { onDone: () => void }) {
       <div className="px-6 pb-8 pt-6 space-y-2">
         <button onClick={onDone} className="sq-btn sq-btn-primary">Done</button>
         <button className="sq-btn sq-btn-ghost">Email Receipt</button>
+      </div>
+    </>
+  );
+}
+
+/* ---------------- REJECT / SELF-CLAIM ---------------- */
+function Reject({ onContinue, onBack }: { onContinue: () => void; onBack: () => void }) {
+  return (
+    <>
+      <TopBar onBack={onBack} title="Pay Full Amount" />
+      <div className="flex-1 min-h-0 overflow-y-auto px-6 pt-2 pb-2">
+        <div className="sq-card p-5 border-l-4 border-l-[var(--sq-ink)]">
+          <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">Claim Rejected</div>
+          <div className="text-[17px] font-semibold mt-1.5 leading-snug">You'll pay the full amount today and claim it back yourself.</div>
+          <p className="text-[13px] text-[var(--sq-muted)] mt-2 leading-relaxed">
+            We won't bulk-bill Medicare or your health fund. Submit your receipt to Services Australia and your insurer to receive your rebate.
+          </p>
+        </div>
+
+        <div className="sq-card mt-4 p-5">
+          <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mb-3">Payment Breakdown</div>
+          <div className="space-y-3.5">
+            <Line label="Treatment Total" value="$220.00" />
+            <Line label="Medicare (claim later)" value="$39.10" muted />
+            <Line label="Health fund (claim later)" value="$120.90" muted />
+          </div>
+          <div className="sq-divider my-4" />
+          <div className="rounded-lg bg-[var(--sq-surface)] p-4 flex items-center justify-between">
+            <div className="flex flex-col">
+              <span className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">You Pay Today</span>
+              <span className="text-[13px] font-medium text-[var(--sq-ink-2)] mt-1">Full amount upfront</span>
+            </div>
+            <span className="text-[32px] font-semibold tracking-tight">$220.00</span>
+          </div>
+        </div>
+
+        <div className="sq-card mt-4 p-5">
+          <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mb-3">Next Steps</div>
+          <ol className="space-y-3">
+            {[
+              "Pay $220.00 with your card at the next screen.",
+              "Receive your itemised receipt by email.",
+              "Submit your claim via the Medicare app and your health fund app.",
+              "Rebate of approximately $160.00 paid to your nominated bank account.",
+            ].map((s, i) => (
+              <li key={i} className="flex gap-3 text-[13px] text-[var(--sq-ink-2)]">
+                <span className="flex-none w-5 h-5 rounded-full bg-[var(--sq-ink)] text-white text-[11px] font-semibold flex items-center justify-center">{i + 1}</span>
+                <span className="leading-snug">{s}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+        <div className="h-6" />
+      </div>
+
+      <div className="px-6 pb-3 pt-3 border-t border-[var(--sq-line)] bg-white flex gap-2">
+        <button onClick={onBack} className="sq-btn sq-btn-secondary">Back</button>
+        <button onClick={onContinue} className="sq-btn sq-btn-primary">Pay $220.00</button>
       </div>
     </>
   );
