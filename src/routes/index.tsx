@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { PhoneFrame, StatusBar } from "@/components/sq/PhoneFrame";
-import { ChevronLeft, ChevronDown, CreditCard, Check, Wifi, Apple, X, Hand } from "lucide-react";
+import { ChevronLeft, ChevronDown, CreditCard, Check, Wifi, Apple, X, Hand, Plus } from "lucide-react";
 import nibLogo from "@/assets/insurers/nib.png";
 import medibankLogo from "@/assets/insurers/medibank.png";
 import hcfLogo from "@/assets/insurers/hcf.avif";
@@ -35,15 +35,19 @@ type Patient = { name: string; relation: string; irn: string; dob: string };
 const PATIENTS: Patient[] = [
   { name: "John Citizen", relation: "Cardholder", irn: "1", dob: "12/03/1984" },
   { name: "Sarah Citizen", relation: "Spouse", irn: "2", dob: "08/07/1986" },
+  { name: "Emma Citizen", relation: "Dependant", irn: "3", dob: "21/11/2014" },
 ];
+
+type LineItem = { item: ClaimItem; charge: number };
 
 function Index() {
   const [step, setStep] = useState<Step>("scan");
   const [amount, setAmount] = useState<number>(60);
   const [printed, setPrinted] = useState(false);
   const [patient, setPatient] = useState<Patient>(PATIENTS[0]);
-  const [item, setItem] = useState<ClaimItem>(ITEM_CATALOG[4]);
-  const [charge, setCharge] = useState<number>(ITEM_CATALOG[4].defaultCharge);
+  const [lineItems, setLineItems] = useState<LineItem[]>([
+    { item: ITEM_CATALOG[4], charge: ITEM_CATALOG[4].defaultCharge },
+  ]);
 
   // Preload the contactless icon so it's cached before the tap screen mounts
   useEffect(() => {
@@ -53,10 +57,11 @@ function Index() {
 
   const reset = () => { setAmount(60); setStep("scan"); setPrinted(false); };
 
-  // Compute benefits/gap from entered charge (simple model for prototype)
-  const medicareBenefit = +(charge * 0.18).toFixed(2);
-  const fundRebate = +(charge * 0.55).toFixed(2);
-  const gap = Math.max(0, +(charge - medicareBenefit - fundRebate).toFixed(2));
+  // Compute benefits/gap from total charge (simple model for prototype)
+  const totalCharge = +lineItems.reduce((s, li) => s + (li.charge || 0), 0).toFixed(2);
+  const medicareBenefit = +(totalCharge * 0.18).toFixed(2);
+  const fundRebate = +(totalCharge * 0.55).toFixed(2);
+  const gap = Math.max(0, +(totalCharge - medicareBenefit - fundRebate).toFixed(2));
 
   return (
     <PhoneFrame sideContent={printed ? <PrintedReceipt amount={amount} /> : undefined}>
@@ -69,10 +74,8 @@ function Index() {
             <ClaimForm
               patient={patient}
               setPatient={setPatient}
-              item={item}
-              setItem={(it) => { setItem(it); setCharge(it.defaultCharge); }}
-              charge={charge}
-              setCharge={setCharge}
+              lineItems={lineItems}
+              setLineItems={setLineItems}
               onBack={() => setStep("scan")}
               onSubmit={() => setStep("submitting")}
             />
@@ -81,13 +84,13 @@ function Index() {
           {step === "summary" && (
             <Summary
               patient={patient}
-              item={item}
-              charge={charge}
+              lineItems={lineItems}
+              totalCharge={totalCharge}
               medicareBenefit={medicareBenefit}
               fundRebate={fundRebate}
               gap={gap}
               onAccept={() => { setAmount(gap); setStep("tap"); }}
-              onReject={() => { setAmount(charge); setStep("tap"); }}
+              onReject={() => { setAmount(totalCharge); setStep("tap"); }}
               onBack={() => setStep("claim")}
             />
           )}
@@ -266,18 +269,35 @@ function Verify({ onDone }: { onDone: () => void }) {
 
 /* ---------------- 2b. CLAIM FORM ---------------- */
 function ClaimForm({
-  patient, setPatient, item, setItem, charge, setCharge, onBack, onSubmit,
+  patient, setPatient, lineItems, setLineItems, onBack, onSubmit,
 }: {
   patient: Patient;
   setPatient: (p: Patient) => void;
-  item: ClaimItem;
-  setItem: (i: ClaimItem) => void;
-  charge: number;
-  setCharge: (n: number) => void;
+  lineItems: LineItem[];
+  setLineItems: (li: LineItem[]) => void;
   onBack: () => void;
   onSubmit: () => void;
 }) {
-  const valid = charge > 0;
+  const valid = lineItems.length > 0 && lineItems.every((li) => li.charge > 0);
+
+  const updateItem = (idx: number, code: string) => {
+    const next = ITEM_CATALOG.find((i) => i.code === code);
+    if (!next) return;
+    setLineItems(lineItems.map((li, i) => i === idx ? { item: next, charge: next.defaultCharge } : li));
+  };
+  const updateCharge = (idx: number, charge: number) => {
+    setLineItems(lineItems.map((li, i) => i === idx ? { ...li, charge } : li));
+  };
+  const removeLine = (idx: number) => {
+    setLineItems(lineItems.filter((_, i) => i !== idx));
+  };
+  const addLine = () => {
+    // Pick the first item not yet added, falling back to the first in catalog
+    const used = new Set(lineItems.map((li) => li.item.code));
+    const next = ITEM_CATALOG.find((i) => !used.has(i.code)) ?? ITEM_CATALOG[0];
+    setLineItems([...lineItems, { item: next, charge: next.defaultCharge }]);
+  };
+
   return (
     <>
       <TopBar onBack={onBack} title="New Claim" />
@@ -304,37 +324,56 @@ function ClaimForm({
           })}
         </div>
 
-        <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mt-5 mb-2">Service item</div>
-        <div className="sq-card relative">
-          <select
-            value={item.code}
-            onChange={(e) => {
-              const next = ITEM_CATALOG.find((i) => i.code === e.target.value);
-              if (next) setItem(next);
-            }}
-            className="w-full bg-transparent appearance-none pl-4 pr-10 py-3 text-[14px] font-medium focus:outline-none cursor-pointer"
-          >
-            {ITEM_CATALOG.map((i) => (
-              <option key={i.code} value={i.code}>{i.code} — {i.description}</option>
-            ))}
-          </select>
-          <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--sq-muted)]" strokeWidth={2.25} />
-        </div>
+        {lineItems.map((li, idx) => (
+          <div key={idx}>
+            <div className="flex items-center justify-between mt-5 mb-2">
+              <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">
+                {lineItems.length > 1 ? `Service ${idx + 1}` : "Service item"}
+              </div>
+              {lineItems.length > 1 && (
+                <button
+                  onClick={() => removeLine(idx)}
+                  className="text-[11px] font-semibold text-[var(--sq-muted)] hover:text-[var(--sq-ink)] transition"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+            <div className="sq-card relative">
+              <select
+                value={li.item.code}
+                onChange={(e) => updateItem(idx, e.target.value)}
+                className="w-full bg-transparent appearance-none pl-4 pr-10 py-3 text-[14px] font-medium focus:outline-none cursor-pointer"
+              >
+                {ITEM_CATALOG.map((i) => (
+                  <option key={i.code} value={i.code}>{i.code} — {i.description}</option>
+                ))}
+              </select>
+              <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--sq-muted)]" strokeWidth={2.25} />
+            </div>
 
-        <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mt-5 mb-2">Charge</div>
-        <div className="sq-card p-3 flex items-center">
-          <span className="text-[24px] font-semibold tracking-tight text-[var(--sq-muted)] mr-1">$</span>
-          <input
-            type="number"
-            inputMode="decimal"
-            min={0}
-            step="0.01"
-            value={Number.isFinite(charge) ? charge : 0}
-            onChange={(e) => setCharge(parseFloat(e.target.value) || 0)}
-            className="flex-1 bg-transparent text-[24px] font-semibold tracking-tight focus:outline-none"
-          />
-        </div>
-        <div className="text-[11px] text-[var(--sq-muted)] mt-1.5 px-1">Enter the gross fee for this item.</div>
+            <div className="sq-card p-3 mt-2 flex items-center">
+              <span className="text-[24px] font-semibold tracking-tight text-[var(--sq-muted)] mr-1">$</span>
+              <input
+                type="number"
+                inputMode="decimal"
+                min={0}
+                step="0.01"
+                value={Number.isFinite(li.charge) ? li.charge : 0}
+                onChange={(e) => updateCharge(idx, parseFloat(e.target.value) || 0)}
+                className="flex-1 bg-transparent text-[24px] font-semibold tracking-tight focus:outline-none"
+              />
+            </div>
+          </div>
+        ))}
+
+        <button
+          onClick={addLine}
+          className="mt-3 w-full flex items-center justify-center gap-1.5 py-3 rounded-lg border border-dashed border-[var(--sq-line)] text-[13px] font-semibold text-[var(--sq-ink)] hover:bg-[var(--sq-surface)] transition"
+        >
+          <Plus className="w-4 h-4" strokeWidth={2.25} />
+          Add another service
+        </button>
 
         <div className="h-4" />
       </div>
@@ -368,12 +407,12 @@ function Submitting({ onDone }: { onDone: () => void }) {
 
 /* ---------------- 3. SUMMARY ---------------- */
 function Summary({
-  patient, item, charge, medicareBenefit, fundRebate, gap,
+  patient, lineItems, totalCharge, medicareBenefit, fundRebate, gap,
   onAccept, onReject, onBack,
 }: {
   patient: Patient;
-  item: ClaimItem;
-  charge: number;
+  lineItems: LineItem[];
+  totalCharge: number;
   medicareBenefit: number;
   fundRebate: number;
   gap: number;
@@ -392,9 +431,8 @@ function Summary({
         target.offsetTop - container.clientHeight / 2 + target.clientHeight / 2;
       const startTop = container.scrollTop;
       const distance = targetTop - startTop;
-      const duration = 1400; // ms — slower for a smoother feel
+      const duration = 1400;
       const startTime = performance.now();
-      // easeInOutCubic
       const ease = (t: number) =>
         t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
       let raf = 0;
@@ -447,14 +485,19 @@ function Summary({
             <div className="col-span-4 text-right">Charge</div>
           </div>
           <div className="sq-divider" />
-          <div className="grid grid-cols-12 gap-2 py-3 text-[13px]">
-            <div className="col-span-2 font-mono">{item.code}</div>
-            <div className="col-span-6">{item.description}</div>
-            <div className="col-span-4 text-right font-medium">${charge.toFixed(2)}</div>
-          </div>
+          {lineItems.map((li, idx) => (
+            <div key={idx}>
+              <div className="grid grid-cols-12 gap-2 py-3 text-[13px]">
+                <div className="col-span-2 font-mono">{li.item.code}</div>
+                <div className="col-span-6">{li.item.description}</div>
+                <div className="col-span-4 text-right font-medium">${li.charge.toFixed(2)}</div>
+              </div>
+              {idx < lineItems.length - 1 && <div className="sq-divider" />}
+            </div>
+          ))}
           <div className="sq-divider" />
           <div className="space-y-3.5 mt-4">
-            <Line label="Total Charge" value={`$${charge.toFixed(2)}`} />
+            <Line label="Total Charge" value={`$${totalCharge.toFixed(2)}`} />
             <Line label="Medicare Benefit" value={`−$${medicareBenefit.toFixed(2)}`} muted />
             <Line label="Private Health Rebate" value={`−$${fundRebate.toFixed(2)}`} muted />
           </div>
