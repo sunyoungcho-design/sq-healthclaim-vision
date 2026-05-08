@@ -156,16 +156,14 @@
 
 @layer utilities {
   .sq-screen {
-    height: 100dvh;
+    height: 100%;
+    width: 100%;
     background: #fff;
     color: var(--sq-ink);
     display: flex;
     flex-direction: column;
-    margin: 0 auto;
     position: relative;
-  }
-  @media (min-width: 768px) {
-    .sq-screen { height: 844px; }
+    overflow: hidden;
   }
   .sq-statusbar {
     display:flex; justify-content:space-between; align-items:center;
@@ -185,6 +183,8 @@
   .sq-btn-primary { background: var(--sq-ink); color: #fff; }
   .sq-btn-primary:hover { background: oklch(0.22 0 0); }
   .sq-btn-ghost { background: transparent; color: var(--sq-muted); }
+  .sq-btn-secondary { background: var(--sq-surface); color: var(--sq-ink); border: 1px solid var(--sq-line); }
+  .sq-btn-secondary:hover { background: oklch(0.96 0 0); }
   .sq-row { display:flex; justify-content:space-between; align-items:center; }
   .sq-divider { height: 1px; background: var(--sq-line); }
   .sq-fadein { animation: sq-fade .4s ease-out both; }

@@ -54,46 +54,33 @@ function Scan({ onNext }: { onNext: () => void }) {
   return (
     <>
       <TopBar />
-      <div className="px-7 pt-4">
-        <h1 className="sq-h1">Check your coverage</h1>
-        <p className="sq-sub mt-2">Scan or tap your healthcare card to continue.</p>
+      <div className="px-6 pt-2 text-center">
+        <h1 className="sq-h1">Check your cover</h1>
+        <h1 className="sq-h1">Insert, swipe or tap</h1>
+        <h1 className="sq-h1">health card</h1>
       </div>
 
-      <div className="flex-1 flex items-center justify-center px-7">
-        <div className="relative w-[260px] h-[260px] flex items-center justify-center">
-          <div className="absolute inset-0 rounded-full bg-[var(--sq-surface)]" />
-
-          <div className="relative w-[180px] h-[112px] rounded-2xl bg-white border border-[var(--sq-line)] shadow-[0_10px_30px_-12px_rgba(0,0,0,0.18)] p-3 flex flex-col justify-between">
-            <div className="flex items-center justify-between">
-              <div className="text-[10px] font-semibold tracking-widest text-[var(--sq-muted)]">HEALTH</div>
-              <Wifi className="w-3.5 h-3.5 rotate-90 text-[var(--sq-ink)]" />
-            </div>
-            <div>
-              <div className="h-1.5 w-20 rounded-full bg-[var(--sq-line)] mb-1.5" />
-              <div className="h-1.5 w-12 rounded-full bg-[var(--sq-line)]" />
-            </div>
-            <div className="flex justify-between items-end">
-              <div className="text-[9px] font-medium tracking-wider text-[var(--sq-ink-2)]">MEMBER</div>
-              <div className="text-[9px] font-mono text-[var(--sq-muted)]">•••• 4821</div>
-            </div>
+      <div className="flex items-center justify-center px-6 pt-4">
+        <div className="relative w-[180px] h-[112px] rounded-2xl bg-white border border-[var(--sq-line)] shadow-[0_10px_30px_-12px_rgba(0,0,0,0.18)] p-3 flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <div className="text-[10px] font-semibold tracking-widest text-[var(--sq-muted)]">HEALTH</div>
+            <Wifi className="w-3.5 h-3.5 rotate-90 text-[var(--sq-ink)]" />
+          </div>
+          <div>
+            <div className="h-1.5 w-20 rounded-full bg-[var(--sq-line)] mb-1.5" />
+            <div className="h-1.5 w-12 rounded-full bg-[var(--sq-line)]" />
+          </div>
+          <div className="flex justify-between items-end">
+            <div className="text-[9px] font-medium tracking-wider text-[var(--sq-ink-2)]">MEMBER</div>
+            <div className="text-[9px] font-mono text-[var(--sq-muted)]">•••• 4821</div>
           </div>
         </div>
       </div>
 
-      <div className="px-7 pb-2 text-center">
-        <p className="text-[13px] text-[var(--sq-muted)]">Hold card near the top of your device</p>
-      </div>
-
-      <div className="px-6 pt-4">
-        <button onClick={onNext} className="sq-btn sq-btn-primary">Start</button>
-      </div>
-
-      <div className="px-6 pt-5 pb-6">
-        <div className="text-center text-[10px] tracking-[0.18em] font-semibold text-[var(--sq-muted)] mb-3">
-          ACCEPTED IN AUSTRALIA
-        </div>
+      <div className="px-5 pt-4">
+        <div className="text-center text-[12px] text-[var(--sq-muted)] mb-2">We accept</div>
         <div className="flex flex-wrap items-center justify-center gap-1.5">
-          {["Medicare", "Bupa", "Medibank", "HCF", "nib", "AHM", "HBF"].map((b) => (
+          {["Medicare", "Bupa", "Medibank", "HCF", "nib"].map((b) => (
             <span
               key={b}
               className="px-2.5 h-6 inline-flex items-center rounded-full border border-[var(--sq-line)] bg-white text-[11px] font-semibold tracking-tight text-[var(--sq-ink-2)]"
@@ -102,6 +89,12 @@ function Scan({ onNext }: { onNext: () => void }) {
             </span>
           ))}
         </div>
+      </div>
+
+      <div className="flex-1" />
+
+      <div className="px-5 pb-5">
+        <button onClick={onNext} className="sq-btn sq-btn-secondary">Enter manually</button>
       </div>
     </>
   );
