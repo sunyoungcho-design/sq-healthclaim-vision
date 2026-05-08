@@ -1,11 +1,11 @@
 import { ReactNode } from "react";
 import frameImg from "@/assets/terminal-frame.png";
 
-export function PhoneFrame({ children }: { children: ReactNode }) {
+export function PhoneFrame({ children, sideContent }: { children: ReactNode; sideContent?: ReactNode }) {
   return (
-    <div className="min-h-dvh w-full bg-[var(--sq-surface)] flex items-center justify-center p-4">
+    <div className="min-h-dvh w-full bg-[var(--sq-surface)] flex items-center justify-center p-4 gap-8">
       <div
-        className="relative"
+        className="relative shrink-0"
         style={{
           aspectRatio: "520 / 816",
           height: "min(816px, calc(100dvh - 32px))",
@@ -14,7 +14,6 @@ export function PhoneFrame({ children }: { children: ReactNode }) {
           backgroundRepeat: "no-repeat",
         }}
       >
-        {/* screen area: 74-433 x 48-687 of 520x816 */}
         <div
           className="absolute overflow-hidden bg-white"
           style={{
@@ -27,6 +26,7 @@ export function PhoneFrame({ children }: { children: ReactNode }) {
           {children}
         </div>
       </div>
+      {sideContent}
     </div>
   );
 }
