@@ -72,15 +72,15 @@ function Index() {
         <button
           type="button"
           onClick={() => setCardCursor((v) => !v)}
-          className="flex items-center gap-3 px-4 py-2.5 rounded-full bg-white/5 border border-white/10 text-[13px] text-white/80 select-none hover:bg-white/10 transition"
+          className="flex items-center gap-3 px-4 py-2.5 rounded-full bg-white/[0.03] border border-white/5 text-[13px] text-white/70 select-none hover:bg-white/[0.06] transition"
         >
           <span>Card cursor</span>
           <span
             role="switch"
             aria-checked={cardCursor}
-            className={`relative inline-block w-9 h-5 rounded-full transition ${cardCursor ? "bg-[#006AFF]" : "bg-white/20"}`}
+            className={`relative inline-block w-9 h-5 rounded-full transition ${cardCursor ? "bg-[#006AFF]/80" : "bg-white/10"}`}
           >
-            <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${cardCursor ? "translate-x-4" : ""}`} />
+            <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white/90 transition-transform ${cardCursor ? "translate-x-4" : ""}`} />
           </span>
         </button>
       ) : undefined}
@@ -283,7 +283,7 @@ function Scan({ onNext, cardCursor }: { onNext: () => void; cardCursor?: boolean
           <img
             src={medicareCard}
             alt=""
-            className="w-[200px] h-auto rounded-md shadow-2xl ring-1 ring-black/20"
+            className="w-[200px] h-auto rounded-md shadow-xl ring-1 ring-white/5"
             draggable={false}
           />
         </div>
