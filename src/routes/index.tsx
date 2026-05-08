@@ -174,7 +174,7 @@ function Scan({ onNext }: { onNext: () => void }) {
                 {MORE_BRANDS.map((b) => (
                   <div
                     key={b}
-                    className="h-9 px-2 rounded-md border border-[var(--sq-line)] bg-white flex items-center justify-center text-[10px] font-semibold tracking-tight text-[var(--sq-ink-2)] text-center"
+                    className="h-9 px-2 rounded-md border border-white/10 bg-white/10 flex items-center justify-center text-[10px] font-semibold tracking-tight text-[var(--sq-ink-2)] text-center"
                   >
                     {b}
                   </div>
