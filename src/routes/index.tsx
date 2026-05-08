@@ -100,7 +100,7 @@ function Scan({ onNext }: { onNext: () => void }) {
         <h1 className="sq-h1">health card</h1>
       </div>
 
-      <div className="flex items-center justify-center px-6 pt-4">
+      <div className="flex items-center justify-center px-6 pt-8">
         <button
           onClick={onNext}
           aria-label="Tap to scan health card"
@@ -123,7 +123,7 @@ function Scan({ onNext }: { onNext: () => void }) {
       </div>
       
 
-      <div className="px-5 pt-4">
+      <div className="px-5 pt-8">
         <div className="text-center text-[12px] text-white/60 mb-2">We accept</div>
         <div className="flex flex-wrap items-center justify-center gap-2">
           {[
