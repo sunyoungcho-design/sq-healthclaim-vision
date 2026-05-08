@@ -184,38 +184,59 @@ function Verify({ onDone }: { onDone: () => void }) {
 function Summary({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
   return (
     <>
-      <TopBar onBack={onBack} title="Treatment Summary" />
+      <TopBar onBack={onBack} title="Statement of Claim" />
       <div className="px-6 pt-2">
         <div className="sq-card p-5">
-          <div className="text-[12px] font-medium text-[var(--sq-muted)] uppercase tracking-wider">Clinic</div>
-          <div className="text-[17px] font-semibold mt-0.5">Riverside Family Dental</div>
-          <div className="mt-4 sq-row">
+          <div className="flex items-start justify-between">
             <div>
-              <div className="text-[12px] text-[var(--sq-muted)]">Practitioner</div>
-              <div className="text-[15px] font-medium mt-0.5">Dr. Amelia Chen</div>
+              <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">Servicing Location</div>
+              <div className="text-[15px] font-semibold mt-1">Riverside Family Dental</div>
+              <div className="text-[12px] text-[var(--sq-muted)] mt-0.5">Suit 1, 11 Digital St, Melbourne VIC 3000</div>
             </div>
             <div className="text-right">
-              <div className="text-[12px] text-[var(--sq-muted)]">Visit</div>
-              <div className="text-[15px] font-medium mt-0.5">Today, 2:30 PM</div>
+              <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">Claim Ref</div>
+              <div className="text-[12px] font-mono mt-1">GN 1234567X</div>
+            </div>
+          </div>
+          <div className="sq-divider my-4" />
+          <div className="sq-row">
+            <div>
+              <div className="text-[11px] text-[var(--sq-muted)] uppercase tracking-wider">Servicing Provider</div>
+              <div className="text-[14px] font-medium mt-0.5">Dr. Laura Leopard</div>
+              <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">Provider No: 123456CD</div>
+            </div>
+            <div className="text-right">
+              <div className="text-[11px] text-[var(--sq-muted)] uppercase tracking-wider">Patient</div>
+              <div className="text-[14px] font-medium mt-0.5">John Citizen</div>
+              <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">Medicare: 1234 56789 1 · IRN 1</div>
             </div>
           </div>
         </div>
 
         <div className="sq-card mt-4 p-5">
-          <div className="sq-row">
-            <span className="text-[15px]">Treatment</span>
-            <span className="text-[15px] font-medium">Routine Cleaning</span>
+          <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mb-3">Service Details</div>
+          <div className="grid grid-cols-12 gap-2 text-[10px] font-semibold uppercase tracking-wider text-[var(--sq-muted)] pb-2">
+            <div className="col-span-2">Item</div>
+            <div className="col-span-6">Description</div>
+            <div className="col-span-4 text-right">Charge</div>
           </div>
-          <div className="sq-divider my-4" />
-          <div className="space-y-3.5">
-            <Line label="Treatment Total" value="$220.00" />
-            <Line label="Insurance Covers" value="−$160.00" muted />
+          <div className="sq-divider" />
+          <div className="grid grid-cols-12 gap-2 py-3 text-[13px]">
+            <div className="col-span-2 font-mono">23</div>
+            <div className="col-span-6">Professional attendance — Level B consultation</div>
+            <div className="col-span-4 text-right font-medium">$220.00</div>
+          </div>
+          <div className="sq-divider" />
+          <div className="space-y-3.5 mt-4">
+            <Line label="Total Charge" value="$220.00" />
+            <Line label="Medicare Benefit" value="−$39.10" muted />
+            <Line label="Private Health Rebate" value="−$120.90" muted />
           </div>
           <div className="sq-divider my-4" />
           <div className="rounded-lg bg-[var(--sq-surface)] p-4 flex items-center justify-between">
             <div className="flex flex-col">
               <span className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">Gap Amount</span>
-              <span className="text-[13px] font-medium text-[var(--sq-ink-2)] mt-1">You pay today</span>
+              <span className="text-[13px] font-medium text-[var(--sq-ink-2)] mt-1">Patient contribution</span>
             </div>
             <span className="text-[32px] font-semibold tracking-tight">$60.00</span>
           </div>
@@ -223,7 +244,7 @@ function Summary({ onNext, onBack }: { onNext: () => void; onBack: () => void })
 
         <div className="mt-4 flex items-center gap-2 text-[12px] text-[var(--sq-muted)] px-1">
           <Check className="w-3.5 h-3.5" />
-          Eligibility verified with BlueCross • Plan PPO 2400
+          Claim assessed electronically by Services Australia
         </div>
       </div>
 
@@ -252,16 +273,28 @@ function Approve({ onApprove, onDecline, onBack }: { onApprove: () => void; onDe
       <div className="px-7 pt-6">
         <div className="text-[14px] text-[var(--sq-muted)]">Gap amount due today</div>
         <div className="mt-1 text-[56px] leading-none font-semibold tracking-tight">$60<span className="text-[28px] text-[var(--sq-muted)] align-top">.00</span></div>
-        <p className="sq-sub mt-3">Your insurance covered part of today's treatment.</p>
+        <p className="sq-sub mt-3">Medicare and your health fund have covered the rest.</p>
       </div>
 
       <div className="px-6 mt-8">
         <div className="sq-card p-5 space-y-3.5">
-          <Line label="Treatment Total" value="$220.00" />
-          <Line label="Insurance Covered" value="−$160.00" muted />
+          <div className="flex items-center justify-between pb-1">
+            <span className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">Claim Summary</span>
+            <span className="text-[11px] font-mono text-[var(--sq-muted)]">GN 1234567X</span>
+          </div>
           <div className="sq-divider" />
           <div className="sq-row">
-            <span className="text-[15px] font-semibold">Remaining Balance</span>
+            <div>
+              <div className="text-[13px]">Item 23 — Level B consult</div>
+              <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">Dr. Laura Leopard</div>
+            </div>
+            <span className="text-[15px] font-medium">$220.00</span>
+          </div>
+          <Line label="Medicare Benefit" value="−$39.10" muted />
+          <Line label="Private Health Rebate" value="−$120.90" muted />
+          <div className="sq-divider" />
+          <div className="sq-row">
+            <span className="text-[15px] font-semibold">Gap Amount</span>
             <span className="text-[17px] font-semibold">$60.00</span>
           </div>
         </div>
