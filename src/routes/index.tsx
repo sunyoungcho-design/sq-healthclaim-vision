@@ -348,7 +348,7 @@ function ClaimForm({
     } else {
       setSelectedPatients([...selectedPatients, p]);
       if (!claimsByIrn[p.irn]) {
-        setClaimsByIrn({ ...claimsByIrn, [p.irn]: [] });
+        setClaimsByIrn({ ...claimsByIrn, [p.irn]: [{ item: EMPTY_ITEM, charge: 0 }] });
       }
     }
   };
