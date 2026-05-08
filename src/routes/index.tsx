@@ -95,10 +95,10 @@ function Index() {
           {step === "verify" && <Verify onDone={() => setStep("claim")} />}
           {step === "claim" && (
             <ClaimForm
-              patient={patient}
-              setPatient={setPatient}
-              lineItems={lineItems}
-              setLineItems={setLineItems}
+              selectedPatients={selectedPatients}
+              setSelectedPatients={setSelectedPatients}
+              claimsByIrn={claimsByIrn}
+              setClaimsByIrn={setClaimsByIrn}
               onBack={() => setStep("scan")}
               onSubmit={() => setStep("submitting")}
             />
@@ -106,8 +106,8 @@ function Index() {
           {step === "submitting" && <Submitting onDone={() => setStep("summary")} />}
           {step === "summary" && (
             <Summary
-              patient={patient}
-              lineItems={lineItems}
+              selectedPatients={selectedPatients}
+              claimsByIrn={claimsByIrn}
               totalCharge={totalCharge}
               medicareBenefit={medicareBenefit}
               fundRebate={fundRebate}
