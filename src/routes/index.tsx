@@ -656,7 +656,7 @@ function Receipt({ amount, onSelect, onPrint }: { amount: number; onSelect: () =
 }
 
 /* ---------------- PRINTED RECEIPT (outside the device) ---------------- */
-function PrintedReceipt({ amount }: { amount: number }) {
+function PrintedReceipt({ amount, patientName }: { amount: number; patientName: string }) {
   const charge = 220;
   const benefit = (160).toFixed(2);
   const now = new Date();
