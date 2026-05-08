@@ -317,54 +317,89 @@ function Verify({ onDone }: { onDone: () => void }) {
 
 /* ---------------- 2b. CLAIM FORM ---------------- */
 function ClaimForm({
-  patient, setPatient, lineItems, setLineItems, onBack, onSubmit,
+  selectedPatients, setSelectedPatients, claimsByIrn, setClaimsByIrn, onBack, onSubmit,
 }: {
-  patient: Patient;
-  setPatient: (p: Patient) => void;
-  lineItems: LineItem[];
-  setLineItems: (li: LineItem[]) => void;
+  selectedPatients: Patient[];
+  setSelectedPatients: (p: Patient[]) => void;
+  claimsByIrn: Record<string, LineItem[]>;
+  setClaimsByIrn: (m: Record<string, LineItem[]>) => void;
   onBack: () => void;
   onSubmit: () => void;
 }) {
-  const valid = lineItems.length > 0 && lineItems.every((li) => li.charge > 0);
+  const valid =
+    selectedPatients.length > 0 &&
+    selectedPatients.every((p) => {
+      const items = claimsByIrn[p.irn] ?? [];
+      return items.length > 0 && items.every((li) => li.charge > 0);
+    });
 
-  const updateItem = (idx: number, code: string) => {
+  const togglePatient = (p: Patient) => {
+    const isSelected = selectedPatients.some((s) => s.irn === p.irn);
+    if (isSelected) {
+      setSelectedPatients(selectedPatients.filter((s) => s.irn !== p.irn));
+      const next = { ...claimsByIrn };
+      delete next[p.irn];
+      setClaimsByIrn(next);
+    } else {
+      setSelectedPatients([...selectedPatients, p]);
+      if (!claimsByIrn[p.irn]) {
+        setClaimsByIrn({
+          ...claimsByIrn,
+          [p.irn]: [{ item: ITEM_CATALOG[4], charge: ITEM_CATALOG[4].defaultCharge }],
+        });
+      }
+    }
+  };
+
+  const updateItem = (irn: string, idx: number, code: string) => {
     const next = ITEM_CATALOG.find((i) => i.code === code);
     if (!next) return;
-    setLineItems(lineItems.map((li, i) => i === idx ? { item: next, charge: next.defaultCharge } : li));
+    const items = claimsByIrn[irn] ?? [];
+    setClaimsByIrn({
+      ...claimsByIrn,
+      [irn]: items.map((li, i) => (i === idx ? { item: next, charge: next.defaultCharge } : li)),
+    });
   };
-  const updateCharge = (idx: number, charge: number) => {
-    setLineItems(lineItems.map((li, i) => i === idx ? { ...li, charge } : li));
+  const updateCharge = (irn: string, idx: number, charge: number) => {
+    const items = claimsByIrn[irn] ?? [];
+    setClaimsByIrn({
+      ...claimsByIrn,
+      [irn]: items.map((li, i) => (i === idx ? { ...li, charge } : li)),
+    });
   };
-  const removeLine = (idx: number) => {
-    setLineItems(lineItems.filter((_, i) => i !== idx));
+  const removeLine = (irn: string, idx: number) => {
+    const items = claimsByIrn[irn] ?? [];
+    setClaimsByIrn({ ...claimsByIrn, [irn]: items.filter((_, i) => i !== idx) });
   };
-  const addLine = () => {
-    // Pick the first item not yet added, falling back to the first in catalog
-    const used = new Set(lineItems.map((li) => li.item.code));
+  const addLine = (irn: string) => {
+    const items = claimsByIrn[irn] ?? [];
+    const used = new Set(items.map((li) => li.item.code));
     const next = ITEM_CATALOG.find((i) => !used.has(i.code)) ?? ITEM_CATALOG[0];
-    setLineItems([...lineItems, { item: next, charge: next.defaultCharge }]);
+    setClaimsByIrn({
+      ...claimsByIrn,
+      [irn]: [...items, { item: next, charge: next.defaultCharge }],
+    });
   };
 
   return (
     <>
       <TopBar onBack={onBack} title="New Claim" />
       <div className="flex-1 min-h-0 overflow-y-auto px-6 pt-2 pb-3">
-        <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mb-2">Patient on card</div>
+        <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mb-2">Patients on card</div>
         <div className="sq-card p-2 space-y-1">
           {PATIENTS.map((p) => {
-            const active = p.name === patient.name;
+            const active = selectedPatients.some((s) => s.irn === p.irn);
             return (
               <button
                 key={p.name}
-                onClick={() => setPatient(p)}
+                onClick={() => togglePatient(p)}
                 className={`w-full flex items-center justify-between px-3 py-2.5 transition text-left ${active ? "bg-[var(--sq-surface)] border-0 rounded" : "rounded-md border border-transparent hover:bg-[var(--sq-surface)]"}`}
               >
                 <div>
                   <div className="text-[14px] font-medium">{p.name}</div>
                   <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">{p.relation} · IRN {p.irn} · DOB {p.dob}</div>
                 </div>
-                <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${active ? "bg-[var(--sq-ink)] border-[var(--sq-ink)]" : "border-[var(--sq-line)]"}`}>
+                <div className={`w-5 h-5 rounded border flex items-center justify-center ${active ? "bg-[var(--sq-ink)] border-[var(--sq-ink)]" : "border-[var(--sq-line)]"}`}>
                   {active && <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
                 </div>
               </button>
@@ -372,56 +407,67 @@ function ClaimForm({
           })}
         </div>
 
-        {lineItems.map((li, idx) => (
-          <div key={idx}>
-            <div className="flex items-center justify-between mt-5 mb-2">
-              <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">
-                {lineItems.length > 1 ? `Service ${idx + 1}` : "Service item"}
+        {selectedPatients.map((p) => {
+          const items = claimsByIrn[p.irn] ?? [];
+          return (
+            <div key={p.irn} className="mt-6">
+              <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mb-2">
+                Services for {p.name}
               </div>
-              {lineItems.length > 1 && (
-                <button
-                  onClick={() => removeLine(idx)}
-                  className="text-[11px] font-semibold text-[var(--sq-muted)] hover:text-[var(--sq-ink)] transition"
-                >
-                  Remove
-                </button>
-              )}
-            </div>
-            <div className="sq-card relative">
-              <select
-                value={li.item.code}
-                onChange={(e) => updateItem(idx, e.target.value)}
-                className="w-full bg-transparent appearance-none pl-4 pr-10 py-3 text-[14px] font-medium focus:outline-none cursor-pointer"
+
+              {items.map((li, idx) => (
+                <div key={idx} className={idx > 0 ? "mt-4" : ""}>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">
+                      {items.length > 1 ? `Service ${idx + 1}` : "Service item"}
+                    </div>
+                    {items.length > 1 && (
+                      <button
+                        onClick={() => removeLine(p.irn, idx)}
+                        className="text-[11px] font-semibold text-[var(--sq-muted)] hover:text-[var(--sq-ink)] transition"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                  <div className="sq-card relative">
+                    <select
+                      value={li.item.code}
+                      onChange={(e) => updateItem(p.irn, idx, e.target.value)}
+                      className="w-full bg-transparent appearance-none pl-4 pr-10 py-3 text-[14px] font-medium focus:outline-none cursor-pointer"
+                    >
+                      {ITEM_CATALOG.map((i) => (
+                        <option key={i.code} value={i.code}>{i.code} — {i.description}</option>
+                      ))}
+                    </select>
+                    <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--sq-muted)]" strokeWidth={2.25} />
+                  </div>
+
+                  <div className="sq-card p-3 mt-2 flex items-center">
+                    <span className="text-[24px] font-semibold tracking-tight text-[var(--sq-muted)] mr-1">$</span>
+                    <input
+                      type="number"
+                      inputMode="decimal"
+                      min={0}
+                      step="0.01"
+                      value={Number.isFinite(li.charge) ? li.charge : 0}
+                      onChange={(e) => updateCharge(p.irn, idx, parseFloat(e.target.value) || 0)}
+                      className="flex-1 bg-transparent text-[24px] font-semibold tracking-tight focus:outline-none"
+                    />
+                  </div>
+                </div>
+              ))}
+
+              <button
+                onClick={() => addLine(p.irn)}
+                className="mt-3 w-full flex items-center justify-center gap-1.5 py-3 rounded-md border border-dashed border-[var(--sq-line)] text-[13px] font-semibold text-[var(--sq-ink)] hover:bg-[var(--sq-surface)] transition"
               >
-                {ITEM_CATALOG.map((i) => (
-                  <option key={i.code} value={i.code}>{i.code} — {i.description}</option>
-                ))}
-              </select>
-              <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--sq-muted)]" strokeWidth={2.25} />
+                <Plus className="w-4 h-4" strokeWidth={2.25} />
+                Add another service
+              </button>
             </div>
-
-            <div className="sq-card p-3 mt-2 flex items-center">
-              <span className="text-[24px] font-semibold tracking-tight text-[var(--sq-muted)] mr-1">$</span>
-              <input
-                type="number"
-                inputMode="decimal"
-                min={0}
-                step="0.01"
-                value={Number.isFinite(li.charge) ? li.charge : 0}
-                onChange={(e) => updateCharge(idx, parseFloat(e.target.value) || 0)}
-                className="flex-1 bg-transparent text-[24px] font-semibold tracking-tight focus:outline-none"
-              />
-            </div>
-          </div>
-        ))}
-
-        <button
-          onClick={addLine}
-          className="mt-3 w-full flex items-center justify-center gap-1.5 py-3 rounded-md border border-dashed border-[var(--sq-line)] text-[13px] font-semibold text-[var(--sq-ink)] hover:bg-[var(--sq-surface)] transition"
-        >
-          <Plus className="w-4 h-4" strokeWidth={2.25} />
-          Add another service
-        </button>
+          );
+        })}
 
         <div className="h-4" />
       </div>
