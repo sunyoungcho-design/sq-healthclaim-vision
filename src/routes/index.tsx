@@ -377,16 +377,12 @@ function PrintedReceipt({ amount }: { amount: number }) {
   const now = new Date();
   const date = `${String(now.getDate()).padStart(2,"0")}/${String(now.getMonth()+1).padStart(2,"0")}/${String(now.getFullYear()).slice(2)} ${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
   return (
-    <div
-      className="hidden md:block absolute top-1/2 -translate-y-1/2 sq-receipt-print"
-      style={{ left: "calc(50% + 220px)" }}
-    >
+    <div className="sq-receipt-print">
       <div
-        className="bg-[#fafaf5] text-black font-mono text-[11px] leading-[1.45] shadow-[0_20px_50px_rgba(0,0,0,0.25)] origin-top"
+        className="bg-[#fafaf5] text-black font-mono text-[11px] leading-[1.45] shadow-[0_20px_50px_rgba(0,0,0,0.25)]"
         style={{
-          width: "260px",
-          padding: "18px 18px 30px",
-          transform: "rotate(-3deg)",
+          width: "280px",
+          padding: "20px 20px 32px",
           backgroundImage:
             "repeating-linear-gradient(180deg, transparent 0 22px, rgba(0,0,0,0.025) 22px 23px)",
           clipPath:
@@ -394,28 +390,24 @@ function PrintedReceipt({ amount }: { amount: number }) {
         }}
       >
         <div className="text-center">
-          <div className="text-[18px] font-bold tracking-[0.15em] flex items-center justify-center gap-2">
-            <span>⊕</span>
-            <span>HICAPS</span>
-            <span>⊕</span>
-          </div>
-          <div className="italic text-[10px] mt-0.5"><b>Fast</b> claims on the spot</div>
-          <div className="text-[9px] tracking-wide">www.hicaps.com.au</div>
+          <div className="text-[16px] font-bold tracking-[0.18em]">RIVERSIDE FAMILY DENTAL</div>
+          <div className="text-[9px] tracking-wide mt-0.5">Suite 1, 11 Digital St, Melbourne VIC 3000</div>
+          <div className="text-[9px] tracking-wide">ABN 12 345 678 910 · (03) 9000 1234</div>
         </div>
 
-        <div className="my-3 h-3 bg-black/85" />
+        <div className="my-3 border-t border-black/60" />
 
         <div className="text-center font-bold tracking-[0.2em] text-[12px] mb-2">CUSTOMER COPY</div>
 
         <div className="space-y-0.5">
-          <div className="flex justify-between"><span>Merchant ID</span><span className="bg-black text-black select-none px-6">XXXX</span></div>
-          <div className="flex justify-between"><span>Terminal ID</span><span className="bg-black text-black select-none px-6">XXXX</span></div>
+          <div className="flex justify-between"><span>Merchant ID</span><span>10293847</span></div>
+          <div className="flex justify-between"><span>Terminal ID</span><span>T-00421</span></div>
           <div className="flex justify-between"><span>Date/Time</span><span>{date}</span></div>
         </div>
 
         <div className="mt-3 space-y-0.5">
-          <div>PROVIDER NAME</div>
-          <div className="flex justify-between"><span>PROVIDER NUMBER</span><span className="bg-black text-black select-none px-6">123456CD</span></div>
+          <div className="flex justify-between"><span>PROVIDER NAME</span><span>DR L. LEOPARD</span></div>
+          <div className="flex justify-between"><span>PROVIDER NUMBER</span><span>123456CD</span></div>
         </div>
 
         <div className="my-2 border-t border-dashed border-black/40" />
@@ -432,7 +424,7 @@ function PrintedReceipt({ amount }: { amount: number }) {
         </div>
         <div className="my-1 border-t border-dashed border-black/40" />
 
-        <div className="text-[10px] mt-2">Patient Id:00</div>
+        <div className="text-[10px] mt-2">Patient Id: JOHN CITIZEN</div>
         <div className="grid grid-cols-12 gap-1 text-[10px]">
           <div className="col-span-3">023</div>
           <div className="col-span-4">CONSULT</div>
