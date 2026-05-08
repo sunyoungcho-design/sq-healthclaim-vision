@@ -415,7 +415,7 @@ function ClaimForm({
                 <div className="w-7 h-7 rounded-full bg-[var(--sq-line)] text-[var(--sq-ink)] flex items-center justify-center text-[12px] font-medium">
                   {p.name.trim().charAt(0).toUpperCase()}
                 </div>
-                <div className="text-[18px] font-semibold tracking-tight text-[var(--sq-ink)]">
+                <div className="text-[18px] font-semibold tracking-tight text-[var(--sq-muted)]">
                   {p.name}
                 </div>
               </div>
