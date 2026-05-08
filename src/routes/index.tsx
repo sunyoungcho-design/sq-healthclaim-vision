@@ -28,34 +28,31 @@ function Index() {
   const reset = () => { setAmount(60); setStep("scan"); setPrinted(false); };
 
   return (
-    <div className="relative">
-      <PhoneFrame>
-        <div className="sq-screen" key={step}>
-          <StatusBar />
-          <div className="flex-1 min-h-0 flex flex-col sq-fadein">
-            {step === "scan" && <Scan onNext={() => setStep("verify")} />}
-            {step === "verify" && <Verify onDone={() => setStep("summary")} />}
-            {step === "summary" && (
-              <Summary
-                onAccept={() => { setAmount(60); setStep("tap"); }}
-                onReject={() => { setAmount(220); setStep("tap"); }}
-                onBack={() => setStep("scan")}
-              />
-            )}
-            {step === "tap" && <Tap amount={amount} onPaid={() => setStep("receipt")} onBack={() => setStep("summary")} />}
-            {step === "receipt" && (
-              <Receipt
-                amount={amount}
-                onSelect={() => setStep("done")}
-                onPrint={() => { setPrinted(true); setStep("done"); }}
-              />
-            )}
-            {step === "done" && <Done amount={amount} selfClaim={amount === 220} onDone={reset} />}
-          </div>
+    <PhoneFrame sideContent={printed ? <PrintedReceipt amount={amount} /> : undefined}>
+      <div className="sq-screen" key={step}>
+        <StatusBar />
+        <div className="flex-1 min-h-0 flex flex-col sq-fadein">
+          {step === "scan" && <Scan onNext={() => setStep("verify")} />}
+          {step === "verify" && <Verify onDone={() => setStep("summary")} />}
+          {step === "summary" && (
+            <Summary
+              onAccept={() => { setAmount(60); setStep("tap"); }}
+              onReject={() => { setAmount(220); setStep("tap"); }}
+              onBack={() => setStep("scan")}
+            />
+          )}
+          {step === "tap" && <Tap amount={amount} onPaid={() => setStep("receipt")} onBack={() => setStep("summary")} />}
+          {step === "receipt" && (
+            <Receipt
+              amount={amount}
+              onSelect={() => setStep("done")}
+              onPrint={() => { setPrinted(true); setStep("done"); }}
+            />
+          )}
+          {step === "done" && <Done amount={amount} selfClaim={amount === 220} onDone={reset} />}
         </div>
-      </PhoneFrame>
-      {printed && <PrintedReceipt amount={amount} />}
-    </div>
+      </div>
+    </PhoneFrame>
   );
 }
 
