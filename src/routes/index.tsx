@@ -18,7 +18,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Step = "scan" | "verify" | "summary" | "tap" | "done";
+type Step = "scan" | "verify" | "summary" | "tap" | "receipt" | "done";
 
 function Index() {
   const [step, setStep] = useState<Step>("scan");
@@ -38,7 +38,8 @@ function Index() {
               onBack={() => setStep("scan")}
             />
           )}
-          {step === "tap" && <Tap amount={amount} onPaid={() => setStep("done")} onBack={() => setStep("summary")} />}
+          {step === "tap" && <Tap amount={amount} onPaid={() => setStep("receipt")} onBack={() => setStep("summary")} />}
+          {step === "receipt" && <Receipt amount={amount} onSelect={() => setStep("done")} />}
           {step === "done" && <Done amount={amount} selfClaim={amount === 220} onDone={() => { setAmount(60); setStep("scan"); }} />}
         </div>
       </div>
@@ -341,7 +342,30 @@ function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; o
   );
 }
 
-/* ---------------- 6. DONE ---------------- */
+/* ---------------- 6. RECEIPT OPTIONS ---------------- */
+function Receipt({ amount, onSelect }: { amount: number; onSelect: () => void }) {
+  return (
+    <>
+      <TopBar />
+      <div className="flex-1 flex flex-col items-center justify-center px-7 text-center -mt-4">
+        <div className="text-[15px] font-semibold tracking-tight">Gap Amount ${amount.toFixed(2)}</div>
+        <h2 className="mt-2 text-[34px] font-semibold tracking-tight">Thank you</h2>
+      </div>
+      <div className="px-6 pb-6 space-y-2.5">
+        <div className="sq-row mb-1">
+          <span className="text-[14px] font-semibold">Receipt options</span>
+          <button className="text-[12px] font-semibold underline text-[var(--sq-ink-2)]">Formal receipt</button>
+        </div>
+        <button onClick={onSelect} className="sq-btn sq-btn-primary">Email</button>
+        <button onClick={onSelect} className="sq-btn sq-btn-primary">Text</button>
+        <button onClick={onSelect} className="sq-btn sq-btn-primary">Print</button>
+        <button onClick={onSelect} className="sq-btn sq-btn-primary">No receipt</button>
+      </div>
+    </>
+  );
+}
+
+/* ---------------- 7. DONE ---------------- */
 function Done({ amount, selfClaim, onDone }: { amount: number; selfClaim: boolean; onDone: () => void }) {
   return (
     <>
