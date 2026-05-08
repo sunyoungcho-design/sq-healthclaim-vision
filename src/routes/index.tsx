@@ -80,11 +80,11 @@ function Scan({ onNext }: { onNext: () => void }) {
       <div className="flex items-center justify-center px-6 pt-4">
         <div className="relative w-[220px] h-[220px] flex items-center justify-center">
           <div className="absolute inset-0 rounded-full bg-[var(--sq-surface)]" />
-          <div className="relative w-[180px] h-[112px] bg-white shadow-[0_10px_30px_-12px_rgba(0,0,0,0.18)] p-3 flex flex-col justify-between overflow-hidden border-0 rounded">
+          <div className="relative w-[180px] h-[112px] rounded-2xl bg-[var(--sq-surface)] border border-[var(--sq-line)] shadow-[0_10px_30px_-12px_rgba(0,0,0,0.18)] p-3 flex flex-col justify-between overflow-hidden">
             <div className="flex items-center justify-between relative z-10">
               <div className="text-[10px] font-semibold tracking-widest text-[var(--sq-muted)]">HEALTH</div>
             </div>
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-[var(--sq-surface)] flex items-center justify-center pointer-events-none">
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white flex items-center justify-center pointer-events-none">
               <Wifi className="w-4 h-4 rotate-90 text-[var(--sq-muted)]" />
             </div>
             <div className="flex justify-between items-end relative z-10">
