@@ -38,6 +38,7 @@ const PATIENTS: Patient[] = [
   { name: "John Smith", relation: "Cardholder", irn: "1", dob: "12/03/1984" },
   { name: "Helen Smith", relation: "Spouse", irn: "2", dob: "08/07/1986" },
   { name: "James Smith", relation: "Dependant", irn: "3", dob: "21/11/2014" },
+  { name: "Jessica Smith", relation: "Dependant", irn: "4", dob: "05/09/2017" },
 ];
 
 type LineItem = { item: ClaimItem; charge: number };
