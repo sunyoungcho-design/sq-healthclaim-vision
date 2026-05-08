@@ -317,22 +317,32 @@ function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; o
 
       </div>
 
-      <div className="px-6 pb-5">
-        <div className="relative h-20 rounded-t-xl bg-gradient-to-br from-white to-[#e8e8e8] -mb-5 mx-auto w-[78%] overflow-hidden shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
-          <div className="absolute top-3 left-4 w-7 h-5 rounded-[3px] bg-gradient-to-br from-[#d4af37] to-[#a8841a]">
-            <div className="absolute inset-[2px] rounded-[2px] border border-[#8a6d14]/40" />
-            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-[#8a6d14]/40" />
-            <div className="absolute top-1/2 left-0 right-0 h-px bg-[#8a6d14]/40" />
-          </div>
-          <div className="absolute top-3 left-14 text-[var(--sq-ink-2)]">
-            <Wifi className="w-4 h-4 rotate-90" strokeWidth={2.25} />
-          </div>
-          <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between font-mono text-[10px] tracking-[0.15em] text-[var(--sq-ink-2)]">
-            <span>•••• •••• •••• 4242</span>
-            <span className="italic font-sans font-semibold text-[11px] tracking-tight text-[#006AFF]">VISA</span>
+      {/* Card insertion visualization — partial card sticking up out of slot */}
+      <div className="relative">
+        <div className="relative mx-auto w-[72%] h-24">
+          <div className="absolute inset-x-0 top-0 h-full rounded-t-xl bg-gradient-to-b from-white via-[#f4f4f4] to-[#dcdcdc] shadow-[0_-6px_18px_rgba(0,0,0,0.18)] overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/40 to-transparent" />
+            <div className="absolute top-3 left-5 w-9 h-7 rounded-[4px] bg-gradient-to-br from-[#e8c869] to-[#9a7a18] shadow-sm">
+              <div className="absolute inset-[3px] rounded-[2px] border border-[#7a5e10]/50" />
+              <div className="absolute left-1/2 top-0 bottom-0 w-px bg-[#7a5e10]/50" />
+              <div className="absolute top-1/2 left-0 right-0 h-px bg-[#7a5e10]/50" />
+            </div>
+            <div className="absolute top-4 left-16 text-[var(--sq-ink-2)]/80">
+              <Wifi className="w-4 h-4 rotate-90" strokeWidth={2.5} />
+            </div>
+            <div className="absolute top-3 right-4 text-[10px] font-bold tracking-[0.2em] text-[var(--sq-ink-2)]">SQUARE</div>
+            <div className="absolute bottom-2 left-5 right-5 font-mono text-[11px] tracking-[0.18em] text-[var(--sq-ink)] font-semibold">
+              •••• •••• •••• 4242
+            </div>
           </div>
         </div>
+        {/* Slot — the dark opening the card is inserted into */}
+        <div className="relative h-5 bg-[#003a99] flex items-center justify-center">
+          <div className="absolute inset-x-0 top-0 h-px bg-black/40" />
+          <div className="w-[78%] h-1.5 rounded-full bg-black/70 shadow-[inset_0_1px_2px_rgba(0,0,0,0.6)]" />
+        </div>
       </div>
+
     </div>
   );
 }
