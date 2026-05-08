@@ -112,7 +112,7 @@ function Scan({ onNext }: { onNext: () => void }) {
             <div className="flex items-center justify-between relative z-10">
               <div className="text-[10px] font-semibold tracking-widest text-[var(--sq-muted)]">HEALTH CARE CARD</div>
             </div>
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white flex items-center justify-center pointer-events-none">
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white/10 flex items-center justify-center pointer-events-none">
               <Wifi className="w-8 h-8 rotate-90 text-[var(--sq-ink-2)]" strokeWidth={2.25} />
             </div>
             <div className="relative z-10" />
@@ -132,14 +132,14 @@ function Scan({ onNext }: { onNext: () => void }) {
           ].map((b) => (
             <div
               key={b.name}
-              className="w-12 h-8 bg-white flex items-center justify-center overflow-hidden border rounded-none"
+              className="w-12 h-8 bg-white/10 flex items-center justify-center overflow-hidden border border-white/10 rounded-none"
             >
               <img src={b.src} alt={b.name} className="max-w-[80%] max-h-[70%] object-contain" />
             </div>
           ))}
           <button
             onClick={() => setShowMore(true)}
-            className="w-12 h-8 rounded-md bg-[var(--sq-surface)] flex items-center justify-center text-[10px] font-semibold text-[var(--sq-ink-2)] transition border-0 underline bg-white"
+            className="w-12 h-8 rounded-md flex items-center justify-center text-[10px] font-semibold text-[var(--sq-ink-2)] transition border-0 underline bg-white/10"
           >
             +more
           </button>
@@ -174,7 +174,7 @@ function Scan({ onNext }: { onNext: () => void }) {
                 {MORE_BRANDS.map((b) => (
                   <div
                     key={b}
-                    className="h-9 px-2 rounded-md border border-[var(--sq-line)] bg-white flex items-center justify-center text-[10px] font-semibold tracking-tight text-[var(--sq-ink-2)] text-center"
+                    className="h-9 px-2 rounded-md border border-white/10 bg-white/10 flex items-center justify-center text-[10px] font-semibold tracking-tight text-[var(--sq-ink-2)] text-center"
                   >
                     {b}
                   </div>
