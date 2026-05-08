@@ -188,7 +188,7 @@ function Verify({ onDone }: { onDone: () => void }) {
         <p className="mt-2 sq-sub">This may take a few seconds.</p>
         <div className="sq-bar w-40 mt-8"><i /></div>
       </div>
-      <div className="pb-10 text-center text-[12px] text-[var(--sq-muted)]">Secured by Square</div>
+      
     </>
   );
 }
