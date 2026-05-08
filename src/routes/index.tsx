@@ -195,7 +195,7 @@ function Verify({ onDone }: { onDone: () => void }) {
 }
 
 /* ---------------- 3. SUMMARY ---------------- */
-function Summary({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
+function Summary({ onAccept, onReject, onBack }: { onAccept: () => void; onReject: () => void; onBack: () => void }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const gapRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -268,8 +268,8 @@ function Summary({ onNext, onBack }: { onNext: () => void; onBack: () => void })
       </div>
 
       <div className="px-6 pb-3 pt-3 border-t border-[var(--sq-line)] bg-white flex gap-2">
-        <button onClick={onBack} className="sq-btn sq-btn-secondary">Reject</button>
-        <button onClick={onNext} className="sq-btn sq-btn-primary">Accept</button>
+        <button onClick={onReject} className="sq-btn sq-btn-secondary">Reject</button>
+        <button onClick={onAccept} className="sq-btn sq-btn-primary">Accept</button>
       </div>
     </>
   );
