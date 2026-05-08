@@ -770,19 +770,6 @@ function Done({ amount, selfClaim, onDone }: { amount: number; selfClaim: boolea
           <p className="sq-sub mt-2">Submit your receipt to Medicare and your fund to claim back.</p>
         )}
 
-        <div className="sq-card mt-8 p-5 w-full text-left space-y-3.5">
-          <Line label="Paid Today" value={`$${amount.toFixed(2)}`} />
-          {selfClaim ? (
-            <Line label="To Claim Back" value="$160.00" muted />
-          ) : (
-            <Line label="Insurance Covered" value="$160.00" muted />
-          )}
-          <div className="sq-divider" />
-          <div className="sq-row">
-            <span className="text-[13px] text-[var(--sq-muted)]">Confirmation</span>
-            <span className="text-[13px] font-mono">SQ-8F2A-4821</span>
-          </div>
-        </div>
       </div>
       <div className="px-6 pb-8 pt-6 space-y-2">
         <button onClick={onDone} className="sq-btn sq-btn-primary">Done</button>
