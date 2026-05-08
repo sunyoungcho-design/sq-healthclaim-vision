@@ -114,7 +114,7 @@ function Scan({ onNext }: { onNext: () => void }) {
             <div className="flex items-center justify-between relative z-10">
               <div className="text-[10px] font-semibold tracking-widest text-white/50">HEALTH CARE CARD</div>
             </div>
-            <div className="absolute left-1/2 bottom-2 -translate-x-1/2 w-12 h-12 rounded-full bg-transparent flex items-center justify-center pointer-events-none">
+            <div className="absolute left-1/2 bottom-1 -translate-x-1/2 w-12 h-12 rounded-full bg-transparent flex items-center justify-center pointer-events-none">
               <Wifi className="lucide lucide-wifi w-6 h-6 rotate-90 text-[#797777]" strokeWidth={2.25} />
             </div>
             <div className="relative z-10" />
