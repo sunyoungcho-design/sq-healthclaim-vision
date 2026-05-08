@@ -318,7 +318,20 @@ function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; o
       </div>
 
       <div className="px-6 pb-5">
-        <div className="h-14 rounded-t-md bg-white -mb-5 mx-auto w-[78%]" />
+        <div className="relative h-20 rounded-t-xl bg-gradient-to-br from-white to-[#e8e8e8] -mb-5 mx-auto w-[78%] overflow-hidden shadow-[0_-4px_12px_rgba(0,0,0,0.08)]">
+          <div className="absolute top-3 left-4 w-7 h-5 rounded-[3px] bg-gradient-to-br from-[#d4af37] to-[#a8841a]">
+            <div className="absolute inset-[2px] rounded-[2px] border border-[#8a6d14]/40" />
+            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-[#8a6d14]/40" />
+            <div className="absolute top-1/2 left-0 right-0 h-px bg-[#8a6d14]/40" />
+          </div>
+          <div className="absolute top-3 left-14 text-[var(--sq-ink-2)]">
+            <Wifi className="w-4 h-4 rotate-90" strokeWidth={2.25} />
+          </div>
+          <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between font-mono text-[10px] tracking-[0.15em] text-[var(--sq-ink-2)]">
+            <span>•••• •••• •••• 4242</span>
+            <span className="italic font-sans font-semibold text-[11px] tracking-tight text-[#006AFF]">VISA</span>
+          </div>
+        </div>
       </div>
     </div>
   );
