@@ -310,7 +310,7 @@ function ClaimForm({
               <button
                 key={p.name}
                 onClick={() => setPatient(p)}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition text-left ${active ? "bg-[var(--sq-surface)] border border-[var(--sq-ink)]" : "border border-transparent hover:bg-[var(--sq-surface)]"}`}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-md transition text-left ${active ? "bg-[var(--sq-surface)] border border-[var(--sq-ink)]" : "border border-transparent hover:bg-[var(--sq-surface)]"}`}
               >
                 <div>
                   <div className="text-[14px] font-medium">{p.name}</div>
@@ -369,7 +369,7 @@ function ClaimForm({
 
         <button
           onClick={addLine}
-          className="mt-3 w-full flex items-center justify-center gap-1.5 py-3 rounded-lg border border-dashed border-[var(--sq-line)] text-[13px] font-semibold text-[var(--sq-ink)] hover:bg-[var(--sq-surface)] transition"
+          className="mt-3 w-full flex items-center justify-center gap-1.5 py-3 rounded-md border border-dashed border-[var(--sq-line)] text-[13px] font-semibold text-[var(--sq-ink)] hover:bg-[var(--sq-surface)] transition"
         >
           <Plus className="w-4 h-4" strokeWidth={2.25} />
           Add another service
@@ -502,7 +502,7 @@ function Summary({
             <Line label="Private Health Rebate" value={`−$${fundRebate.toFixed(2)}`} muted />
           </div>
           <div className="sq-divider my-4" />
-          <div ref={gapRef} className="rounded-lg bg-[var(--sq-surface)] p-4 flex items-center justify-between">
+          <div ref={gapRef} className="rounded-md bg-[var(--sq-surface)] p-4 flex items-center justify-between">
             <div className="flex flex-col">
               <span className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">Gap Amount</span>
               
