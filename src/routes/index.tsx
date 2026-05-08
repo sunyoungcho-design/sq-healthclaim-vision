@@ -46,10 +46,8 @@ function Index() {
   const [amount, setAmount] = useState<number>(60);
   const [printed, setPrinted] = useState(false);
   const [cardCursor, setCardCursor] = useState(false);
-  const [selectedPatients, setSelectedPatients] = useState<Patient[]>([PATIENTS[0]]);
-  const [claimsByIrn, setClaimsByIrn] = useState<Record<string, LineItem[]>>({
-    [PATIENTS[0].irn]: [],
-  });
+  const [selectedPatients, setSelectedPatients] = useState<Patient[]>([]);
+  const [claimsByIrn, setClaimsByIrn] = useState<Record<string, LineItem[]>>({});
 
   // Preload the contactless icon and medicare card so they're cached before use
   useEffect(() => {
