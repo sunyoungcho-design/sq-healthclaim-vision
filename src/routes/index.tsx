@@ -18,12 +18,34 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Step = "scan" | "verify" | "summary" | "tap" | "receipt" | "done";
+type Step = "scan" | "verify" | "claim" | "submitting" | "summary" | "tap" | "receipt" | "done";
+
+type ClaimItem = { code: string; description: string; defaultCharge: number };
+const ITEM_CATALOG: ClaimItem[] = [
+  { code: "011", description: "Comprehensive oral examination", defaultCharge: 75 },
+  { code: "012", description: "Periodic oral examination", defaultCharge: 60 },
+  { code: "014", description: "Consultation", defaultCharge: 90 },
+  { code: "022", description: "Intraoral periapical X-ray", defaultCharge: 55 },
+  { code: "114", description: "Scale and clean", defaultCharge: 145 },
+  { code: "121", description: "Topical application of remineralising agent", defaultCharge: 45 },
+  { code: "311", description: "Removal of a tooth", defaultCharge: 220 },
+];
+
+type Patient = { name: string; relation: string; irn: string; dob: string };
+const PATIENTS: Patient[] = [
+  { name: "John Citizen", relation: "Cardholder", irn: "1", dob: "12/03/1984" },
+  { name: "Sarah Citizen", relation: "Spouse", irn: "2", dob: "08/07/1986" },
+  { name: "Emma Citizen", relation: "Dependant", irn: "3", dob: "21/11/2014" },
+  { name: "Liam Citizen", relation: "Dependant", irn: "4", dob: "02/05/2017" },
+];
 
 function Index() {
   const [step, setStep] = useState<Step>("scan");
   const [amount, setAmount] = useState<number>(60);
   const [printed, setPrinted] = useState(false);
+  const [patient, setPatient] = useState<Patient>(PATIENTS[0]);
+  const [item, setItem] = useState<ClaimItem>(ITEM_CATALOG[4]);
+  const [charge, setCharge] = useState<number>(ITEM_CATALOG[4].defaultCharge);
 
   // Preload the contactless icon so it's cached before the tap screen mounts
   useEffect(() => {
