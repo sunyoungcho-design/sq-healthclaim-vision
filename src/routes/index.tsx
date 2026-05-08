@@ -21,6 +21,7 @@ type Step = "scan" | "verify" | "summary" | "approve" | "tap" | "done";
 
 function Index() {
   const [step, setStep] = useState<Step>("scan");
+  const [amount, setAmount] = useState<number>(60);
 
   return (
     <PhoneFrame>
@@ -29,10 +30,17 @@ function Index() {
         <div className="flex-1 min-h-0 flex flex-col sq-fadein">
           {step === "scan" && <Scan onNext={() => setStep("verify")} />}
           {step === "verify" && <Verify onDone={() => setStep("summary")} />}
-          {step === "summary" && <Summary onNext={() => setStep("approve")} onBack={() => setStep("scan")} />}
+          {step === "summary" && (
+            <Summary
+              onAccept={() => { setAmount(60); setStep("approve"); }}
+              onReject={() => { setAmount(220); setStep("reject"); }}
+              onBack={() => setStep("scan")}
+            />
+          )}
+          {step === "reject" && <Reject onContinue={() => setStep("tap")} onBack={() => setStep("summary")} />}
           {step === "approve" && <Approve onApprove={() => setStep("tap")} onDecline={() => setStep("scan")} onBack={() => setStep("summary")} />}
-          {step === "tap" && <Tap onPaid={() => setStep("done")} onBack={() => setStep("approve")} />}
-          {step === "done" && <Done onDone={() => setStep("scan")} />}
+          {step === "tap" && <Tap amount={amount} onPaid={() => setStep("done")} onBack={() => setStep("approve")} />}
+          {step === "done" && <Done amount={amount} selfClaim={amount === 220} onDone={() => { setAmount(60); setStep("scan"); }} />}
         </div>
       </div>
     </PhoneFrame>
