@@ -159,7 +159,7 @@ function Scan({ onNext }: { onNext: () => void }) {
             className="absolute inset-0 bg-black/40"
             aria-label="Close"
           />
-          <div className="relative w-full bg-white rounded-t-2xl max-h-[80%] flex flex-col shadow-2xl sq-fadein">
+          <div className="relative w-full bg-[#18181c] rounded-t-2xl max-h-[80%] flex flex-col shadow-2xl sq-fadein">
             <div className="flex items-center justify-between px-5 pt-4 pb-2">
               <div className="text-[15px] font-semibold">Accepted insurers</div>
               <button
@@ -301,7 +301,7 @@ function Summary({ onAccept, onReject, onBack }: { onAccept: () => void; onRejec
 
       </div>
 
-      <div className="px-6 pb-3 pt-3 border-t border-[var(--sq-line)] bg-white flex gap-2">
+      <div className="px-6 pb-3 pt-3 border-t border-[var(--sq-line)] bg-[#0f0f12] flex gap-2">
         <button onClick={onReject} className="sq-btn sq-btn-secondary">Reject</button>
         <button onClick={onAccept} className="sq-btn sq-btn-primary">Accept</button>
       </div>
