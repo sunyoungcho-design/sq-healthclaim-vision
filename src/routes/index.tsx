@@ -564,9 +564,9 @@ function Summary({
               <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">Provider No: 123456CD</div>
             </div>
             <div className="text-right">
-              <div className="text-[11px] text-[var(--sq-muted)] uppercase tracking-wider">Patient</div>
-              <div className="text-[14px] font-medium mt-0.5">{patient.name}</div>
-              <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">Medicare: 1234 56789 1 · IRN {patient.irn}</div>
+              <div className="text-[11px] text-[var(--sq-muted)] uppercase tracking-wider">{selectedPatients.length > 1 ? "Patients" : "Patient"}</div>
+              <div className="text-[14px] font-medium mt-0.5">{selectedPatients.map((p) => p.name).join(", ")}</div>
+              <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">Medicare: 1234 56789 1</div>
             </div>
           </div>
         </div>
