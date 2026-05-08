@@ -69,7 +69,7 @@ function Index() {
 
   return (
     <PhoneFrame
-      sideContent={printed ? <PrintedReceipt amount={amount} /> : undefined}
+      sideContent={printed ? <PrintedReceipt amount={amount} patientName={patient.name} /> : undefined}
       belowContent={step === "scan" ? (
         <button
           type="button"
@@ -656,7 +656,7 @@ function Receipt({ amount, onSelect, onPrint }: { amount: number; onSelect: () =
 }
 
 /* ---------------- PRINTED RECEIPT (outside the device) ---------------- */
-function PrintedReceipt({ amount }: { amount: number }) {
+function PrintedReceipt({ amount, patientName }: { amount: number; patientName: string }) {
   const charge = 220;
   const benefit = (160).toFixed(2);
   const now = new Date();
@@ -709,7 +709,7 @@ function PrintedReceipt({ amount }: { amount: number }) {
         </div>
         <div className="my-1 border-t border-dashed border-black/40" />
 
-        <div className="text-[10px] mt-2">Patient Id: JOHN CITIZEN</div>
+        <div className="text-[10px] mt-2">Patient Id: {patientName.toUpperCase()}</div>
         <div className="grid grid-cols-12 gap-1 text-[10px]">
           <div className="col-span-3">023</div>
           <div className="col-span-4">CONSULT</div>
