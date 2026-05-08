@@ -282,50 +282,6 @@ function Line({ label, value, muted }: { label: string; value: string; muted?: b
   );
 }
 
-/* ---------------- 4. APPROVE ---------------- */
-function Approve({ onApprove, onDecline, onBack }: { onApprove: () => void; onDecline: () => void; onBack: () => void }) {
-  return (
-    <>
-      <TopBar onBack={onBack} title="Review Payment" />
-      <div className="px-7 pt-6">
-        <div className="text-[14px] text-[var(--sq-muted)]">Gap amount due today</div>
-        <div className="mt-1 text-[56px] leading-none font-semibold tracking-tight">$60<span className="text-[28px] text-[var(--sq-muted)] align-top">.00</span></div>
-        <p className="sq-sub mt-3">Medicare and your health fund have covered the rest.</p>
-      </div>
-
-      <div className="px-6 mt-8">
-        <div className="sq-card p-5 space-y-3.5">
-          <div className="flex items-center justify-between pb-1">
-            <span className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">Claim Summary</span>
-            <span className="text-[11px] font-mono text-[var(--sq-muted)]">GN 1234567X</span>
-          </div>
-          <div className="sq-divider" />
-          <div className="sq-row">
-            <div>
-              <div className="text-[13px]">Item 23 — Level B consult</div>
-              <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">Dr. Laura Leopard</div>
-            </div>
-            <span className="text-[15px] font-medium">$220.00</span>
-          </div>
-          <Line label="Medicare Benefit" value="−$39.10" muted />
-          <Line label="Private Health Rebate" value="−$120.90" muted />
-          <div className="sq-divider" />
-          <div className="sq-row">
-            <span className="text-[15px] font-semibold">Gap Amount</span>
-            <span className="text-[17px] font-semibold">$60.00</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex-1" />
-      <div className="px-6 pb-8 pt-6 space-y-2">
-        <button onClick={onApprove} className="sq-btn sq-btn-primary">Pay $60.00</button>
-        <button onClick={onDecline} className="sq-btn sq-btn-ghost">Back</button>
-      </div>
-    </>
-  );
-}
-
 /* ---------------- 5. TAP TO PAY ---------------- */
 function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; onBack: () => void }) {
   useEffect(() => {
