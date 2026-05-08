@@ -322,11 +322,7 @@ function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; o
       </div>
 
       <div className="px-6 pb-5">
-        <div className="h-14 rounded-t-md bg-white flex items-center justify-center -mb-5 mx-auto w-[78%]">
-          <svg viewBox="0 0 24 24" className="w-6 h-6" fill="#006AFF">
-            <path d="M3 3h18v18H3V3zm3 3v12h12V6H6zm3 3h6v6H9V9z"/>
-          </svg>
-        </div>
+        <div className="h-14 rounded-t-md bg-white -mb-5 mx-auto w-[78%]" />
       </div>
     </div>
   );
