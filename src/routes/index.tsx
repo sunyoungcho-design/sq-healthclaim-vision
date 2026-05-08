@@ -112,10 +112,10 @@ function Scan({ onNext }: { onNext: () => void }) {
           <div className="absolute inset-4 rounded-full border border-[var(--sq-line)] opacity-0 group-hover:opacity-60 transition-opacity duration-300" />
           <div className="relative w-[150px] h-[94px] bg-[#1a1a1f] p-3 flex flex-col justify-between overflow-hidden border border-white/5 rounded-md shadow-sm transition-transform duration-300 ease-out group-hover:scale-[1.02] group-active:scale-[0.98]">
             <div className="flex items-center justify-between relative z-10">
-              <div className="text-[10px] font-semibold tracking-widest text-[var(--sq-muted)]">HEALTH CARE CARD</div>
+              <div className="text-[10px] font-semibold tracking-widest text-white/50">HEALTH CARE CARD</div>
             </div>
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/[0.04] flex items-center justify-center pointer-events-none">
-              <Wifi className="w-6 h-6 rotate-90 text-[var(--sq-ink-2)]" strokeWidth={2.25} />
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/[0.06] flex items-center justify-center pointer-events-none">
+              <Wifi className="w-6 h-6 rotate-90 text-white/70" strokeWidth={2.25} />
             </div>
             <div className="relative z-10" />
           </div>
