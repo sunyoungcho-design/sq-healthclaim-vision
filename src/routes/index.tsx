@@ -132,7 +132,7 @@ function Scan({ onNext }: { onNext: () => void }) {
           ].map((b) => (
             <div
               key={b.name}
-              className="w-12 h-8 bg-white flex items-center justify-center overflow-hidden border rounded-none"
+              className="w-12 h-8 bg-white/10 flex items-center justify-center overflow-hidden border border-white/10 rounded-none"
             >
               <img src={b.src} alt={b.name} className="max-w-[80%] max-h-[70%] object-contain" />
             </div>
