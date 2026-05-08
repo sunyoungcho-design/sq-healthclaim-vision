@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { PhoneFrame, StatusBar } from "@/components/sq/PhoneFrame";
-import { ChevronLeft, CreditCard, Check, Wifi, Apple, X, Hand } from "lucide-react";
+import { ChevronLeft, ChevronDown, CreditCard, Check, Wifi, Apple, X, Hand } from "lucide-react";
 import nibLogo from "@/assets/insurers/nib.png";
 import medibankLogo from "@/assets/insurers/medibank.png";
 import hcfLogo from "@/assets/insurers/hcf.avif";
@@ -307,19 +307,20 @@ function ClaimForm({
         </div>
 
         <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mt-5 mb-2">Service item</div>
-        <div className="sq-card p-2">
+        <div className="sq-card relative">
           <select
             value={item.code}
             onChange={(e) => {
               const next = ITEM_CATALOG.find((i) => i.code === e.target.value);
               if (next) setItem(next);
             }}
-            className="w-full bg-transparent appearance-none px-3 py-2.5 text-[14px] font-medium focus:outline-none cursor-pointer"
+            className="w-full bg-transparent appearance-none pl-4 pr-10 py-3 text-[14px] font-medium focus:outline-none cursor-pointer"
           >
             {ITEM_CATALOG.map((i) => (
               <option key={i.code} value={i.code}>{i.code} — {i.description}</option>
             ))}
           </select>
+          <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--sq-muted)]" strokeWidth={2.25} />
         </div>
 
         <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mt-5 mb-2">Charge</div>
@@ -334,7 +335,6 @@ function ClaimForm({
             onChange={(e) => setCharge(parseFloat(e.target.value) || 0)}
             className="flex-1 bg-transparent text-[24px] font-semibold tracking-tight focus:outline-none"
           />
-          <span className="text-[12px] text-[var(--sq-muted)]">AUD</span>
         </div>
         <div className="text-[11px] text-[var(--sq-muted)] mt-1.5 px-1">Enter the gross fee for this item.</div>
 
