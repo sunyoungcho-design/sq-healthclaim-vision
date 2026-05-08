@@ -206,7 +206,7 @@
     100% { transform: translateX(360%); }
   }
   .sq-check {
-    width:88px; height:88px; border-radius:9999px; background: var(--sq-ink); color:#fff;
+    width:88px; height:88px; border-radius:9999px; background: #fff; color:#0f0f12;
     display:flex; align-items:center; justify-content:center;
     animation: sq-pop .5s cubic-bezier(.2,.8,.2,1.2) both;
   }
