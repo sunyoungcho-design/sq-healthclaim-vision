@@ -259,7 +259,7 @@ function Summary({ onNext, onBack }: { onNext: () => void; onBack: () => void })
 
       </div>
 
-      <div className="px-6 pb-8 pt-4 border-t border-[var(--sq-line)] bg-white">
+      <div className="px-6 pb-3 pt-3 border-t border-[var(--sq-line)] bg-white">
         <button onClick={onNext} className="sq-btn sq-btn-primary">Continue</button>
       </div>
     </>
