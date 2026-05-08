@@ -215,7 +215,26 @@ function Summary({ onAccept, onReject, onBack }: { onAccept: () => void; onRejec
   const gapRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const t = setTimeout(() => {
-      gapRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      const container = scrollRef.current;
+      const target = gapRef.current;
+      if (!container || !target) return;
+      const targetTop =
+        target.offsetTop - container.clientHeight / 2 + target.clientHeight / 2;
+      const startTop = container.scrollTop;
+      const distance = targetTop - startTop;
+      const duration = 1400; // ms — slower for a smoother feel
+      const startTime = performance.now();
+      // easeInOutCubic
+      const ease = (t: number) =>
+        t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      let raf = 0;
+      const tick = (now: number) => {
+        const p = Math.min(1, (now - startTime) / duration);
+        container.scrollTop = startTop + distance * ease(p);
+        if (p < 1) raf = requestAnimationFrame(tick);
+      };
+      raf = requestAnimationFrame(tick);
+      return () => cancelAnimationFrame(raf);
     }, 250);
     return () => clearTimeout(t);
   }, []);
