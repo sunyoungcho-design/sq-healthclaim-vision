@@ -68,17 +68,20 @@ function Index() {
     <PhoneFrame
       sideContent={printed ? <PrintedReceipt amount={amount} /> : undefined}
       belowContent={step === "scan" ? (
-        <label className="flex items-center gap-3 px-4 py-2.5 rounded-full bg-white/5 border border-white/10 text-[13px] text-white/80 cursor-pointer select-none hover:bg-white/10 transition">
+        <button
+          type="button"
+          onClick={() => setCardCursor((v) => !v)}
+          className="flex items-center gap-3 px-4 py-2.5 rounded-full bg-white/5 border border-white/10 text-[13px] text-white/80 select-none hover:bg-white/10 transition"
+        >
           <span>Card cursor</span>
           <span
             role="switch"
             aria-checked={cardCursor}
-            onClick={() => setCardCursor((v) => !v)}
             className={`relative inline-block w-9 h-5 rounded-full transition ${cardCursor ? "bg-[#006AFF]" : "bg-white/20"}`}
           >
             <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${cardCursor ? "translate-x-4" : ""}`} />
           </span>
-        </label>
+        </button>
       ) : undefined}
     >
       <div className={`sq-screen${step === "scan" ? " sq-screen-dark" : ""}${step === "tap" ? " sq-screen-blue" : ""}`} key={step}>
