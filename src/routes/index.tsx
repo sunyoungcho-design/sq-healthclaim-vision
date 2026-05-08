@@ -709,7 +709,7 @@ function PrintedReceipt({ amount, patientName }: { amount: number; patientName: 
         </div>
         <div className="my-1 border-t border-dashed border-black/40" />
 
-        <div className="text-[10px] mt-2">Patient Id: JOHN CITIZEN</div>
+        <div className="text-[10px] mt-2">Patient Id: {patientName.toUpperCase()}</div>
         <div className="grid grid-cols-12 gap-1 text-[10px]">
           <div className="col-span-3">023</div>
           <div className="col-span-4">CONSULT</div>
