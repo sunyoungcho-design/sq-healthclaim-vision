@@ -411,7 +411,7 @@ function ClaimForm({
           const items = claimsByIrn[p.irn] ?? [];
           return (
             <div key={p.irn} className="mt-6">
-              <div className="flex items-center gap-3 mb-3 pb-3 border-b border-[var(--sq-line)]">
+              <div className="flex items-center gap-3 mb-3">
                 <div className="w-9 h-9 rounded-full bg-[var(--sq-ink)] text-white flex items-center justify-center text-[14px] font-semibold">
                   {p.name.trim().charAt(0).toUpperCase()}
                 </div>
