@@ -501,11 +501,11 @@ function Submitting({ onDone }: { onDone: () => void }) {
 
 /* ---------------- 3. SUMMARY ---------------- */
 function Summary({
-  patient, lineItems, totalCharge, medicareBenefit, fundRebate, gap,
+  selectedPatients, claimsByIrn, totalCharge, medicareBenefit, fundRebate, gap,
   onAccept, onReject, onBack,
 }: {
-  patient: Patient;
-  lineItems: LineItem[];
+  selectedPatients: Patient[];
+  claimsByIrn: Record<string, LineItem[]>;
   totalCharge: number;
   medicareBenefit: number;
   fundRebate: number;
