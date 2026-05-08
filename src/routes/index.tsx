@@ -270,7 +270,22 @@ function Scan({ onNext, cardCursor }: { onNext: () => void; cardCursor?: boolean
           </div>
         </div>
       )}
-    </>
+
+      {cardCursor && pos && (
+        <div
+          className="pointer-events-none absolute z-50"
+          style={{ left: pos.x, top: pos.y, transform: "translate(-50%, -50%)" }}
+        >
+          <div className="w-[88px] h-[56px] rounded-md bg-gradient-to-br from-[#1f6feb] to-[#0a3a8c] border border-white/20 shadow-xl p-1.5 flex flex-col justify-between">
+            <div className="text-[6px] font-semibold tracking-widest text-white/80 leading-none">HEALTH CARE</div>
+            <div className="flex items-end justify-between">
+              <div className="w-5 h-3.5 rounded-[2px] bg-gradient-to-br from-[#e8c869] to-[#9a7a18]" />
+              <Wifi className="w-3 h-3 rotate-90 text-white/80" strokeWidth={2.5} />
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
