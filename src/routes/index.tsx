@@ -59,7 +59,13 @@ function Index() {
     card.src = medicareCard;
   }, []);
 
-  const reset = () => { setAmount(60); setStep("scan"); setPrinted(false); };
+  const reset = () => {
+    setAmount(60);
+    setStep("scan");
+    setPrinted(false);
+    setSelectedPatients([]);
+    setClaimsByIrn({});
+  };
 
   // Compute benefits/gap from total charge across all patients (simple model)
   const allLineItems: LineItem[] = selectedPatients.flatMap((p) => claimsByIrn[p.irn] ?? []);
