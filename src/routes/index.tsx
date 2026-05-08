@@ -26,7 +26,7 @@ function Index() {
     <PhoneFrame>
       <div className="sq-screen" key={step}>
         <StatusBar />
-        <div className="flex-1 flex flex-col sq-fadein">
+        <div className="flex-1 min-h-0 flex flex-col sq-fadein">
           {step === "scan" && <Scan onNext={() => setStep("verify")} />}
           {step === "verify" && <Verify onDone={() => setStep("summary")} />}
           {step === "summary" && <Summary onNext={() => setStep("approve")} onBack={() => setStep("scan")} />}
@@ -191,7 +191,7 @@ function Summary({ onNext, onBack }: { onNext: () => void; onBack: () => void })
   return (
     <>
       <TopBar onBack={onBack} title="Statement of Claim" />
-      <div className="flex-1 overflow-y-auto px-6 pt-2 pb-2">
+      <div className="flex-1 min-h-0 overflow-y-auto px-6 pt-2 pb-2">
         <div className="sq-card p-5">
           <div className="flex items-start justify-between">
             <div>
