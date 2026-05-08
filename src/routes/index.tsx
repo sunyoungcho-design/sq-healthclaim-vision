@@ -141,7 +141,7 @@ function Scan({ onNext }: { onNext: () => void }) {
           ))}
           <button
             onClick={() => setShowMore(true)}
-            className="w-12 h-8 flex items-center justify-center text-[10px] font-semibold text-[var(--sq-ink-2)] transition border-0 underline bg-white/10 rounded-sm"
+            className="w-12 h-8 flex items-center justify-center text-[10px] font-semibold text-[var(--sq-ink-2)] transition border-0 underline bg-white/10 rounded"
           >
             +more
           </button>
