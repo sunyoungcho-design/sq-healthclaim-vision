@@ -12,6 +12,7 @@ export function PhoneFrame({ children, sideContent }: { children: ReactNode; sid
           backgroundImage: `url(${frameImg})`,
           backgroundSize: "100% 100%",
           backgroundRepeat: "no-repeat",
+          clipPath: "inset(0 11% 0 0)",
         }}
       >
         <div
