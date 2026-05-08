@@ -23,27 +23,39 @@ type Step = "scan" | "verify" | "summary" | "tap" | "receipt" | "done";
 function Index() {
   const [step, setStep] = useState<Step>("scan");
   const [amount, setAmount] = useState<number>(60);
+  const [printed, setPrinted] = useState(false);
+
+  const reset = () => { setAmount(60); setStep("scan"); setPrinted(false); };
 
   return (
-    <PhoneFrame>
-      <div className="sq-screen" key={step}>
-        <StatusBar />
-        <div className="flex-1 min-h-0 flex flex-col sq-fadein">
-          {step === "scan" && <Scan onNext={() => setStep("verify")} />}
-          {step === "verify" && <Verify onDone={() => setStep("summary")} />}
-          {step === "summary" && (
-            <Summary
-              onAccept={() => { setAmount(60); setStep("tap"); }}
-              onReject={() => { setAmount(220); setStep("tap"); }}
-              onBack={() => setStep("scan")}
-            />
-          )}
-          {step === "tap" && <Tap amount={amount} onPaid={() => setStep("receipt")} onBack={() => setStep("summary")} />}
-          {step === "receipt" && <Receipt amount={amount} onSelect={() => setStep("done")} />}
-          {step === "done" && <Done amount={amount} selfClaim={amount === 220} onDone={() => { setAmount(60); setStep("scan"); }} />}
+    <div className="relative">
+      <PhoneFrame>
+        <div className="sq-screen" key={step}>
+          <StatusBar />
+          <div className="flex-1 min-h-0 flex flex-col sq-fadein">
+            {step === "scan" && <Scan onNext={() => setStep("verify")} />}
+            {step === "verify" && <Verify onDone={() => setStep("summary")} />}
+            {step === "summary" && (
+              <Summary
+                onAccept={() => { setAmount(60); setStep("tap"); }}
+                onReject={() => { setAmount(220); setStep("tap"); }}
+                onBack={() => setStep("scan")}
+              />
+            )}
+            {step === "tap" && <Tap amount={amount} onPaid={() => setStep("receipt")} onBack={() => setStep("summary")} />}
+            {step === "receipt" && (
+              <Receipt
+                amount={amount}
+                onSelect={() => setStep("done")}
+                onPrint={() => { setPrinted(true); setStep("done"); }}
+              />
+            )}
+            {step === "done" && <Done amount={amount} selfClaim={amount === 220} onDone={reset} />}
+          </div>
         </div>
-      </div>
-    </PhoneFrame>
+      </PhoneFrame>
+      {printed && <PrintedReceipt amount={amount} />}
+    </div>
   );
 }
 
@@ -343,7 +355,7 @@ function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; o
 }
 
 /* ---------------- 6. RECEIPT OPTIONS ---------------- */
-function Receipt({ amount, onSelect }: { amount: number; onSelect: () => void }) {
+function Receipt({ amount, onSelect, onPrint }: { amount: number; onSelect: () => void; onPrint: () => void }) {
   return (
     <>
       <TopBar />
@@ -354,10 +366,119 @@ function Receipt({ amount, onSelect }: { amount: number; onSelect: () => void })
       <div className="px-6 pb-6 space-y-2.5">
         <button onClick={onSelect} className="sq-btn sq-btn-primary">Email</button>
         <button onClick={onSelect} className="sq-btn sq-btn-primary">Text</button>
-        <button onClick={onSelect} className="sq-btn sq-btn-primary">Print</button>
+        <button onClick={onPrint} className="sq-btn sq-btn-primary">Print</button>
         <button onClick={onSelect} className="sq-btn sq-btn-primary">No receipt</button>
       </div>
     </>
+  );
+}
+
+/* ---------------- PRINTED RECEIPT (outside the device) ---------------- */
+function PrintedReceipt({ amount }: { amount: number }) {
+  const charge = 220;
+  const benefit = (160).toFixed(2);
+  const now = new Date();
+  const date = `${String(now.getDate()).padStart(2,"0")}/${String(now.getMonth()+1).padStart(2,"0")}/${String(now.getFullYear()).slice(2)} ${String(now.getHours()).padStart(2,"0")}:${String(now.getMinutes()).padStart(2,"0")}`;
+  return (
+    <div
+      className="hidden md:block absolute top-1/2 -translate-y-1/2 sq-receipt-print"
+      style={{ left: "calc(50% + 220px)" }}
+    >
+      <div
+        className="bg-[#fafaf5] text-black font-mono text-[11px] leading-[1.45] shadow-[0_20px_50px_rgba(0,0,0,0.25)] origin-top"
+        style={{
+          width: "260px",
+          padding: "18px 18px 30px",
+          transform: "rotate(-3deg)",
+          backgroundImage:
+            "repeating-linear-gradient(180deg, transparent 0 22px, rgba(0,0,0,0.025) 22px 23px)",
+          clipPath:
+            "polygon(0 0, 100% 0, 100% calc(100% - 8px), 95% 100%, 90% calc(100% - 6px), 85% 100%, 80% calc(100% - 6px), 75% 100%, 70% calc(100% - 6px), 65% 100%, 60% calc(100% - 6px), 55% 100%, 50% calc(100% - 6px), 45% 100%, 40% calc(100% - 6px), 35% 100%, 30% calc(100% - 6px), 25% 100%, 20% calc(100% - 6px), 15% 100%, 10% calc(100% - 6px), 5% 100%, 0 calc(100% - 8px))",
+        }}
+      >
+        <div className="text-center">
+          <div className="text-[18px] font-bold tracking-[0.15em] flex items-center justify-center gap-2">
+            <span>⊕</span>
+            <span>HICAPS</span>
+            <span>⊕</span>
+          </div>
+          <div className="italic text-[10px] mt-0.5"><b>Fast</b> claims on the spot</div>
+          <div className="text-[9px] tracking-wide">www.hicaps.com.au</div>
+        </div>
+
+        <div className="my-3 h-3 bg-black/85" />
+
+        <div className="text-center font-bold tracking-[0.2em] text-[12px] mb-2">CUSTOMER COPY</div>
+
+        <div className="space-y-0.5">
+          <div className="flex justify-between"><span>Merchant ID</span><span className="bg-black text-black select-none px-6">XXXX</span></div>
+          <div className="flex justify-between"><span>Terminal ID</span><span className="bg-black text-black select-none px-6">XXXX</span></div>
+          <div className="flex justify-between"><span>Date/Time</span><span>{date}</span></div>
+        </div>
+
+        <div className="mt-3 space-y-0.5">
+          <div>PROVIDER NAME</div>
+          <div className="flex justify-between"><span>PROVIDER NUMBER</span><span className="bg-black text-black select-none px-6">123456CD</span></div>
+        </div>
+
+        <div className="my-2 border-t border-dashed border-black/40" />
+        <div className="font-semibold">MEDIBANK PRIVATE HEALTH</div>
+        <div className="my-2 border-t border-dashed border-black/40" />
+
+        <div className="font-bold tracking-[0.15em] text-[12px] mt-2">SERVICES CLAIMED:</div>
+        <div className="my-1 border-t border-dashed border-black/40" />
+        <div className="grid grid-cols-12 gap-1 text-[9px] font-bold tracking-wider">
+          <div className="col-span-3">SERVICE</div>
+          <div className="col-span-4">DESCRIPTION</div>
+          <div className="col-span-2 text-right">CHARGE</div>
+          <div className="col-span-3 text-right">BENEFIT</div>
+        </div>
+        <div className="my-1 border-t border-dashed border-black/40" />
+
+        <div className="text-[10px] mt-2">Patient Id:00</div>
+        <div className="grid grid-cols-12 gap-1 text-[10px]">
+          <div className="col-span-3">023</div>
+          <div className="col-span-4">CONSULT</div>
+          <div className="col-span-2 text-right">DOS</div>
+          <div className="col-span-3 text-right">{date.slice(0,5)}</div>
+        </div>
+        <div className="grid grid-cols-12 gap-1 text-[10px]">
+          <div className="col-span-3">APPROVED</div>
+          <div className="col-span-4">00</div>
+          <div className="col-span-2 text-right">${charge}.00</div>
+          <div className="col-span-3 text-right">${benefit}</div>
+        </div>
+
+        <div className="mt-2 text-[10px]">RRN: 000031234217</div>
+        <div className="my-2 border-t border-dashed border-black/40" />
+
+        <div className="flex justify-between text-[11px] font-semibold">
+          <span>CLAIM TOTAL</span>
+          <span>${charge}.00 &nbsp; ${benefit}</span>
+        </div>
+        <div className="my-2 border-t border-dashed border-black/40" />
+
+        <div className="flex justify-between text-[15px] font-bold tracking-wider mt-2">
+          <span>GAP PAYMENT</span>
+          <span>${amount.toFixed(2)}</span>
+        </div>
+
+        <div className="mt-3 text-[10px]">TXN RESPONSE:</div>
+        <div className="flex justify-between font-bold text-[13px] tracking-widest">
+          <span>APPROVED</span>
+          <span>00</span>
+        </div>
+
+        <div className="mt-3 flex justify-between text-[10px]">
+          <span>SWIPE COMM TYPE</span>
+          <span>BASE</span>
+        </div>
+        <div className="flex justify-between text-[10px]">
+          <span>DELIVERY COMM TYPE</span>
+          <span>ETHERNET</span>
+        </div>
+      </div>
+    </div>
   );
 }
 
