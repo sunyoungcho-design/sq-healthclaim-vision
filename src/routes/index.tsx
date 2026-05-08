@@ -250,7 +250,7 @@ function Approve({ onApprove, onDecline, onBack }: { onApprove: () => void; onDe
     <>
       <TopBar onBack={onBack} title="Review Payment" />
       <div className="px-7 pt-6">
-        <div className="text-[14px] text-[var(--sq-muted)]">Amount due today</div>
+        <div className="text-[14px] text-[var(--sq-muted)]">Gap amount due today</div>
         <div className="mt-1 text-[56px] leading-none font-semibold tracking-tight">$60<span className="text-[28px] text-[var(--sq-muted)] align-top">.00</span></div>
         <p className="sq-sub mt-3">Your insurance covered part of today's treatment.</p>
       </div>
