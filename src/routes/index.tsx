@@ -45,8 +45,9 @@ function Index() {
   const [amount, setAmount] = useState<number>(60);
   const [printed, setPrinted] = useState(false);
   const [patient, setPatient] = useState<Patient>(PATIENTS[0]);
-  const [item, setItem] = useState<ClaimItem>(ITEM_CATALOG[4]);
-  const [charge, setCharge] = useState<number>(ITEM_CATALOG[4].defaultCharge);
+  const [lineItems, setLineItems] = useState<LineItem[]>([
+    { item: ITEM_CATALOG[4], charge: ITEM_CATALOG[4].defaultCharge },
+  ]);
 
   // Preload the contactless icon so it's cached before the tap screen mounts
   useEffect(() => {
@@ -56,10 +57,11 @@ function Index() {
 
   const reset = () => { setAmount(60); setStep("scan"); setPrinted(false); };
 
-  // Compute benefits/gap from entered charge (simple model for prototype)
-  const medicareBenefit = +(charge * 0.18).toFixed(2);
-  const fundRebate = +(charge * 0.55).toFixed(2);
-  const gap = Math.max(0, +(charge - medicareBenefit - fundRebate).toFixed(2));
+  // Compute benefits/gap from total charge (simple model for prototype)
+  const totalCharge = +lineItems.reduce((s, li) => s + (li.charge || 0), 0).toFixed(2);
+  const medicareBenefit = +(totalCharge * 0.18).toFixed(2);
+  const fundRebate = +(totalCharge * 0.55).toFixed(2);
+  const gap = Math.max(0, +(totalCharge - medicareBenefit - fundRebate).toFixed(2));
 
   return (
     <PhoneFrame sideContent={printed ? <PrintedReceipt amount={amount} /> : undefined}>
@@ -72,10 +74,8 @@ function Index() {
             <ClaimForm
               patient={patient}
               setPatient={setPatient}
-              item={item}
-              setItem={(it) => { setItem(it); setCharge(it.defaultCharge); }}
-              charge={charge}
-              setCharge={setCharge}
+              lineItems={lineItems}
+              setLineItems={setLineItems}
               onBack={() => setStep("scan")}
               onSubmit={() => setStep("submitting")}
             />
@@ -84,13 +84,13 @@ function Index() {
           {step === "summary" && (
             <Summary
               patient={patient}
-              item={item}
-              charge={charge}
+              lineItems={lineItems}
+              totalCharge={totalCharge}
               medicareBenefit={medicareBenefit}
               fundRebate={fundRebate}
               gap={gap}
               onAccept={() => { setAmount(gap); setStep("tap"); }}
-              onReject={() => { setAmount(charge); setStep("tap"); }}
+              onReject={() => { setAmount(totalCharge); setStep("tap"); }}
               onBack={() => setStep("claim")}
             />
           )}
