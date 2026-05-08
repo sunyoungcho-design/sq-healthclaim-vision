@@ -257,8 +257,123 @@ function Verify({ onDone }: { onDone: () => void }) {
   );
 }
 
+/* ---------------- 2b. CLAIM FORM ---------------- */
+function ClaimForm({
+  patient, setPatient, item, setItem, charge, setCharge, onBack, onSubmit,
+}: {
+  patient: Patient;
+  setPatient: (p: Patient) => void;
+  item: ClaimItem;
+  setItem: (i: ClaimItem) => void;
+  charge: number;
+  setCharge: (n: number) => void;
+  onBack: () => void;
+  onSubmit: () => void;
+}) {
+  const valid = charge > 0;
+  return (
+    <>
+      <TopBar onBack={onBack} title="New Claim" />
+      <div className="flex-1 min-h-0 overflow-y-auto px-6 pt-2 pb-3">
+        <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mb-2">Patient on card</div>
+        <div className="sq-card p-2 space-y-1">
+          {PATIENTS.map((p) => {
+            const active = p.name === patient.name;
+            return (
+              <button
+                key={p.name}
+                onClick={() => setPatient(p)}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition text-left ${active ? "bg-[var(--sq-surface)] border border-[var(--sq-ink)]" : "border border-transparent hover:bg-[var(--sq-surface)]"}`}
+              >
+                <div>
+                  <div className="text-[14px] font-medium">{p.name}</div>
+                  <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">{p.relation} · IRN {p.irn} · DOB {p.dob}</div>
+                </div>
+                <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${active ? "bg-[var(--sq-ink)] border-[var(--sq-ink)]" : "border-[var(--sq-line)]"}`}>
+                  {active && <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mt-5 mb-2">Service item</div>
+        <div className="sq-card p-2">
+          <select
+            value={item.code}
+            onChange={(e) => {
+              const next = ITEM_CATALOG.find((i) => i.code === e.target.value);
+              if (next) setItem(next);
+            }}
+            className="w-full bg-transparent appearance-none px-3 py-2.5 text-[14px] font-medium focus:outline-none cursor-pointer"
+          >
+            {ITEM_CATALOG.map((i) => (
+              <option key={i.code} value={i.code}>{i.code} — {i.description}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mt-5 mb-2">Charge</div>
+        <div className="sq-card p-3 flex items-center">
+          <span className="text-[24px] font-semibold tracking-tight text-[var(--sq-muted)] mr-1">$</span>
+          <input
+            type="number"
+            inputMode="decimal"
+            min={0}
+            step="0.01"
+            value={Number.isFinite(charge) ? charge : 0}
+            onChange={(e) => setCharge(parseFloat(e.target.value) || 0)}
+            className="flex-1 bg-transparent text-[24px] font-semibold tracking-tight focus:outline-none"
+          />
+          <span className="text-[12px] text-[var(--sq-muted)]">AUD</span>
+        </div>
+        <div className="text-[11px] text-[var(--sq-muted)] mt-1.5 px-1">Enter the gross fee for this item.</div>
+
+        <div className="h-4" />
+      </div>
+
+      <div className="px-6 pb-3 pt-3 border-t border-[var(--sq-line)] bg-white flex gap-2">
+        <button onClick={onBack} className="sq-btn sq-btn-secondary">Cancel</button>
+        <button onClick={onSubmit} disabled={!valid} className="sq-btn sq-btn-primary disabled:opacity-50">Submit claim</button>
+      </div>
+    </>
+  );
+}
+
+/* ---------------- 2c. SUBMITTING ---------------- */
+function Submitting({ onDone }: { onDone: () => void }) {
+  useEffect(() => {
+    const t = setTimeout(onDone, 1800);
+    return () => clearTimeout(t);
+  }, [onDone]);
+  return (
+    <>
+      <TopBar />
+      <div className="flex-1 flex flex-col items-center justify-center px-10 text-center">
+        <div className="w-12 h-12 rounded-full border-2 border-[var(--sq-line)] border-t-[var(--sq-ink)] animate-spin" />
+        <h2 className="mt-8 text-[20px] font-semibold tracking-tight">Submitting claim to insurer…</h2>
+        <p className="mt-2 sq-sub">Awaiting statement of claim.</p>
+        <div className="sq-bar w-40 mt-8"><i /></div>
+      </div>
+    </>
+  );
+}
+
 /* ---------------- 3. SUMMARY ---------------- */
-function Summary({ onAccept, onReject, onBack }: { onAccept: () => void; onReject: () => void; onBack: () => void }) {
+function Summary({
+  patient, item, charge, medicareBenefit, fundRebate, gap,
+  onAccept, onReject, onBack,
+}: {
+  patient: Patient;
+  item: ClaimItem;
+  charge: number;
+  medicareBenefit: number;
+  fundRebate: number;
+  gap: number;
+  onAccept: () => void;
+  onReject: () => void;
+  onBack: () => void;
+}) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const gapRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
