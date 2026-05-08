@@ -277,13 +277,13 @@ function Scan({ onNext, cardCursor }: { onNext: () => void; cardCursor?: boolean
 
       {cardCursor && pos && (
         <div
-          className="pointer-events-none absolute z-50"
+          className="pointer-events-none absolute z-50 w-[88%]"
           style={{ left: pos.x, top: pos.y, transform: "translate(-50%, -50%) rotate(-8deg)" }}
         >
           <img
             src={medicareCard}
             alt=""
-            className="w-[90%] h-auto rounded-md shadow-xl ring-1 ring-white/5"
+            className="w-full h-auto rounded-md shadow-xl ring-1 ring-white/5"
             draggable={false}
           />
         </div>
