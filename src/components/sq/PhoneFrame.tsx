@@ -5,21 +5,16 @@ export function PhoneFrame({ children, sideContent }: { children: ReactNode; sid
   return (
     <div className="min-h-dvh w-full bg-[#0b0b0d] text-white flex items-center justify-center p-4 gap-8">
       <div
-        className="relative shrink-0 overflow-hidden"
+        className="relative shrink-0"
         style={{
-          aspectRatio: "470 / 816",
+          aspectRatio: "520 / 816",
           height: "min(816px, calc(100dvh - 32px))",
+          backgroundImage: `url(${frameImg})`,
+          backgroundSize: "100% 100%",
+          backgroundRepeat: "no-repeat",
+          clipPath: "inset(0 9.6% 0 0)",
         }}
       >
-        <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `url(${frameImg})`,
-            backgroundSize: "calc(100% * 520 / 470) 100%",
-            backgroundPosition: "left center",
-            backgroundRepeat: "no-repeat",
-          }}
-        />
         <div
           className="absolute overflow-hidden bg-black"
           style={{
