@@ -93,6 +93,16 @@ function Index() {
               onBack={() => setStep("claim")}
             />
           )}
+          {step === "summary" && (
+            <img
+              src={contactlessIcon}
+              alt=""
+              aria-hidden
+              decoding="async"
+              fetchPriority="high"
+              style={{ position: "absolute", width: 1, height: 1, opacity: 0, pointerEvents: "none" }}
+            />
+          )}
           {step === "tap" && <Tap amount={amount} onPaid={() => setStep("receipt")} onBack={() => setStep("summary")} />}
           {step === "receipt" && (
             <Receipt
