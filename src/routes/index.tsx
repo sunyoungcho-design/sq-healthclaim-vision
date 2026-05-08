@@ -212,12 +212,12 @@ function Summary({ onNext, onBack }: { onNext: () => void; onBack: () => void })
             <Line label="Insurance Covers" value="−$160.00" muted />
           </div>
           <div className="sq-divider my-4" />
-          <div className="sq-row">
+          <div className="rounded-lg bg-[var(--sq-surface)] p-4 flex items-center justify-between">
             <div className="flex flex-col">
-              <span className="text-[15px] font-semibold">You Pay Today</span>
-              <span className="text-[12px] font-medium text-[var(--sq-ink-2)] mt-0.5">Gap amount</span>
+              <span className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">Gap Amount</span>
+              <span className="text-[13px] font-medium text-[var(--sq-ink-2)] mt-1">You pay today</span>
             </div>
-            <span className="text-[28px] font-semibold tracking-tight">$60.00</span>
+            <span className="text-[32px] font-semibold tracking-tight">$60.00</span>
           </div>
         </div>
 
