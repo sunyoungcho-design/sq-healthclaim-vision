@@ -48,7 +48,7 @@ function Index() {
   const [cardCursor, setCardCursor] = useState(false);
   const [selectedPatients, setSelectedPatients] = useState<Patient[]>([PATIENTS[0]]);
   const [claimsByIrn, setClaimsByIrn] = useState<Record<string, LineItem[]>>({
-    [PATIENTS[0].irn]: [{ item: ITEM_CATALOG[4], charge: ITEM_CATALOG[4].defaultCharge }],
+    [PATIENTS[0].irn]: [],
   });
 
   // Preload the contactless icon and medicare card so they're cached before use
