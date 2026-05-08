@@ -147,7 +147,7 @@ function Index() {
   );
 }
 
-function TopBar({ onBack, title }: { onBack?: () => void; title?: string }) {
+function TopBar({ onBack, title, subtitle }: { onBack?: () => void; title?: string; subtitle?: string }) {
   return (
     <div className="px-4 h-12 flex items-center">
       {onBack ? (
@@ -155,7 +155,12 @@ function TopBar({ onBack, title }: { onBack?: () => void; title?: string }) {
           <ChevronLeft className="w-6 h-6" />
         </button>
       ) : <div className="w-10 h-10" />}
-      <div className="flex-1 text-center text-[15px] font-semibold">{title}</div>
+      <div className="flex-1 text-center leading-tight">
+        <div className="text-[15px] font-semibold">{title}</div>
+        {subtitle && (
+          <div className="text-[11px] font-medium text-[var(--sq-muted)] mt-0.5">{subtitle}</div>
+        )}
+      </div>
       <div className="w-10 h-10" />
     </div>
   );
