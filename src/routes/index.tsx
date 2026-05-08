@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Step = "scan" | "verify" | "summary" | "approve" | "tap" | "done";
+type Step = "scan" | "verify" | "summary" | "reject" | "approve" | "tap" | "done";
 
 function Index() {
   const [step, setStep] = useState<Step>("scan");
