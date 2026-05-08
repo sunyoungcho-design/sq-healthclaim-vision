@@ -321,8 +321,8 @@ function Approve({ onApprove, onDecline, onBack }: { onApprove: () => void; onDe
 
       <div className="flex-1" />
       <div className="px-6 pb-8 pt-6 space-y-2">
-        <button onClick={onApprove} className="sq-btn sq-btn-primary">Approve Payment</button>
-        <button onClick={onDecline} className="sq-btn sq-btn-ghost">Decline</button>
+        <button onClick={onApprove} className="sq-btn sq-btn-primary">Pay $60.00</button>
+        <button onClick={onDecline} className="sq-btn sq-btn-ghost">Back</button>
       </div>
     </>
   );
