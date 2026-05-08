@@ -412,7 +412,7 @@ function ClaimForm({
           return (
             <div key={p.irn} className="mt-6">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-9 h-9 rounded-full bg-[var(--sq-ink)] text-white flex items-center justify-center text-[14px] font-semibold">
+                <div className="w-7 h-7 rounded-full bg-[var(--sq-line)] text-[var(--sq-ink)] flex items-center justify-center text-[12px] font-medium">
                   {p.name.trim().charAt(0).toUpperCase()}
                 </div>
                 <div className="text-[18px] font-semibold tracking-tight text-[var(--sq-ink)]">
