@@ -579,16 +579,27 @@ function Summary({
             <div className="col-span-4 text-right">Charge</div>
           </div>
           <div className="sq-divider" />
-          {lineItems.map((li, idx) => (
-            <div key={idx}>
-              <div className="grid grid-cols-12 gap-2 py-3 text-[13px]">
-                <div className="col-span-2 font-mono">{li.item.code}</div>
-                <div className="col-span-6">{li.item.description}</div>
-                <div className="col-span-4 text-right font-medium">${li.charge.toFixed(2)}</div>
+          {selectedPatients.map((p, pIdx) => {
+            const items = claimsByIrn[p.irn] ?? [];
+            return (
+              <div key={p.irn}>
+                <div className="pt-3 pb-1 text-[11px] font-semibold uppercase tracking-wider text-[var(--sq-muted)]">
+                  {p.name} · IRN {p.irn}
+                </div>
+                {items.map((li, idx) => (
+                  <div key={idx}>
+                    <div className="grid grid-cols-12 gap-2 py-2 text-[13px]">
+                      <div className="col-span-2 font-mono">{li.item.code}</div>
+                      <div className="col-span-6">{li.item.description}</div>
+                      <div className="col-span-4 text-right font-medium">${li.charge.toFixed(2)}</div>
+                    </div>
+                    {idx < items.length - 1 && <div className="sq-divider" />}
+                  </div>
+                ))}
+                {pIdx < selectedPatients.length - 1 && <div className="sq-divider" />}
               </div>
-              {idx < lineItems.length - 1 && <div className="sq-divider" />}
-            </div>
-          ))}
+            );
+          })}
           <div className="sq-divider" />
           <div className="space-y-3.5 mt-4">
             <Line label="Total Charge" value={`$${totalCharge.toFixed(2)}`} />
