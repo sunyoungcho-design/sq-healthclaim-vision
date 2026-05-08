@@ -106,7 +106,7 @@ function Scan({ onNext }: { onNext: () => void }) {
           aria-label="Tap to scan health card"
           className="group relative w-[220px] h-[220px] flex items-center justify-center focus:outline-none"
         >
-          <div className="absolute inset-0 rounded-full bg-[#ebebeb]/[0.18]" />
+          <div className="absolute inset-0 rounded-full bg-[#212121]" />
           <div className="absolute inset-0 rounded-full border border-white/30 sq-tap-ring" />
           <div className="absolute inset-0 rounded-full border border-white/30 sq-tap-ring" style={{ animationDelay: "1.75s" }} />
           <div className="absolute inset-4 rounded-full border border-[var(--sq-line)] opacity-0 group-hover:opacity-60 transition-opacity duration-300" />
