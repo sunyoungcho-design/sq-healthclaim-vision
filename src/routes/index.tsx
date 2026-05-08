@@ -22,6 +22,7 @@ export const Route = createFileRoute("/")({
 type Step = "scan" | "verify" | "claim" | "submitting" | "summary" | "tap" | "receipt" | "done";
 
 type ClaimItem = { code: string; description: string; defaultCharge: number };
+const EMPTY_ITEM: ClaimItem = { code: "", description: "Select service item", defaultCharge: 0 };
 const ITEM_CATALOG: ClaimItem[] = [
   { code: "011", description: "Comprehensive oral examination", defaultCharge: 75 },
   { code: "012", description: "Periodic oral examination", defaultCharge: 60 },
