@@ -177,14 +177,15 @@
   .sq-btn {
     height: 56px; border-radius: 999px; font-weight: 600; font-size: 16px;
     display:inline-flex; align-items:center; justify-content:center; width:100%;
+    border: 0;
     transition: transform .15s ease, opacity .2s ease, background .2s ease;
   }
   .sq-btn:active { transform: scale(0.98); }
   .sq-btn-primary { background: var(--sq-ink); color: #fff; }
   .sq-btn-primary:hover { background: oklch(0.22 0 0); }
   .sq-btn-ghost { background: transparent; color: var(--sq-muted); }
-  .sq-btn-secondary { background: var(--sq-surface); color: var(--sq-ink); border: 1px solid var(--sq-line); }
-  .sq-btn-secondary:hover { background: oklch(0.96 0 0); }
+  .sq-btn-secondary { background: #F0F0F0; color: var(--sq-ink); }
+  .sq-btn-secondary:hover { background: #E8E8E8; }
   .sq-row { display:flex; justify-content:space-between; align-items:center; }
   .sq-divider { height: 1px; background: var(--sq-line); }
   .sq-fadein { animation: sq-fade .4s ease-out both; }
