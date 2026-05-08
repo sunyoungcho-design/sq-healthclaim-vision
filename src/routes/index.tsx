@@ -159,7 +159,7 @@ function Scan({ onNext }: { onNext: () => void }) {
             className="absolute inset-0 bg-black/40"
             aria-label="Close"
           />
-          <div className="relative w-full bg-white rounded-t-2xl max-h-[80%] flex flex-col shadow-2xl sq-fadein">
+          <div className="relative w-full bg-[#18181c] rounded-t-2xl max-h-[80%] flex flex-col shadow-2xl sq-fadein">
             <div className="flex items-center justify-between px-5 pt-4 pb-2">
               <div className="text-[15px] font-semibold">Accepted insurers</div>
               <button
