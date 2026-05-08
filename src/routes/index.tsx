@@ -35,7 +35,10 @@ type Patient = { name: string; relation: string; irn: string; dob: string };
 const PATIENTS: Patient[] = [
   { name: "John Citizen", relation: "Cardholder", irn: "1", dob: "12/03/1984" },
   { name: "Sarah Citizen", relation: "Spouse", irn: "2", dob: "08/07/1986" },
+  { name: "Emma Citizen", relation: "Dependant", irn: "3", dob: "21/11/2014" },
 ];
+
+type LineItem = { item: ClaimItem; charge: number };
 
 function Index() {
   const [step, setStep] = useState<Step>("scan");
