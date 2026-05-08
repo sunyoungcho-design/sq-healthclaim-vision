@@ -162,9 +162,23 @@ const MORE_BRANDS = [
   "myOwn", "Suncorp", "AAMI",
 ];
 
-function Scan({ onNext }: { onNext: () => void }) {
+function Scan({ onNext, cardCursor }: { onNext: () => void; cardCursor?: boolean }) {
   const [showMore, setShowMore] = useState(false);
+  const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
   return (
+    <div
+      ref={wrapRef}
+      className="contents"
+      onMouseMove={cardCursor ? (e) => {
+        const host = wrapRef.current?.parentElement;
+        if (!host) return;
+        const r = host.getBoundingClientRect();
+        setPos({ x: e.clientX - r.left, y: e.clientY - r.top });
+      } : undefined}
+      onMouseLeave={() => setPos(null)}
+      style={cardCursor ? { cursor: "none" } : undefined}
+    >
     <>
       <TopBar />
       <div className="px-6 pt-2 text-center">
