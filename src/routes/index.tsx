@@ -456,9 +456,10 @@ function ClaimForm({
                       inputMode="decimal"
                       min={0}
                       step="0.01"
-                      value={Number.isFinite(li.charge) ? li.charge : 0}
+                      placeholder="0.00"
+                      value={li.charge ? li.charge : ""}
                       onChange={(e) => updateCharge(p.irn, idx, parseFloat(e.target.value) || 0)}
-                      className="flex-1 bg-transparent text-[24px] font-semibold tracking-tight focus:outline-none"
+                      className="flex-1 bg-transparent text-[24px] font-semibold tracking-tight focus:outline-none placeholder:text-[var(--sq-muted)]"
                     />
                   </div>
                 </div>
