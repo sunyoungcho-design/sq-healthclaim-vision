@@ -407,12 +407,12 @@ function Submitting({ onDone }: { onDone: () => void }) {
 
 /* ---------------- 3. SUMMARY ---------------- */
 function Summary({
-  patient, item, charge, medicareBenefit, fundRebate, gap,
+  patient, lineItems, totalCharge, medicareBenefit, fundRebate, gap,
   onAccept, onReject, onBack,
 }: {
   patient: Patient;
-  item: ClaimItem;
-  charge: number;
+  lineItems: LineItem[];
+  totalCharge: number;
   medicareBenefit: number;
   fundRebate: number;
   gap: number;
@@ -431,9 +431,8 @@ function Summary({
         target.offsetTop - container.clientHeight / 2 + target.clientHeight / 2;
       const startTop = container.scrollTop;
       const distance = targetTop - startTop;
-      const duration = 1400; // ms — slower for a smoother feel
+      const duration = 1400;
       const startTime = performance.now();
-      // easeInOutCubic
       const ease = (t: number) =>
         t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
       let raf = 0;
@@ -486,14 +485,19 @@ function Summary({
             <div className="col-span-4 text-right">Charge</div>
           </div>
           <div className="sq-divider" />
-          <div className="grid grid-cols-12 gap-2 py-3 text-[13px]">
-            <div className="col-span-2 font-mono">{item.code}</div>
-            <div className="col-span-6">{item.description}</div>
-            <div className="col-span-4 text-right font-medium">${charge.toFixed(2)}</div>
-          </div>
+          {lineItems.map((li, idx) => (
+            <div key={idx}>
+              <div className="grid grid-cols-12 gap-2 py-3 text-[13px]">
+                <div className="col-span-2 font-mono">{li.item.code}</div>
+                <div className="col-span-6">{li.item.description}</div>
+                <div className="col-span-4 text-right font-medium">${li.charge.toFixed(2)}</div>
+              </div>
+              {idx < lineItems.length - 1 && <div className="sq-divider" />}
+            </div>
+          ))}
           <div className="sq-divider" />
           <div className="space-y-3.5 mt-4">
-            <Line label="Total Charge" value={`$${charge.toFixed(2)}`} />
+            <Line label="Total Charge" value={`$${totalCharge.toFixed(2)}`} />
             <Line label="Medicare Benefit" value={`−$${medicareBenefit.toFixed(2)}`} muted />
             <Line label="Private Health Rebate" value={`−$${fundRebate.toFixed(2)}`} muted />
           </div>
