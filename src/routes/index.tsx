@@ -123,7 +123,7 @@ function Scan({ onNext }: { onNext: () => void }) {
           ))}
           <button
             onClick={() => setShowMore(true)}
-            className="w-12 h-8 rounded-md bg-[var(--sq-surface)] border border-[var(--sq-line)] flex items-center justify-center text-[10px] font-semibold text-[var(--sq-ink-2)] hover:bg-white transition"
+            className="w-12 h-8 rounded-md bg-[var(--sq-surface)] flex items-center justify-center text-[10px] font-semibold text-[var(--sq-ink-2)] transition border-0 bg-[#f7f7f7]"
           >
             +more
           </button>
