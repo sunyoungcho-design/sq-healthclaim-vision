@@ -659,13 +659,13 @@ function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; o
     >
       <div className="px-5 pt-4 flex items-center justify-between text-white">
         <button
-          onClick={onBack}
+          onClick={(e) => { e.stopPropagation(); onBack(); }}
           aria-label="Cancel"
           className="w-8 h-8 -ml-1 flex items-center justify-center rounded-full hover:bg-white/10 transition"
         >
           <X className="w-5 h-5" strokeWidth={2} />
         </button>
-        <button className="text-[12px] font-medium opacity-90 hover:opacity-100">English</button>
+        <button onClick={(e) => e.stopPropagation()} className="text-[12px] font-medium opacity-90 hover:opacity-100">English</button>
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center px-3 -mt-4">
