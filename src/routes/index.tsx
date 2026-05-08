@@ -301,7 +301,7 @@ function Summary({ onAccept, onReject, onBack }: { onAccept: () => void; onRejec
 
       </div>
 
-      <div className="px-6 pb-3 pt-3 border-t border-[var(--sq-line)] bg-white flex gap-2">
+      <div className="px-6 pb-3 pt-3 border-t border-[var(--sq-line)] bg-[#0f0f12] flex gap-2">
         <button onClick={onReject} className="sq-btn sq-btn-secondary">Reject</button>
         <button onClick={onAccept} className="sq-btn sq-btn-primary">Accept</button>
       </div>
