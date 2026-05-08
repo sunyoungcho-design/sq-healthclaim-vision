@@ -80,7 +80,7 @@ function Scan({ onNext }: { onNext: () => void }) {
       <div className="flex items-center justify-center px-6 pt-4">
         <div className="relative w-[220px] h-[220px] flex items-center justify-center">
           <div className="absolute inset-0 rounded-full bg-[var(--sq-surface)] bg-[#f0f0f0]" />
-          <div className="relative w-[180px] h-[112px] bg-[var(--sq-surface)] p-3 flex flex-col justify-between overflow-hidden border-0 rounded-md shadow-none">
+          <div className="relative w-[180px] h-[112px] bg-[var(--sq-surface)] p-3 flex flex-col justify-between overflow-hidden border-0 rounded-md shadow-sm">
             <div className="flex items-center justify-between relative z-10">
               <div className="text-[10px] font-semibold tracking-widest text-[var(--sq-muted)]">HEALTH CARE CARD</div>
             </div>
