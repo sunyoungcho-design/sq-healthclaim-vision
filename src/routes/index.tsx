@@ -103,7 +103,7 @@ function Scan({ onNext }: { onNext: () => void }) {
           </div>
         </button>
       </div>
-      <div className="text-center text-[11px] font-medium text-[var(--sq-muted)] mt-2">Tap card to start demo</div>
+      
 
       <div className="px-5 pt-4">
         <div className="text-center text-[12px] text-[var(--sq-muted)] mb-2">We accept</div>
