@@ -78,9 +78,15 @@ function Scan({ onNext }: { onNext: () => void }) {
       </div>
 
       <div className="flex items-center justify-center px-6 pt-4">
-        <div className="relative w-[220px] h-[220px] flex items-center justify-center">
+        <button
+          onClick={onNext}
+          aria-label="Tap to scan health card"
+          className="group relative w-[220px] h-[220px] flex items-center justify-center focus:outline-none"
+        >
           <div className="absolute inset-0 rounded-full bg-[#ebebeb]/[0.18]" />
-          <div className="relative w-[150px] h-[94px] bg-[var(--sq-surface)] p-3 flex flex-col justify-between overflow-hidden border-0 rounded-md shadow-sm">
+          <div className="absolute inset-4 rounded-full border border-[var(--sq-line)] opacity-60 group-hover:opacity-100 transition" />
+          <div className="absolute inset-0 rounded-full sq-pulse-ring" />
+          <div className="relative w-[150px] h-[94px] bg-[var(--sq-surface)] p-3 flex flex-col justify-between overflow-hidden border-0 rounded-md shadow-sm transition-transform group-hover:scale-105 group-active:scale-95">
             <div className="flex items-center justify-between relative z-10">
               <div className="text-[10px] font-semibold tracking-widest text-[var(--sq-muted)]">HEALTH CARE CARD</div>
             </div>
@@ -89,8 +95,9 @@ function Scan({ onNext }: { onNext: () => void }) {
             </div>
             <div className="relative z-10" />
           </div>
-        </div>
+        </button>
       </div>
+      <div className="text-center text-[11px] font-medium text-[var(--sq-muted)] mt-2">Tap card to start demo</div>
 
       <div className="px-5 pt-4">
         <div className="text-center text-[12px] text-[var(--sq-muted)] mb-2">We accept</div>
