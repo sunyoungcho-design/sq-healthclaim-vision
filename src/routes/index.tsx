@@ -259,8 +259,9 @@ function Summary({ onNext, onBack }: { onNext: () => void; onBack: () => void })
 
       </div>
 
-      <div className="px-6 pb-3 pt-3 border-t border-[var(--sq-line)] bg-white">
-        <button onClick={onNext} className="sq-btn sq-btn-primary">Continue</button>
+      <div className="px-6 pb-3 pt-3 border-t border-[var(--sq-line)] bg-white flex gap-2">
+        <button onClick={onBack} className="sq-btn sq-btn-secondary">Reject</button>
+        <button onClick={onNext} className="sq-btn sq-btn-primary">Accept</button>
       </div>
     </>
   );
