@@ -297,7 +297,7 @@ function Scan({ onNext, cardCursor }: { onNext: () => void; cardCursor?: boolean
           <img
             src={medicareCard}
             alt=""
-            className="w-full h-auto rounded-md shadow-xl ring-1 ring-white/5"
+            className="w-full h-auto rounded-sm shadow-xl ring-1 ring-white/5"
             draggable={false}
           />
         </div>
