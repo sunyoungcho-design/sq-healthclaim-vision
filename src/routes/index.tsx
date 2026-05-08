@@ -340,6 +340,9 @@ function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; o
       <div className="px-7 pt-6 text-center">
         <div className="text-[13px] uppercase tracking-[0.18em] text-[var(--sq-muted)] font-semibold">Amount Due</div>
         <div className="mt-2 text-[64px] leading-none font-semibold tracking-tight">${dollars}<span className="text-[32px] text-[var(--sq-muted)] align-top">.{cents}</span></div>
+        <p className="sq-sub mt-2">
+          {amount === 220 ? "Full amount — claim back ~$160 from Medicare & fund." : "Gap for item 23 · GN 1234567X"}
+        </p>
       </div>
 
       <div className="flex-1 flex items-center justify-center">
