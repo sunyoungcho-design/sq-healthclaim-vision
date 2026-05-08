@@ -54,7 +54,20 @@ function TopBar({ onBack, title }: { onBack?: () => void; title?: string }) {
 }
 
 /* ---------------- 1. SCAN ---------------- */
+const MORE_BRANDS = [
+  "Australian Unity", "Bupa", "HBF", "AHM", "UniHealth", "RBHS",
+  "CBHS", "Mildura Health", "Teachers Health", "GMHBA", "Budget Direct",
+  "HIF", "Doctors Health", "Defence Health", "GU Health", "health.com.au",
+  "Latrobe", "Frank", "Westfund", "CUA Health", "RT Health", "ACA Health",
+  "Peoplecare", "TUH", "Police Health", "St Lukes", "Onemedifund",
+  "Healthcare Insurance", "Queensland Country", "Navy Health",
+  "Phoenix Health", "Health Partners", "Qantas Insurance", "Apia",
+  "Emergency Services", "Nurses & Midwives", "Hunter Health",
+  "myOwn", "Suncorp", "AAMI",
+];
+
 function Scan({ onNext }: { onNext: () => void }) {
+  const [showMore, setShowMore] = useState(false);
   return (
     <>
       <TopBar />
@@ -98,6 +111,12 @@ function Scan({ onNext }: { onNext: () => void }) {
               <img src={b.src} alt={b.name} className="max-w-[80%] max-h-[70%] object-contain" />
             </div>
           ))}
+          <button
+            onClick={() => setShowMore(true)}
+            className="w-12 h-8 rounded-md bg-[var(--sq-surface)] border border-[var(--sq-line)] flex items-center justify-center text-[10px] font-semibold text-[var(--sq-ink-2)] hover:bg-white transition"
+          >
+            +more
+          </button>
         </div>
       </div>
 
@@ -106,6 +125,39 @@ function Scan({ onNext }: { onNext: () => void }) {
       <div className="px-5 pb-5">
         <button onClick={onNext} className="sq-btn sq-btn-secondary">Enter manually</button>
       </div>
+
+      {showMore && (
+        <div className="absolute inset-0 z-10 flex items-end">
+          <button
+            onClick={() => setShowMore(false)}
+            className="absolute inset-0 bg-black/40"
+            aria-label="Close"
+          />
+          <div className="relative w-full bg-white rounded-t-2xl max-h-[80%] flex flex-col shadow-2xl sq-fadein">
+            <div className="flex items-center justify-between px-5 pt-4 pb-2">
+              <div className="text-[15px] font-semibold">Accepted insurers</div>
+              <button
+                onClick={() => setShowMore(false)}
+                className="text-[12px] font-semibold text-[var(--sq-muted)]"
+              >
+                Close
+              </button>
+            </div>
+            <div className="px-4 pb-5 overflow-y-auto">
+              <div className="grid grid-cols-2 gap-1.5">
+                {MORE_BRANDS.map((b) => (
+                  <div
+                    key={b}
+                    className="h-9 px-2 rounded-md border border-[var(--sq-line)] bg-white flex items-center justify-center text-[10px] font-semibold tracking-tight text-[var(--sq-ink-2)] text-center"
+                  >
+                    {b}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
