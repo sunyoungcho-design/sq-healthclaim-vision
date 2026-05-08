@@ -38,7 +38,8 @@ function Index() {
               onBack={() => setStep("scan")}
             />
           )}
-          {step === "tap" && <Tap amount={amount} onPaid={() => setStep("done")} onBack={() => setStep("summary")} />}
+          {step === "tap" && <Tap amount={amount} onPaid={() => setStep("receipt")} onBack={() => setStep("summary")} />}
+          {step === "receipt" && <Receipt amount={amount} onSelect={() => setStep("done")} />}
           {step === "done" && <Done amount={amount} selfClaim={amount === 220} onDone={() => { setAmount(60); setStep("scan"); }} />}
         </div>
       </div>
