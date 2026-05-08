@@ -2,6 +2,10 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { PhoneFrame, StatusBar } from "@/components/sq/PhoneFrame";
 import { ChevronLeft, CreditCard, Check, Wifi, Apple } from "lucide-react";
+import nibLogo from "@/assets/insurers/nib.png";
+import medibankLogo from "@/assets/insurers/medibank.png";
+import hcfLogo from "@/assets/insurers/hcf.avif";
+import healthpointLogo from "@/assets/insurers/healthpoint.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -80,14 +84,19 @@ function Scan({ onNext }: { onNext: () => void }) {
 
       <div className="px-5 pt-4">
         <div className="text-center text-[12px] text-[var(--sq-muted)] mb-2">We accept</div>
-        <div className="flex flex-wrap items-center justify-center gap-1.5">
-          {["Medicare", "Bupa", "Medibank", "HCF", "nib"].map((b) => (
-            <span
-              key={b}
-              className="px-2.5 h-6 inline-flex items-center rounded-full border border-[var(--sq-line)] bg-white text-[11px] font-semibold tracking-tight text-[var(--sq-ink-2)]"
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {[
+            { name: "nib", src: nibLogo },
+            { name: "Medibank", src: medibankLogo },
+            { name: "HCF", src: hcfLogo },
+            { name: "HealthPoint", src: healthpointLogo },
+          ].map((b) => (
+            <div
+              key={b.name}
+              className="w-12 h-8 rounded-md bg-white border border-[var(--sq-line)] flex items-center justify-center overflow-hidden"
             >
-              {b}
-            </span>
+              <img src={b.src} alt={b.name} className="max-w-[80%] max-h-[70%] object-contain" />
+            </div>
           ))}
         </div>
       </div>
