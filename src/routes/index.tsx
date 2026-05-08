@@ -18,12 +18,34 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Step = "scan" | "verify" | "summary" | "tap" | "receipt" | "done";
+type Step = "scan" | "verify" | "claim" | "submitting" | "summary" | "tap" | "receipt" | "done";
+
+type ClaimItem = { code: string; description: string; defaultCharge: number };
+const ITEM_CATALOG: ClaimItem[] = [
+  { code: "011", description: "Comprehensive oral examination", defaultCharge: 75 },
+  { code: "012", description: "Periodic oral examination", defaultCharge: 60 },
+  { code: "014", description: "Consultation", defaultCharge: 90 },
+  { code: "022", description: "Intraoral periapical X-ray", defaultCharge: 55 },
+  { code: "114", description: "Scale and clean", defaultCharge: 145 },
+  { code: "121", description: "Topical application of remineralising agent", defaultCharge: 45 },
+  { code: "311", description: "Removal of a tooth", defaultCharge: 220 },
+];
+
+type Patient = { name: string; relation: string; irn: string; dob: string };
+const PATIENTS: Patient[] = [
+  { name: "John Citizen", relation: "Cardholder", irn: "1", dob: "12/03/1984" },
+  { name: "Sarah Citizen", relation: "Spouse", irn: "2", dob: "08/07/1986" },
+  { name: "Emma Citizen", relation: "Dependant", irn: "3", dob: "21/11/2014" },
+  { name: "Liam Citizen", relation: "Dependant", irn: "4", dob: "02/05/2017" },
+];
 
 function Index() {
   const [step, setStep] = useState<Step>("scan");
   const [amount, setAmount] = useState<number>(60);
   const [printed, setPrinted] = useState(false);
+  const [patient, setPatient] = useState<Patient>(PATIENTS[0]);
+  const [item, setItem] = useState<ClaimItem>(ITEM_CATALOG[4]);
+  const [charge, setCharge] = useState<number>(ITEM_CATALOG[4].defaultCharge);
 
   // Preload the contactless icon so it's cached before the tap screen mounts
   useEffect(() => {
@@ -33,18 +55,42 @@ function Index() {
 
   const reset = () => { setAmount(60); setStep("scan"); setPrinted(false); };
 
+  // Compute benefits/gap from entered charge (simple model for prototype)
+  const medicareBenefit = +(charge * 0.18).toFixed(2);
+  const fundRebate = +(charge * 0.55).toFixed(2);
+  const gap = Math.max(0, +(charge - medicareBenefit - fundRebate).toFixed(2));
+
   return (
     <PhoneFrame sideContent={printed ? <PrintedReceipt amount={amount} /> : undefined}>
       <div className={`sq-screen${step === "scan" ? " sq-screen-dark" : ""}${step === "tap" ? " sq-screen-blue" : ""}`} key={step}>
         <StatusBar />
         <div className="flex-1 min-h-0 flex flex-col sq-fadein">
           {step === "scan" && <Scan onNext={() => setStep("verify")} />}
-          {step === "verify" && <Verify onDone={() => setStep("summary")} />}
+          {step === "verify" && <Verify onDone={() => setStep("claim")} />}
+          {step === "claim" && (
+            <ClaimForm
+              patient={patient}
+              setPatient={setPatient}
+              item={item}
+              setItem={(it) => { setItem(it); setCharge(it.defaultCharge); }}
+              charge={charge}
+              setCharge={setCharge}
+              onBack={() => setStep("scan")}
+              onSubmit={() => setStep("submitting")}
+            />
+          )}
+          {step === "submitting" && <Submitting onDone={() => setStep("summary")} />}
           {step === "summary" && (
             <Summary
-              onAccept={() => { setAmount(60); setStep("tap"); }}
-              onReject={() => { setAmount(220); setStep("tap"); }}
-              onBack={() => setStep("scan")}
+              patient={patient}
+              item={item}
+              charge={charge}
+              medicareBenefit={medicareBenefit}
+              fundRebate={fundRebate}
+              gap={gap}
+              onAccept={() => { setAmount(gap); setStep("tap"); }}
+              onReject={() => { setAmount(charge); setStep("tap"); }}
+              onBack={() => setStep("claim")}
             />
           )}
           {step === "tap" && <Tap amount={amount} onPaid={() => setStep("receipt")} onBack={() => setStep("summary")} />}
@@ -211,8 +257,123 @@ function Verify({ onDone }: { onDone: () => void }) {
   );
 }
 
+/* ---------------- 2b. CLAIM FORM ---------------- */
+function ClaimForm({
+  patient, setPatient, item, setItem, charge, setCharge, onBack, onSubmit,
+}: {
+  patient: Patient;
+  setPatient: (p: Patient) => void;
+  item: ClaimItem;
+  setItem: (i: ClaimItem) => void;
+  charge: number;
+  setCharge: (n: number) => void;
+  onBack: () => void;
+  onSubmit: () => void;
+}) {
+  const valid = charge > 0;
+  return (
+    <>
+      <TopBar onBack={onBack} title="New Claim" />
+      <div className="flex-1 min-h-0 overflow-y-auto px-6 pt-2 pb-3">
+        <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mb-2">Patient on card</div>
+        <div className="sq-card p-2 space-y-1">
+          {PATIENTS.map((p) => {
+            const active = p.name === patient.name;
+            return (
+              <button
+                key={p.name}
+                onClick={() => setPatient(p)}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg transition text-left ${active ? "bg-[var(--sq-surface)] border border-[var(--sq-ink)]" : "border border-transparent hover:bg-[var(--sq-surface)]"}`}
+              >
+                <div>
+                  <div className="text-[14px] font-medium">{p.name}</div>
+                  <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">{p.relation} · IRN {p.irn} · DOB {p.dob}</div>
+                </div>
+                <div className={`w-5 h-5 rounded-full border flex items-center justify-center ${active ? "bg-[var(--sq-ink)] border-[var(--sq-ink)]" : "border-[var(--sq-line)]"}`}>
+                  {active && <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mt-5 mb-2">Service item</div>
+        <div className="sq-card p-2">
+          <select
+            value={item.code}
+            onChange={(e) => {
+              const next = ITEM_CATALOG.find((i) => i.code === e.target.value);
+              if (next) setItem(next);
+            }}
+            className="w-full bg-transparent appearance-none px-3 py-2.5 text-[14px] font-medium focus:outline-none cursor-pointer"
+          >
+            {ITEM_CATALOG.map((i) => (
+              <option key={i.code} value={i.code}>{i.code} — {i.description}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mt-5 mb-2">Charge</div>
+        <div className="sq-card p-3 flex items-center">
+          <span className="text-[24px] font-semibold tracking-tight text-[var(--sq-muted)] mr-1">$</span>
+          <input
+            type="number"
+            inputMode="decimal"
+            min={0}
+            step="0.01"
+            value={Number.isFinite(charge) ? charge : 0}
+            onChange={(e) => setCharge(parseFloat(e.target.value) || 0)}
+            className="flex-1 bg-transparent text-[24px] font-semibold tracking-tight focus:outline-none"
+          />
+          <span className="text-[12px] text-[var(--sq-muted)]">AUD</span>
+        </div>
+        <div className="text-[11px] text-[var(--sq-muted)] mt-1.5 px-1">Enter the gross fee for this item.</div>
+
+        <div className="h-4" />
+      </div>
+
+      <div className="px-6 pb-3 pt-3 border-t border-[var(--sq-line)] bg-white flex gap-2">
+        <button onClick={onBack} className="sq-btn sq-btn-secondary">Cancel</button>
+        <button onClick={onSubmit} disabled={!valid} className="sq-btn sq-btn-primary disabled:opacity-50">Submit claim</button>
+      </div>
+    </>
+  );
+}
+
+/* ---------------- 2c. SUBMITTING ---------------- */
+function Submitting({ onDone }: { onDone: () => void }) {
+  useEffect(() => {
+    const t = setTimeout(onDone, 1800);
+    return () => clearTimeout(t);
+  }, [onDone]);
+  return (
+    <>
+      <TopBar />
+      <div className="flex-1 flex flex-col items-center justify-center px-10 text-center">
+        <div className="w-12 h-12 rounded-full border-2 border-[var(--sq-line)] border-t-[var(--sq-ink)] animate-spin" />
+        <h2 className="mt-8 text-[20px] font-semibold tracking-tight">Submitting claim to insurer…</h2>
+        <p className="mt-2 sq-sub">Awaiting statement of claim.</p>
+        <div className="sq-bar w-40 mt-8"><i /></div>
+      </div>
+    </>
+  );
+}
+
 /* ---------------- 3. SUMMARY ---------------- */
-function Summary({ onAccept, onReject, onBack }: { onAccept: () => void; onReject: () => void; onBack: () => void }) {
+function Summary({
+  patient, item, charge, medicareBenefit, fundRebate, gap,
+  onAccept, onReject, onBack,
+}: {
+  patient: Patient;
+  item: ClaimItem;
+  charge: number;
+  medicareBenefit: number;
+  fundRebate: number;
+  gap: number;
+  onAccept: () => void;
+  onReject: () => void;
+  onBack: () => void;
+}) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const gapRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -265,8 +426,8 @@ function Summary({ onAccept, onReject, onBack }: { onAccept: () => void; onRejec
             </div>
             <div className="text-right">
               <div className="text-[11px] text-[var(--sq-muted)] uppercase tracking-wider">Patient</div>
-              <div className="text-[14px] font-medium mt-0.5">John Citizen</div>
-              <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">Medicare: 1234 56789 1 · IRN 1</div>
+              <div className="text-[14px] font-medium mt-0.5">{patient.name}</div>
+              <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">Medicare: 1234 56789 1 · IRN {patient.irn}</div>
             </div>
           </div>
         </div>
@@ -280,15 +441,15 @@ function Summary({ onAccept, onReject, onBack }: { onAccept: () => void; onRejec
           </div>
           <div className="sq-divider" />
           <div className="grid grid-cols-12 gap-2 py-3 text-[13px]">
-            <div className="col-span-2 font-mono">23</div>
-            <div className="col-span-6">Professional attendance — Level B consultation</div>
-            <div className="col-span-4 text-right font-medium">$220.00</div>
+            <div className="col-span-2 font-mono">{item.code}</div>
+            <div className="col-span-6">{item.description}</div>
+            <div className="col-span-4 text-right font-medium">${charge.toFixed(2)}</div>
           </div>
           <div className="sq-divider" />
           <div className="space-y-3.5 mt-4">
-            <Line label="Total Charge" value="$220.00" />
-            <Line label="Medicare Benefit" value="−$39.10" muted />
-            <Line label="Private Health Rebate" value="−$120.90" muted />
+            <Line label="Total Charge" value={`$${charge.toFixed(2)}`} />
+            <Line label="Medicare Benefit" value={`−$${medicareBenefit.toFixed(2)}`} muted />
+            <Line label="Private Health Rebate" value={`−$${fundRebate.toFixed(2)}`} muted />
           </div>
           <div className="sq-divider my-4" />
           <div ref={gapRef} className="rounded-lg bg-[var(--sq-surface)] p-4 flex items-center justify-between">
@@ -296,7 +457,7 @@ function Summary({ onAccept, onReject, onBack }: { onAccept: () => void; onRejec
               <span className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">Gap Amount</span>
               <span className="text-[13px] font-medium text-[var(--sq-ink-2)] mt-1">Patient contribution</span>
             </div>
-            <span className="text-[32px] font-semibold tracking-tight">$60.00</span>
+            <span className="text-[32px] font-semibold tracking-tight">${gap.toFixed(2)}</span>
           </div>
         </div>
         <div className="h-6" />
