@@ -426,8 +426,8 @@ function Summary({
             </div>
             <div className="text-right">
               <div className="text-[11px] text-[var(--sq-muted)] uppercase tracking-wider">Patient</div>
-              <div className="text-[14px] font-medium mt-0.5">John Citizen</div>
-              <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">Medicare: 1234 56789 1 · IRN 1</div>
+              <div className="text-[14px] font-medium mt-0.5">{patient.name}</div>
+              <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">Medicare: 1234 56789 1 · IRN {patient.irn}</div>
             </div>
           </div>
         </div>
@@ -441,15 +441,15 @@ function Summary({
           </div>
           <div className="sq-divider" />
           <div className="grid grid-cols-12 gap-2 py-3 text-[13px]">
-            <div className="col-span-2 font-mono">23</div>
-            <div className="col-span-6">Professional attendance — Level B consultation</div>
-            <div className="col-span-4 text-right font-medium">$220.00</div>
+            <div className="col-span-2 font-mono">{item.code}</div>
+            <div className="col-span-6">{item.description}</div>
+            <div className="col-span-4 text-right font-medium">${charge.toFixed(2)}</div>
           </div>
           <div className="sq-divider" />
           <div className="space-y-3.5 mt-4">
-            <Line label="Total Charge" value="$220.00" />
-            <Line label="Medicare Benefit" value="−$39.10" muted />
-            <Line label="Private Health Rebate" value="−$120.90" muted />
+            <Line label="Total Charge" value={`$${charge.toFixed(2)}`} />
+            <Line label="Medicare Benefit" value={`−$${medicareBenefit.toFixed(2)}`} muted />
+            <Line label="Private Health Rebate" value={`−$${fundRebate.toFixed(2)}`} muted />
           </div>
           <div className="sq-divider my-4" />
           <div ref={gapRef} className="rounded-lg bg-[var(--sq-surface)] p-4 flex items-center justify-between">
@@ -457,7 +457,7 @@ function Summary({
               <span className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">Gap Amount</span>
               <span className="text-[13px] font-medium text-[var(--sq-ink-2)] mt-1">Patient contribution</span>
             </div>
-            <span className="text-[32px] font-semibold tracking-tight">$60.00</span>
+            <span className="text-[32px] font-semibold tracking-tight">${gap.toFixed(2)}</span>
           </div>
         </div>
         <div className="h-6" />
