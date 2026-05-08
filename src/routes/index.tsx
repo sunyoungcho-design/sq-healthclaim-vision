@@ -386,9 +386,17 @@ function ClaimForm({
     });
   };
 
+  const formTotal = selectedPatients
+    .flatMap((p) => claimsByIrn[p.irn] ?? [])
+    .reduce((s, li) => s + (li.charge || 0), 0);
+
   return (
     <>
-      <TopBar onBack={onBack} title="New Claim" />
+      <TopBar
+        onBack={onBack}
+        title="New Claim"
+        subtitle={formTotal > 0 ? `Total $${formTotal.toFixed(2)}` : undefined}
+      />
       <div className="flex-1 min-h-0 overflow-y-auto px-6 pt-2 pb-3">
         <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mb-2">Patients on card</div>
         <div className="sq-card p-2 space-y-1">
