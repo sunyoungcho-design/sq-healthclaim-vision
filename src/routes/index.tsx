@@ -35,8 +35,6 @@ type Patient = { name: string; relation: string; irn: string; dob: string };
 const PATIENTS: Patient[] = [
   { name: "John Citizen", relation: "Cardholder", irn: "1", dob: "12/03/1984" },
   { name: "Sarah Citizen", relation: "Spouse", irn: "2", dob: "08/07/1986" },
-  { name: "Emma Citizen", relation: "Dependant", irn: "3", dob: "21/11/2014" },
-  { name: "Liam Citizen", relation: "Dependant", irn: "4", dob: "02/05/2017" },
 ];
 
 function Index() {
