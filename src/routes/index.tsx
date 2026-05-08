@@ -69,7 +69,7 @@ function Index() {
 
   return (
     <PhoneFrame
-      sideContent={printed ? <PrintedReceipt amount={amount} /> : undefined}
+      sideContent={printed ? <PrintedReceipt amount={amount} patientName={patient.name} /> : undefined}
       belowContent={step === "scan" ? (
         <button
           type="button"
