@@ -441,6 +441,7 @@ function ClaimForm({
                       onChange={(e) => updateItem(p.irn, idx, e.target.value)}
                       className="w-full bg-transparent appearance-none pl-4 pr-10 py-3 text-[14px] font-medium focus:outline-none cursor-pointer"
                     >
+                      <option value="" disabled>Select service item</option>
                       {ITEM_CATALOG.map((i) => (
                         <option key={i.code} value={i.code}>{i.code} — {i.description}</option>
                       ))}
