@@ -35,7 +35,7 @@ function Index() {
 
   return (
     <PhoneFrame sideContent={printed ? <PrintedReceipt amount={amount} /> : undefined}>
-      <div className={`sq-screen${step === "scan" ? " sq-screen-dark" : ""}`} key={step}>
+      <div className={`sq-screen${step === "scan" ? " sq-screen-dark" : ""}${step === "tap" ? " sq-screen-blue" : ""}`} key={step}>
         <StatusBar />
         <div className="flex-1 min-h-0 flex flex-col sq-fadein">
           {step === "scan" && <Scan onNext={() => setStep("verify")} />}
