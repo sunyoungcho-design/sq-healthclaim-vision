@@ -156,16 +156,14 @@
 
 @layer utilities {
   .sq-screen {
-    height: 100dvh;
+    height: 100%;
+    width: 100%;
     background: #fff;
     color: var(--sq-ink);
     display: flex;
     flex-direction: column;
-    margin: 0 auto;
     position: relative;
-  }
-  @media (min-width: 768px) {
-    .sq-screen { height: 844px; }
+    overflow: hidden;
   }
   .sq-statusbar {
     display:flex; justify-content:space-between; align-items:center;
