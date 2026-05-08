@@ -66,11 +66,9 @@ function Scan({ onNext }: { onNext: () => void }) {
           <div className="relative w-[180px] h-[112px] rounded-2xl bg-white border border-[var(--sq-line)] shadow-[0_10px_30px_-12px_rgba(0,0,0,0.18)] p-3 flex flex-col justify-between">
             <div className="flex items-center justify-between">
               <div className="text-[10px] font-semibold tracking-widest text-[var(--sq-muted)]">HEALTH</div>
-              <Wifi className="w-3.5 h-3.5 rotate-90 text-[var(--sq-ink)]" />
             </div>
-            <div>
-              <div className="h-1.5 w-20 rounded-full bg-[var(--sq-line)] mb-1.5" />
-              <div className="h-1.5 w-12 rounded-full bg-[var(--sq-line)]" />
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <Wifi className="w-7 h-7 rotate-90 text-[var(--sq-line)] opacity-80" />
             </div>
             <div className="flex justify-between items-end">
               <div className="text-[9px] font-medium tracking-wider text-[var(--sq-ink-2)]">MEMBER</div>
