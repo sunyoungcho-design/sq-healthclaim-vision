@@ -311,12 +311,10 @@ function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; o
           style={{ filter: "brightness(0) invert(1)" }}
         />
 
-        <div className="text-[28px] leading-none font-medium tracking-tight">
-          ${amount.toFixed(2)}
-        </div>
-        <p className="mt-2 text-[13px] text-white/90 text-center">
-          Tap, Insert or Swipe
-        </p>
+        <div className="sq-h1 text-white">${amount.toFixed(2)}</div>
+        <p className="sq-h1 text-white mt-1">Tap, Insert</p>
+        <p className="sq-h1 text-white">or Swipe</p>
+
       </div>
 
       <div className="px-6 pb-5">
