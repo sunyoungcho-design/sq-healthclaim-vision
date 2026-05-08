@@ -341,27 +341,12 @@ function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; o
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center px-3 -mt-4">
-        {/* Contactless + hand glyph (inline SVG renders instantly with the rest of the screen) */}
-        <svg
-          viewBox="0 0 120 96"
-          className="w-[150px] h-auto mb-7"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={3.5}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-label="Contactless"
-        >
-          {/* waves */}
-          <path d="M14 30 Q26 48 14 66" />
-          <path d="M26 22 Q44 48 26 74" />
-          <path d="M38 14 Q62 48 38 82" />
-          {/* hand */}
-          <path d="M62 60 L62 36 Q62 30 68 30 Q74 30 74 36 L74 54" />
-          <path d="M74 50 L74 32 Q74 26 80 26 Q86 26 86 32 L86 54" />
-          <path d="M86 50 L86 36 Q86 30 92 30 Q98 30 98 36 L98 58" />
-          <path d="M98 52 L98 42 Q98 36 104 36 Q110 36 110 42 L110 64 Q110 80 96 84 L74 84 Q62 82 58 72 L52 60 Q50 56 54 54 Q58 52 62 56 L66 62" />
-        </svg>
+        <img
+          src={contactlessIcon}
+          alt="Contactless"
+          className="w-[170px] h-auto mb-7"
+          style={{ filter: "brightness(0) invert(1)" }}
+        />
 
 
         <div className="sq-h1 text-white">${amount.toFixed(2)}</div>
