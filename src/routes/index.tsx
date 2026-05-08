@@ -22,6 +22,7 @@ export const Route = createFileRoute("/")({
 type Step = "scan" | "verify" | "claim" | "submitting" | "summary" | "tap" | "receipt" | "done";
 
 type ClaimItem = { code: string; description: string; defaultCharge: number };
+const EMPTY_ITEM: ClaimItem = { code: "", description: "Select service item", defaultCharge: 0 };
 const ITEM_CATALOG: ClaimItem[] = [
   { code: "011", description: "Comprehensive oral examination", defaultCharge: 75 },
   { code: "012", description: "Periodic oral examination", defaultCharge: 60 },
@@ -347,7 +348,7 @@ function ClaimForm({
     } else {
       setSelectedPatients([...selectedPatients, p]);
       if (!claimsByIrn[p.irn]) {
-        setClaimsByIrn({ ...claimsByIrn, [p.irn]: [] });
+        setClaimsByIrn({ ...claimsByIrn, [p.irn]: [{ item: EMPTY_ITEM, charge: 0 }] });
       }
     }
   };
@@ -374,11 +375,9 @@ function ClaimForm({
   };
   const addLine = (irn: string) => {
     const items = claimsByIrn[irn] ?? [];
-    const used = new Set(items.map((li) => li.item.code));
-    const next = ITEM_CATALOG.find((i) => !used.has(i.code)) ?? ITEM_CATALOG[0];
     setClaimsByIrn({
       ...claimsByIrn,
-      [irn]: [...items, { item: next, charge: next.defaultCharge }],
+      [irn]: [...items, { item: EMPTY_ITEM, charge: 0 }],
     });
   };
 
@@ -442,6 +441,7 @@ function ClaimForm({
                       onChange={(e) => updateItem(p.irn, idx, e.target.value)}
                       className="w-full bg-transparent appearance-none pl-4 pr-10 py-3 text-[14px] font-medium focus:outline-none cursor-pointer"
                     >
+                      <option value="" disabled>Select service item</option>
                       {ITEM_CATALOG.map((i) => (
                         <option key={i.code} value={i.code}>{i.code} — {i.description}</option>
                       ))}
@@ -456,9 +456,10 @@ function ClaimForm({
                       inputMode="decimal"
                       min={0}
                       step="0.01"
-                      value={Number.isFinite(li.charge) ? li.charge : 0}
+                      placeholder="0.00"
+                      value={li.charge ? li.charge : ""}
                       onChange={(e) => updateCharge(p.irn, idx, parseFloat(e.target.value) || 0)}
-                      className="flex-1 bg-transparent text-[24px] font-semibold tracking-tight focus:outline-none"
+                      className="flex-1 bg-transparent text-[24px] font-semibold tracking-tight focus:outline-none placeholder:text-[var(--sq-muted)]"
                     />
                   </div>
                 </div>
