@@ -110,7 +110,7 @@ function Scan({ onNext }: { onNext: () => void }) {
           <div className="absolute inset-0 rounded-full border border-white/30 sq-tap-ring" />
           <div className="absolute inset-0 rounded-full border border-white/30 sq-tap-ring" style={{ animationDelay: "1.75s" }} />
           <div className="absolute inset-4 rounded-full border border-[var(--sq-line)] opacity-0 group-hover:opacity-60 transition-opacity duration-300" />
-          <div className="relative w-[150px] h-[94px] bg-[var(--sq-surface)] p-3 flex flex-col justify-between overflow-hidden border-0 rounded-md shadow-sm transition-transform duration-300 ease-out group-hover:scale-[1.02] group-active:scale-[0.98]">
+          <div className="relative w-[150px] h-[94px] bg-[#1a1a1f] p-3 flex flex-col justify-between overflow-hidden border border-white/5 rounded-md shadow-sm transition-transform duration-300 ease-out group-hover:scale-[1.02] group-active:scale-[0.98]">
             <div className="flex items-center justify-between relative z-10">
               <div className="text-[10px] font-semibold tracking-widest text-[var(--sq-muted)]">HEALTH CARE CARD</div>
             </div>
