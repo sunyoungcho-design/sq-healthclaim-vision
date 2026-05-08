@@ -283,8 +283,7 @@ function Scan({ onNext, cardCursor }: { onNext: () => void; cardCursor?: boolean
           <img
             src={medicareCard}
             alt=""
-            className="w-[88%] max-w-[420px] h-auto rounded-md shadow-xl ring-1 ring-white/5"
-            style={{ width: "min(88vw, 420px)" }}
+            className="w-[90%] h-auto rounded-md shadow-xl ring-1 ring-white/5"
             draggable={false}
           />
         </div>
