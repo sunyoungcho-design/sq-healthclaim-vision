@@ -51,10 +51,12 @@ function Index() {
     { item: ITEM_CATALOG[4], charge: ITEM_CATALOG[4].defaultCharge },
   ]);
 
-  // Preload the contactless icon so it's cached before the tap screen mounts
+  // Preload the contactless icon and medicare card so they're cached before use
   useEffect(() => {
     const img = new Image();
     img.src = contactlessIcon;
+    const card = new Image();
+    card.src = medicareCard;
   }, []);
 
   const reset = () => { setAmount(60); setStep("scan"); setPrinted(false); };
