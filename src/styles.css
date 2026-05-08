@@ -172,7 +172,7 @@
   .sq-h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.15; }
   .sq-sub { font-size: 15px; color: var(--sq-muted); line-height: 1.45; }
   .sq-card {
-    background: #fff; border: 1px solid var(--sq-line); border-radius: 18px;
+    background: #fff; border: 1px solid var(--sq-line); border-radius: 8px;
   }
   .sq-btn {
     height: 56px; border-radius: 999px; font-weight: 600; font-size: 16px;
