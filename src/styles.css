@@ -195,6 +195,8 @@
   .sq-screen-dark .sq-btn-primary:hover { background: oklch(0.92 0 0); }
   .sq-screen-dark .sq-btn-secondary { background: #26262b; color: #fff; }
   .sq-screen-dark .sq-btn-secondary:hover { background: #2e2e34; }
+  .sq-screen-blue { background: #006AFF !important; color: #fff; }
+  .sq-screen-blue .sq-statusbar { color: #fff; }
   .sq-row { display:flex; justify-content:space-between; align-items:center; }
   .sq-divider { height: 1px; background: var(--sq-line); }
   .sq-fadein { animation: sq-fade .4s ease-out both; }
