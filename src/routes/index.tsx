@@ -25,6 +25,12 @@ function Index() {
   const [amount, setAmount] = useState<number>(60);
   const [printed, setPrinted] = useState(false);
 
+  // Preload the contactless icon so it's cached before the tap screen mounts
+  useEffect(() => {
+    const img = new Image();
+    img.src = contactlessIcon;
+  }, []);
+
   const reset = () => { setAmount(60); setStep("scan"); setPrinted(false); };
 
   return (
