@@ -349,10 +349,7 @@ function ClaimForm({
     } else {
       setSelectedPatients([...selectedPatients, p]);
       if (!claimsByIrn[p.irn]) {
-        setClaimsByIrn({
-          ...claimsByIrn,
-          [p.irn]: [{ item: ITEM_CATALOG[4], charge: ITEM_CATALOG[4].defaultCharge }],
-        });
+        setClaimsByIrn({ ...claimsByIrn, [p.irn]: [] });
       }
     }
   };
