@@ -290,38 +290,42 @@ function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; o
   }, [onPaid]);
 
   return (
-    <div className="absolute inset-0 bg-[#1A6FEB] text-white flex flex-col">
-      <div className="px-5 pt-5 flex items-center">
+    <div className="absolute inset-0 bg-[#006AFF] text-white flex flex-col">
+      <div className="px-5 pt-4 flex items-center justify-between text-white">
         <button
           onClick={onBack}
           aria-label="Cancel"
-          className="w-9 h-9 -ml-1.5 flex items-center justify-center rounded-full hover:bg-white/10 transition"
+          className="w-8 h-8 -ml-1 flex items-center justify-center rounded-full hover:bg-white/10 transition"
         >
-          <X className="w-6 h-6" strokeWidth={2.25} />
+          <X className="w-5 h-5" strokeWidth={2} />
         </button>
+        <button className="text-[12px] font-medium opacity-90 hover:opacity-100">English</button>
       </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center px-8 -mt-6">
-        <div className="relative w-[180px] h-[120px] flex items-center justify-center mb-8">
-          <Wifi className="w-[110px] h-[110px] text-white rotate-90 opacity-95" strokeWidth={1.5} />
-          <Hand className="absolute right-0 bottom-0 w-12 h-12 text-white" strokeWidth={1.75} />
-        </div>
-        <div className="text-[44px] leading-none font-semibold tracking-tight">
+      <div className="flex-1 flex flex-col items-center justify-center px-8 -mt-4">
+        {/* Contactless + hand glyph */}
+        <svg viewBox="0 0 120 96" className="w-[150px] h-auto mb-7" fill="none" stroke="currentColor" strokeWidth={3.5} strokeLinecap="round" strokeLinejoin="round">
+          {/* contactless waves on the left */}
+          <path d="M14 30 Q 30 48 14 66" />
+          <path d="M28 22 Q 50 48 28 74" />
+          <path d="M42 14 Q 70 48 42 82" />
+          {/* hand */}
+          <path d="M58 64 V 40 a4 4 0 0 1 8 0 V 56 V 32 a4 4 0 0 1 8 0 V 56 V 36 a4 4 0 0 1 8 0 V 56 V 42 a4 4 0 0 1 8 0 V 64 a18 18 0 0 1 -18 18 h -4 a14 14 0 0 1 -14 -14 v -2 a4 4 0 0 1 4 -4 z" fill="#006AFF" />
+        </svg>
+
+        <div className="text-[28px] leading-none font-medium tracking-tight">
           ${amount.toFixed(2)}
         </div>
-        <p className="mt-3 text-[15px] text-white/85 text-center">
-          Tap, Insert, or Swipe
-        </p>
-        <p className="mt-1.5 text-[12px] text-white/60 text-center">
-          {amount === 220 ? "Full amount — claim back ~$160 yourself" : "Gap for item 23 · GN 1234567X"}
+        <p className="mt-2 text-[13px] text-white/90 text-center">
+          Tap, Insert or Swipe
         </p>
       </div>
 
-      <div className="px-5 pb-5">
-        <div className="h-12 rounded-md bg-white flex items-center justify-center">
-          <div className="w-7 h-7 rounded-sm bg-[#1A6FEB] flex items-center justify-center">
-            <CreditCard className="w-4 h-4 text-white" strokeWidth={2.25} />
-          </div>
+      <div className="px-6 pb-5">
+        <div className="h-14 rounded-t-md bg-white flex items-center justify-center -mb-5 mx-auto w-[78%]">
+          <svg viewBox="0 0 24 24" className="w-6 h-6" fill="#006AFF">
+            <path d="M3 3h18v18H3V3zm3 3v12h12V6H6zm3 3h6v6H9V9z"/>
+          </svg>
         </div>
       </div>
     </div>
