@@ -213,7 +213,7 @@
   @keyframes sq-pop { from { transform: scale(.6); opacity:0;} to { transform: scale(1); opacity:1;} }
   .sq-receipt-print { animation: sq-receipt-roll 1.1s cubic-bezier(.2,.8,.2,1) both; transform-origin: top center; }
   @keyframes sq-receipt-roll {
-    0%   { transform: translateY(-40px) rotate(-3deg); opacity: 0; clip-path: inset(0 0 100% 0); }
-    100% { transform: translateY(0) rotate(-3deg); opacity: 1; clip-path: inset(0 0 0 0); }
+    0%   { transform: translateY(-30px); opacity: 0; clip-path: inset(0 0 100% 0); }
+    100% { transform: translateY(0); opacity: 1; clip-path: inset(0 0 0 0); }
   }
 }
