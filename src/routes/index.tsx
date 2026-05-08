@@ -260,7 +260,6 @@ function Verify({ onDone }: { onDone: () => void }) {
         <div className="w-12 h-12 rounded-full border-2 border-[var(--sq-line)] border-t-[var(--sq-ink)] animate-spin" />
         <h2 className="mt-8 text-[20px] font-semibold tracking-tight">Checking insurance eligibility…</h2>
         <p className="mt-2 sq-sub">This may take a few seconds.</p>
-        <div className="sq-bar w-40 mt-8"><i /></div>
       </div>
       
     </>
@@ -363,7 +362,7 @@ function Submitting({ onDone }: { onDone: () => void }) {
         <div className="w-12 h-12 rounded-full border-2 border-[var(--sq-line)] border-t-[var(--sq-ink)] animate-spin" />
         <h2 className="mt-8 text-[20px] font-semibold tracking-tight">Submitting claim to insurer…</h2>
         <p className="mt-2 sq-sub">Awaiting statement of claim.</p>
-        <div className="sq-bar w-40 mt-8"><i /></div>
+        
       </div>
     </>
   );
