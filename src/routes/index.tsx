@@ -17,7 +17,7 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-type Step = "scan" | "verify" | "summary" | "reject" | "approve" | "tap" | "done";
+type Step = "scan" | "verify" | "summary" | "tap" | "done";
 
 function Index() {
   const [step, setStep] = useState<Step>("scan");
@@ -32,14 +32,12 @@ function Index() {
           {step === "verify" && <Verify onDone={() => setStep("summary")} />}
           {step === "summary" && (
             <Summary
-              onAccept={() => { setAmount(60); setStep("approve"); }}
-              onReject={() => { setAmount(220); setStep("reject"); }}
+              onAccept={() => { setAmount(60); setStep("tap"); }}
+              onReject={() => { setAmount(220); setStep("tap"); }}
               onBack={() => setStep("scan")}
             />
           )}
-          {step === "reject" && <Reject onContinue={() => setStep("tap")} onBack={() => setStep("summary")} />}
-          {step === "approve" && <Approve onApprove={() => setStep("tap")} onDecline={() => setStep("scan")} onBack={() => setStep("summary")} />}
-          {step === "tap" && <Tap amount={amount} onPaid={() => setStep("done")} onBack={() => setStep("approve")} />}
+          {step === "tap" && <Tap amount={amount} onPaid={() => setStep("done")} onBack={() => setStep("summary")} />}
           {step === "done" && <Done amount={amount} selfClaim={amount === 220} onDone={() => { setAmount(60); setStep("scan"); }} />}
         </div>
       </div>
@@ -284,50 +282,6 @@ function Line({ label, value, muted }: { label: string; value: string; muted?: b
   );
 }
 
-/* ---------------- 4. APPROVE ---------------- */
-function Approve({ onApprove, onDecline, onBack }: { onApprove: () => void; onDecline: () => void; onBack: () => void }) {
-  return (
-    <>
-      <TopBar onBack={onBack} title="Review Payment" />
-      <div className="px-7 pt-6">
-        <div className="text-[14px] text-[var(--sq-muted)]">Gap amount due today</div>
-        <div className="mt-1 text-[56px] leading-none font-semibold tracking-tight">$60<span className="text-[28px] text-[var(--sq-muted)] align-top">.00</span></div>
-        <p className="sq-sub mt-3">Medicare and your health fund have covered the rest.</p>
-      </div>
-
-      <div className="px-6 mt-8">
-        <div className="sq-card p-5 space-y-3.5">
-          <div className="flex items-center justify-between pb-1">
-            <span className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">Claim Summary</span>
-            <span className="text-[11px] font-mono text-[var(--sq-muted)]">GN 1234567X</span>
-          </div>
-          <div className="sq-divider" />
-          <div className="sq-row">
-            <div>
-              <div className="text-[13px]">Item 23 — Level B consult</div>
-              <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">Dr. Laura Leopard</div>
-            </div>
-            <span className="text-[15px] font-medium">$220.00</span>
-          </div>
-          <Line label="Medicare Benefit" value="−$39.10" muted />
-          <Line label="Private Health Rebate" value="−$120.90" muted />
-          <div className="sq-divider" />
-          <div className="sq-row">
-            <span className="text-[15px] font-semibold">Gap Amount</span>
-            <span className="text-[17px] font-semibold">$60.00</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex-1" />
-      <div className="px-6 pb-8 pt-6 space-y-2">
-        <button onClick={onApprove} className="sq-btn sq-btn-primary">Pay $60.00</button>
-        <button onClick={onDecline} className="sq-btn sq-btn-ghost">Back</button>
-      </div>
-    </>
-  );
-}
-
 /* ---------------- 5. TAP TO PAY ---------------- */
 function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; onBack: () => void }) {
   useEffect(() => {
@@ -342,6 +296,9 @@ function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; o
       <div className="px-7 pt-6 text-center">
         <div className="text-[13px] uppercase tracking-[0.18em] text-[var(--sq-muted)] font-semibold">Amount Due</div>
         <div className="mt-2 text-[64px] leading-none font-semibold tracking-tight">${dollars}<span className="text-[32px] text-[var(--sq-muted)] align-top">.{cents}</span></div>
+        <p className="sq-sub mt-2">
+          {amount === 220 ? "Full amount — claim back ~$160 from Medicare & fund." : "Gap for item 23 · GN 1234567X"}
+        </p>
       </div>
 
       <div className="flex-1 flex items-center justify-center">
@@ -400,50 +357,6 @@ function Done({ amount, selfClaim, onDone }: { amount: number; selfClaim: boolea
       <div className="px-6 pb-8 pt-6 space-y-2">
         <button onClick={onDone} className="sq-btn sq-btn-primary">Done</button>
         <button className="sq-btn sq-btn-ghost">Email Receipt</button>
-      </div>
-    </>
-  );
-}
-
-/* ---------------- REJECT / SELF-CLAIM ---------------- */
-function Reject({ onContinue, onBack }: { onContinue: () => void; onBack: () => void }) {
-  return (
-    <>
-      <TopBar onBack={onBack} title="Pay Full Amount" />
-      <div className="px-7 pt-6">
-        <div className="text-[14px] text-[var(--sq-muted)]">Full amount due today</div>
-        <div className="mt-1 text-[56px] leading-none font-semibold tracking-tight">$220<span className="text-[28px] text-[var(--sq-muted)] align-top">.00</span></div>
-        <p className="sq-sub mt-3">Pay upfront and claim ~$160.00 back from Medicare and your health fund.</p>
-      </div>
-
-      <div className="px-6 mt-8">
-        <div className="sq-card p-5 space-y-3.5">
-          <div className="flex items-center justify-between pb-1">
-            <span className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">Claim Summary</span>
-            <span className="text-[11px] font-mono text-[var(--sq-muted)]">GN 1234567X</span>
-          </div>
-          <div className="sq-divider" />
-          <div className="sq-row">
-            <div>
-              <div className="text-[13px]">Item 23 — Level B consult</div>
-              <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">Dr. Laura Leopard</div>
-            </div>
-            <span className="text-[15px] font-medium">$220.00</span>
-          </div>
-          <Line label="Medicare (claim later)" value="$39.10" muted />
-          <Line label="Health fund (claim later)" value="$120.90" muted />
-          <div className="sq-divider" />
-          <div className="sq-row">
-            <span className="text-[15px] font-semibold">You Pay Today</span>
-            <span className="text-[17px] font-semibold">$220.00</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex-1" />
-      <div className="px-6 pb-8 pt-6 space-y-2">
-        <button onClick={onContinue} className="sq-btn sq-btn-primary">Pay $220.00</button>
-        <button onClick={onBack} className="sq-btn sq-btn-ghost">Back</button>
       </div>
     </>
   );
