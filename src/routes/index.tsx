@@ -352,10 +352,6 @@ function Receipt({ amount, onSelect }: { amount: number; onSelect: () => void })
         <h2 className="mt-2 text-[34px] font-semibold tracking-tight">Thank you</h2>
       </div>
       <div className="px-6 pb-6 space-y-2.5">
-        <div className="sq-row mb-1">
-          <span className="text-[14px] font-semibold">Receipt options</span>
-          
-        </div>
         <button onClick={onSelect} className="sq-btn sq-btn-primary">Email</button>
         <button onClick={onSelect} className="sq-btn sq-btn-primary">Text</button>
         <button onClick={onSelect} className="sq-btn sq-btn-primary">Print</button>
