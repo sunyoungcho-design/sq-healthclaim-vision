@@ -319,7 +319,7 @@ function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; o
         <button className="text-[12px] font-medium opacity-90 hover:opacity-100">English</button>
       </div>
 
-      <div className="flex-1 flex flex-col items-center justify-center px-8 -mt-4">
+      <div className="flex-1 flex flex-col items-center justify-center px-3 -mt-4">
         <img
           src={contactlessIcon}
           alt="Contactless"
@@ -328,8 +328,7 @@ function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; o
         />
 
         <div className="sq-h1 text-white">${amount.toFixed(2)}</div>
-        <p className="sq-h1 text-white mt-1">Tap, Insert</p>
-        <p className="sq-h1 text-white">or Swipe</p>
+        <p className="sq-h1 text-white mt-1 whitespace-nowrap">Tap, Insert or Swipe</p>
 
       </div>
 
