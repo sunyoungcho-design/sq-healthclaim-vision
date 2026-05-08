@@ -55,18 +55,42 @@ function Index() {
 
   const reset = () => { setAmount(60); setStep("scan"); setPrinted(false); };
 
+  // Compute benefits/gap from entered charge (simple model for prototype)
+  const medicareBenefit = +(charge * 0.18).toFixed(2);
+  const fundRebate = +(charge * 0.55).toFixed(2);
+  const gap = Math.max(0, +(charge - medicareBenefit - fundRebate).toFixed(2));
+
   return (
     <PhoneFrame sideContent={printed ? <PrintedReceipt amount={amount} /> : undefined}>
       <div className={`sq-screen${step === "scan" ? " sq-screen-dark" : ""}${step === "tap" ? " sq-screen-blue" : ""}`} key={step}>
         <StatusBar />
         <div className="flex-1 min-h-0 flex flex-col sq-fadein">
           {step === "scan" && <Scan onNext={() => setStep("verify")} />}
-          {step === "verify" && <Verify onDone={() => setStep("summary")} />}
+          {step === "verify" && <Verify onDone={() => setStep("claim")} />}
+          {step === "claim" && (
+            <ClaimForm
+              patient={patient}
+              setPatient={setPatient}
+              item={item}
+              setItem={(it) => { setItem(it); setCharge(it.defaultCharge); }}
+              charge={charge}
+              setCharge={setCharge}
+              onBack={() => setStep("scan")}
+              onSubmit={() => setStep("submitting")}
+            />
+          )}
+          {step === "submitting" && <Submitting onDone={() => setStep("summary")} />}
           {step === "summary" && (
             <Summary
-              onAccept={() => { setAmount(60); setStep("tap"); }}
-              onReject={() => { setAmount(220); setStep("tap"); }}
-              onBack={() => setStep("scan")}
+              patient={patient}
+              item={item}
+              charge={charge}
+              medicareBenefit={medicareBenefit}
+              fundRebate={fundRebate}
+              gap={gap}
+              onAccept={() => { setAmount(gap); setStep("tap"); }}
+              onReject={() => { setAmount(charge); setStep("tap"); }}
+              onBack={() => setStep("claim")}
             />
           )}
           {step === "tap" && <Tap amount={amount} onPaid={() => setStep("receipt")} onBack={() => setStep("summary")} />}
