@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { PhoneFrame, StatusBar } from "@/components/sq/PhoneFrame";
-import { ChevronLeft, CreditCard, Check, Wifi, Apple } from "lucide-react";
+import { ChevronLeft, CreditCard, Check, Wifi, Apple, Plus } from "lucide-react";
 import nibLogo from "@/assets/insurers/nib.png";
 import medibankLogo from "@/assets/insurers/medibank.png";
 import hcfLogo from "@/assets/insurers/hcf.avif";
