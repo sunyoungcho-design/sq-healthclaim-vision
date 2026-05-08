@@ -255,6 +255,7 @@ function Summary({ onNext, onBack }: { onNext: () => void; onBack: () => void })
             <span className="text-[32px] font-semibold tracking-tight">$60.00</span>
           </div>
         </div>
+        <div className="h-6" />
 
       </div>
 
