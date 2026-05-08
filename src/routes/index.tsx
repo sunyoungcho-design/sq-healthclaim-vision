@@ -375,11 +375,9 @@ function ClaimForm({
   };
   const addLine = (irn: string) => {
     const items = claimsByIrn[irn] ?? [];
-    const used = new Set(items.map((li) => li.item.code));
-    const next = ITEM_CATALOG.find((i) => !used.has(i.code)) ?? ITEM_CATALOG[0];
     setClaimsByIrn({
       ...claimsByIrn,
-      [irn]: [...items, { item: next, charge: next.defaultCharge }],
+      [irn]: [...items, { item: EMPTY_ITEM, charge: 0 }],
     });
   };
 
