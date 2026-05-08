@@ -505,7 +505,7 @@ function Summary({
           <div ref={gapRef} className="rounded-lg bg-[var(--sq-surface)] p-4 flex items-center justify-between">
             <div className="flex flex-col">
               <span className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">Gap Amount</span>
-              <span className="text-[13px] font-medium text-[var(--sq-ink-2)] mt-1">Patient contribution</span>
+              
             </div>
             <span className="text-[32px] font-semibold tracking-tight">${gap.toFixed(2)}</span>
           </div>
