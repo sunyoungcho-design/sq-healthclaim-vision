@@ -3,7 +3,7 @@ import frameImg from "@/assets/terminal-frame.png";
 
 export function PhoneFrame({ children, sideContent }: { children: ReactNode; sideContent?: ReactNode }) {
   return (
-    <div className="min-h-dvh w-full bg-[var(--sq-surface)] flex items-center justify-center p-4 gap-8">
+    <div className="min-h-dvh w-full bg-[#0b0b0d] text-white flex items-center justify-center p-4 gap-8">
       <div
         className="relative shrink-0"
         style={{
