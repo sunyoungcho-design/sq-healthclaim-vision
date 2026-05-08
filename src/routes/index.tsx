@@ -501,7 +501,6 @@ function Done({ amount, selfClaim, onDone }: { amount: number; selfClaim: boolea
       </div>
       <div className="px-6 pb-8 pt-6 space-y-2">
         <button onClick={onDone} className="sq-btn sq-btn-primary">Done</button>
-        <button className="sq-btn sq-btn-ghost">Email Receipt</button>
       </div>
     </>
   );
