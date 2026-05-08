@@ -304,15 +304,12 @@ function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; o
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center px-8 -mt-4">
-        {/* Contactless + hand glyph */}
-        <svg viewBox="0 0 120 96" className="w-[150px] h-auto mb-7" fill="none" stroke="currentColor" strokeWidth={3.5} strokeLinecap="round" strokeLinejoin="round">
-          {/* contactless waves on the left */}
-          <path d="M14 30 Q 30 48 14 66" />
-          <path d="M28 22 Q 50 48 28 74" />
-          <path d="M42 14 Q 70 48 42 82" />
-          {/* hand */}
-          <path d="M58 64 V 40 a4 4 0 0 1 8 0 V 56 V 32 a4 4 0 0 1 8 0 V 56 V 36 a4 4 0 0 1 8 0 V 56 V 42 a4 4 0 0 1 8 0 V 64 a18 18 0 0 1 -18 18 h -4 a14 14 0 0 1 -14 -14 v -2 a4 4 0 0 1 4 -4 z" fill="#006AFF" />
-        </svg>
+        <img
+          src={contactlessIcon}
+          alt="Contactless"
+          className="w-[170px] h-auto mb-7"
+          style={{ filter: "brightness(0) invert(1)" }}
+        />
 
         <div className="text-[28px] leading-none font-medium tracking-tight">
           ${amount.toFixed(2)}
