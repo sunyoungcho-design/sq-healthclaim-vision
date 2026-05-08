@@ -147,7 +147,7 @@ function Index() {
   );
 }
 
-function TopBar({ onBack, title }: { onBack?: () => void; title?: string }) {
+function TopBar({ onBack, title, subtitle }: { onBack?: () => void; title?: string; subtitle?: string }) {
   return (
     <div className="px-4 h-12 flex items-center">
       {onBack ? (
@@ -155,7 +155,12 @@ function TopBar({ onBack, title }: { onBack?: () => void; title?: string }) {
           <ChevronLeft className="w-6 h-6" />
         </button>
       ) : <div className="w-10 h-10" />}
-      <div className="flex-1 text-center text-[15px] font-semibold">{title}</div>
+      <div className="flex-1 text-center leading-tight">
+        <div className="text-[15px] font-semibold">{title}</div>
+        {subtitle && (
+          <div className="text-[11px] font-medium text-[var(--sq-muted)] mt-0.5">{subtitle}</div>
+        )}
+      </div>
       <div className="w-10 h-10" />
     </div>
   );
@@ -381,9 +386,17 @@ function ClaimForm({
     });
   };
 
+  const formTotal = selectedPatients
+    .flatMap((p) => claimsByIrn[p.irn] ?? [])
+    .reduce((s, li) => s + (li.charge || 0), 0);
+
   return (
     <>
-      <TopBar onBack={onBack} title="New Claim" />
+      <TopBar
+        onBack={onBack}
+        title="New Claim"
+        subtitle={formTotal > 0 ? `Total $${formTotal.toFixed(2)}` : undefined}
+      />
       <div className="flex-1 min-h-0 overflow-y-auto px-6 pt-2 pb-3">
         <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mb-2">Patients on card</div>
         <div className="sq-card p-2 space-y-1">
