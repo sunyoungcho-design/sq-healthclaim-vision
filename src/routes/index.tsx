@@ -123,7 +123,7 @@ function Scan({ onNext }: { onNext: () => void }) {
       </div>
       
 
-      <div className="px-5 pt-4">
+      <div className="px-5 pt-8">
         <div className="text-center text-[12px] text-white/60 mb-2">We accept</div>
         <div className="flex flex-wrap items-center justify-center gap-2">
           {[
