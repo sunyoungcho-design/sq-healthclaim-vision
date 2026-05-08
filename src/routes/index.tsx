@@ -124,7 +124,7 @@ function Scan({ onNext }: { onNext: () => void }) {
       
 
       <div className="px-5 pt-4">
-        <div className="text-center text-[12px] text-[var(--sq-muted)] mb-2">We accept</div>
+        <div className="text-center text-[12px] text-white/60 mb-2">We accept</div>
         <div className="flex flex-wrap items-center justify-center gap-2">
           {[
             { name: "nib", src: nibLogo },
@@ -176,7 +176,7 @@ function Scan({ onNext }: { onNext: () => void }) {
                 {MORE_BRANDS.map((b) => (
                   <div
                     key={b}
-                    className="h-9 px-2 rounded-md border border-white/10 bg-white/10 flex items-center justify-center text-[10px] font-semibold tracking-tight text-[var(--sq-ink-2)] text-center"
+                    className="h-9 px-2 rounded-md border border-white/10 bg-white/10 flex items-center justify-center text-[10px] font-semibold tracking-tight text-white/80 text-center"
                   >
                     {b}
                   </div>
