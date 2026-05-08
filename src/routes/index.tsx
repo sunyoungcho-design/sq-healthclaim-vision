@@ -44,6 +44,7 @@ function Index() {
   const [step, setStep] = useState<Step>("scan");
   const [amount, setAmount] = useState<number>(60);
   const [printed, setPrinted] = useState(false);
+  const [cardCursor, setCardCursor] = useState(false);
   const [patient, setPatient] = useState<Patient>(PATIENTS[0]);
   const [lineItems, setLineItems] = useState<LineItem[]>([
     { item: ITEM_CATALOG[4], charge: ITEM_CATALOG[4].defaultCharge },
@@ -64,11 +65,26 @@ function Index() {
   const gap = Math.max(0, +(totalCharge - medicareBenefit - fundRebate).toFixed(2));
 
   return (
-    <PhoneFrame sideContent={printed ? <PrintedReceipt amount={amount} /> : undefined}>
+    <PhoneFrame
+      sideContent={printed ? <PrintedReceipt amount={amount} /> : undefined}
+      belowContent={step === "scan" ? (
+        <label className="flex items-center gap-3 px-4 py-2.5 rounded-full bg-white/5 border border-white/10 text-[13px] text-white/80 cursor-pointer select-none hover:bg-white/10 transition">
+          <span>Card cursor</span>
+          <span
+            role="switch"
+            aria-checked={cardCursor}
+            onClick={() => setCardCursor((v) => !v)}
+            className={`relative inline-block w-9 h-5 rounded-full transition ${cardCursor ? "bg-[#006AFF]" : "bg-white/20"}`}
+          >
+            <span className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white transition-transform ${cardCursor ? "translate-x-4" : ""}`} />
+          </span>
+        </label>
+      ) : undefined}
+    >
       <div className={`sq-screen${step === "scan" ? " sq-screen-dark" : ""}${step === "tap" ? " sq-screen-blue" : ""}`} key={step}>
         <StatusBar />
         <div className="flex-1 min-h-0 flex flex-col sq-fadein">
-          {step === "scan" && <Scan onNext={() => setStep("verify")} />}
+          {step === "scan" && <Scan onNext={() => setStep("verify")} cardCursor={cardCursor} />}
           {step === "verify" && <Verify onDone={() => setStep("claim")} />}
           {step === "claim" && (
             <ClaimForm
@@ -146,10 +162,21 @@ const MORE_BRANDS = [
   "myOwn", "Suncorp", "AAMI",
 ];
 
-function Scan({ onNext }: { onNext: () => void }) {
+function Scan({ onNext, cardCursor }: { onNext: () => void; cardCursor?: boolean }) {
   const [showMore, setShowMore] = useState(false);
+  const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
   return (
-    <>
+    <div
+      ref={wrapRef}
+      className="flex-1 min-h-0 flex flex-col relative"
+      onMouseMove={cardCursor ? (e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        setPos({ x: e.clientX - r.left, y: e.clientY - r.top });
+      } : undefined}
+      onMouseLeave={() => setPos(null)}
+      style={cardCursor ? { cursor: "none" } : undefined}
+    >
       <TopBar />
       <div className="px-6 pt-2 text-center">
         <h1 className="sq-h1">Check your cover</h1>
@@ -243,7 +270,22 @@ function Scan({ onNext }: { onNext: () => void }) {
           </div>
         </div>
       )}
-    </>
+
+      {cardCursor && pos && (
+        <div
+          className="pointer-events-none absolute z-50"
+          style={{ left: pos.x, top: pos.y, transform: "translate(-50%, -50%)" }}
+        >
+          <div className="w-[88px] h-[56px] rounded-md bg-gradient-to-br from-[#1f6feb] to-[#0a3a8c] border border-white/20 shadow-xl p-1.5 flex flex-col justify-between">
+            <div className="text-[6px] font-semibold tracking-widest text-white/80 leading-none">HEALTH CARE</div>
+            <div className="flex items-end justify-between">
+              <div className="w-5 h-3.5 rounded-[2px] bg-gradient-to-br from-[#e8c869] to-[#9a7a18]" />
+              <Wifi className="w-3 h-3 rotate-90 text-white/80" strokeWidth={2.5} />
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
