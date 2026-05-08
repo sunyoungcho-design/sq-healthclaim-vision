@@ -354,7 +354,7 @@ function Receipt({ amount, onSelect }: { amount: number; onSelect: () => void })
       <div className="px-6 pb-6 space-y-2.5">
         <div className="sq-row mb-1">
           <span className="text-[14px] font-semibold">Receipt options</span>
-          <button className="text-[12px] font-semibold underline text-[var(--sq-ink-2)]">Formal receipt</button>
+          
         </div>
         <button onClick={onSelect} className="sq-btn sq-btn-primary">Email</button>
         <button onClick={onSelect} className="sq-btn sq-btn-primary">Text</button>
