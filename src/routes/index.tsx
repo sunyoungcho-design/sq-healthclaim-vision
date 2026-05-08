@@ -256,10 +256,6 @@ function Summary({ onNext, onBack }: { onNext: () => void; onBack: () => void })
           </div>
         </div>
 
-        <div className="mt-4 flex items-center gap-2 text-[12px] text-[var(--sq-muted)] px-1">
-          <Check className="w-3.5 h-3.5" />
-          Claim assessed electronically by Services Australia
-        </div>
       </div>
 
       <div className="px-6 pb-8 pt-4 border-t border-[var(--sq-line)] bg-white">
