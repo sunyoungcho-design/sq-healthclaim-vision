@@ -218,7 +218,7 @@
   }
   .sq-tap-ring {
     pointer-events: none;
-    animation: sq-tap-ring 2s ease-out infinite;
+    animation: sq-tap-ring 3.5s ease-out infinite;
   }
   @keyframes sq-tap-ring {
     0%   { transform: scale(0.85); opacity: 0; }
