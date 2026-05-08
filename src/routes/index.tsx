@@ -345,7 +345,7 @@ function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; o
           src={contactlessIcon}
           alt="Contactless"
           className="w-[170px] h-auto mb-7"
-          style={{ filter: "brightness(0) invert(1)" }}
+          style={{ mixBlendMode: "screen" }}
         />
 
 
