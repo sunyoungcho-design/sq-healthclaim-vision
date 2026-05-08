@@ -410,54 +410,40 @@ function Reject({ onContinue, onBack }: { onContinue: () => void; onBack: () => 
   return (
     <>
       <TopBar onBack={onBack} title="Pay Full Amount" />
-      <div className="flex-1 min-h-0 overflow-y-auto px-6 pt-2 pb-2">
-        <div className="sq-card p-5 border-l-4 border-l-[var(--sq-ink)]">
-          <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">Claim Rejected</div>
-          <div className="text-[17px] font-semibold mt-1.5 leading-snug">You'll pay the full amount today and claim it back yourself.</div>
-          <p className="text-[13px] text-[var(--sq-muted)] mt-2 leading-relaxed">
-            We won't bulk-bill Medicare or your health fund. Submit your receipt to Services Australia and your insurer to receive your rebate.
-          </p>
-        </div>
-
-        <div className="sq-card mt-4 p-5">
-          <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mb-3">Payment Breakdown</div>
-          <div className="space-y-3.5">
-            <Line label="Treatment Total" value="$220.00" />
-            <Line label="Medicare (claim later)" value="$39.10" muted />
-            <Line label="Health fund (claim later)" value="$120.90" muted />
-          </div>
-          <div className="sq-divider my-4" />
-          <div className="rounded-lg bg-[var(--sq-surface)] p-4 flex items-center justify-between">
-            <div className="flex flex-col">
-              <span className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">You Pay Today</span>
-              <span className="text-[13px] font-medium text-[var(--sq-ink-2)] mt-1">Full amount upfront</span>
-            </div>
-            <span className="text-[32px] font-semibold tracking-tight">$220.00</span>
-          </div>
-        </div>
-
-        <div className="sq-card mt-4 p-5">
-          <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mb-3">Next Steps</div>
-          <ol className="space-y-3">
-            {[
-              "Pay $220.00 with your card at the next screen.",
-              "Receive your itemised receipt by email.",
-              "Submit your claim via the Medicare app and your health fund app.",
-              "Rebate of approximately $160.00 paid to your nominated bank account.",
-            ].map((s, i) => (
-              <li key={i} className="flex gap-3 text-[13px] text-[var(--sq-ink-2)]">
-                <span className="flex-none w-5 h-5 rounded-full bg-[var(--sq-ink)] text-white text-[11px] font-semibold flex items-center justify-center">{i + 1}</span>
-                <span className="leading-snug">{s}</span>
-              </li>
-            ))}
-          </ol>
-        </div>
-        <div className="h-6" />
+      <div className="px-7 pt-6">
+        <div className="text-[14px] text-[var(--sq-muted)]">Full amount due today</div>
+        <div className="mt-1 text-[56px] leading-none font-semibold tracking-tight">$220<span className="text-[28px] text-[var(--sq-muted)] align-top">.00</span></div>
+        <p className="sq-sub mt-3">Pay upfront and claim ~$160.00 back from Medicare and your health fund.</p>
       </div>
 
-      <div className="px-6 pb-3 pt-3 border-t border-[var(--sq-line)] bg-white flex gap-2">
-        <button onClick={onBack} className="sq-btn sq-btn-secondary">Back</button>
+      <div className="px-6 mt-8">
+        <div className="sq-card p-5 space-y-3.5">
+          <div className="flex items-center justify-between pb-1">
+            <span className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">Claim Summary</span>
+            <span className="text-[11px] font-mono text-[var(--sq-muted)]">GN 1234567X</span>
+          </div>
+          <div className="sq-divider" />
+          <div className="sq-row">
+            <div>
+              <div className="text-[13px]">Item 23 — Level B consult</div>
+              <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">Dr. Laura Leopard</div>
+            </div>
+            <span className="text-[15px] font-medium">$220.00</span>
+          </div>
+          <Line label="Medicare (claim later)" value="$39.10" muted />
+          <Line label="Health fund (claim later)" value="$120.90" muted />
+          <div className="sq-divider" />
+          <div className="sq-row">
+            <span className="text-[15px] font-semibold">You Pay Today</span>
+            <span className="text-[17px] font-semibold">$220.00</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex-1" />
+      <div className="px-6 pb-8 pt-6 space-y-2">
         <button onClick={onContinue} className="sq-btn sq-btn-primary">Pay $220.00</button>
+        <button onClick={onBack} className="sq-btn sq-btn-ghost">Back</button>
       </div>
     </>
   );
