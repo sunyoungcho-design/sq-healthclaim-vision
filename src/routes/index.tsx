@@ -44,6 +44,7 @@ function Index() {
   const [step, setStep] = useState<Step>("scan");
   const [amount, setAmount] = useState<number>(60);
   const [printed, setPrinted] = useState(false);
+  const [cardCursor, setCardCursor] = useState(false);
   const [patient, setPatient] = useState<Patient>(PATIENTS[0]);
   const [lineItems, setLineItems] = useState<LineItem[]>([
     { item: ITEM_CATALOG[4], charge: ITEM_CATALOG[4].defaultCharge },
