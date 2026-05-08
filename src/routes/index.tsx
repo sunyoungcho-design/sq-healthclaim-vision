@@ -285,7 +285,7 @@ function Line({ label, value, muted }: { label: string; value: string; muted?: b
 /* ---------------- 5. TAP TO PAY ---------------- */
 function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; onBack: () => void }) {
   useEffect(() => {
-    const t = setTimeout(onPaid, 30000);
+    const t = setTimeout(onPaid, 3200);
     return () => clearTimeout(t);
   }, [onPaid]);
 
