@@ -269,18 +269,35 @@ function Verify({ onDone }: { onDone: () => void }) {
 
 /* ---------------- 2b. CLAIM FORM ---------------- */
 function ClaimForm({
-  patient, setPatient, item, setItem, charge, setCharge, onBack, onSubmit,
+  patient, setPatient, lineItems, setLineItems, onBack, onSubmit,
 }: {
   patient: Patient;
   setPatient: (p: Patient) => void;
-  item: ClaimItem;
-  setItem: (i: ClaimItem) => void;
-  charge: number;
-  setCharge: (n: number) => void;
+  lineItems: LineItem[];
+  setLineItems: (li: LineItem[]) => void;
   onBack: () => void;
   onSubmit: () => void;
 }) {
-  const valid = charge > 0;
+  const valid = lineItems.length > 0 && lineItems.every((li) => li.charge > 0);
+
+  const updateItem = (idx: number, code: string) => {
+    const next = ITEM_CATALOG.find((i) => i.code === code);
+    if (!next) return;
+    setLineItems(lineItems.map((li, i) => i === idx ? { item: next, charge: next.defaultCharge } : li));
+  };
+  const updateCharge = (idx: number, charge: number) => {
+    setLineItems(lineItems.map((li, i) => i === idx ? { ...li, charge } : li));
+  };
+  const removeLine = (idx: number) => {
+    setLineItems(lineItems.filter((_, i) => i !== idx));
+  };
+  const addLine = () => {
+    // Pick the first item not yet added, falling back to the first in catalog
+    const used = new Set(lineItems.map((li) => li.item.code));
+    const next = ITEM_CATALOG.find((i) => !used.has(i.code)) ?? ITEM_CATALOG[0];
+    setLineItems([...lineItems, { item: next, charge: next.defaultCharge }]);
+  };
+
   return (
     <>
       <TopBar onBack={onBack} title="New Claim" />
@@ -307,37 +324,56 @@ function ClaimForm({
           })}
         </div>
 
-        <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mt-5 mb-2">Service item</div>
-        <div className="sq-card relative">
-          <select
-            value={item.code}
-            onChange={(e) => {
-              const next = ITEM_CATALOG.find((i) => i.code === e.target.value);
-              if (next) setItem(next);
-            }}
-            className="w-full bg-transparent appearance-none pl-4 pr-10 py-3 text-[14px] font-medium focus:outline-none cursor-pointer"
-          >
-            {ITEM_CATALOG.map((i) => (
-              <option key={i.code} value={i.code}>{i.code} — {i.description}</option>
-            ))}
-          </select>
-          <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--sq-muted)]" strokeWidth={2.25} />
-        </div>
+        {lineItems.map((li, idx) => (
+          <div key={idx}>
+            <div className="flex items-center justify-between mt-5 mb-2">
+              <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">
+                {lineItems.length > 1 ? `Service ${idx + 1}` : "Service item"}
+              </div>
+              {lineItems.length > 1 && (
+                <button
+                  onClick={() => removeLine(idx)}
+                  className="text-[11px] font-semibold text-[var(--sq-muted)] hover:text-[var(--sq-ink)] transition"
+                >
+                  Remove
+                </button>
+              )}
+            </div>
+            <div className="sq-card relative">
+              <select
+                value={li.item.code}
+                onChange={(e) => updateItem(idx, e.target.value)}
+                className="w-full bg-transparent appearance-none pl-4 pr-10 py-3 text-[14px] font-medium focus:outline-none cursor-pointer"
+              >
+                {ITEM_CATALOG.map((i) => (
+                  <option key={i.code} value={i.code}>{i.code} — {i.description}</option>
+                ))}
+              </select>
+              <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--sq-muted)]" strokeWidth={2.25} />
+            </div>
 
-        <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mt-5 mb-2">Charge</div>
-        <div className="sq-card p-3 flex items-center">
-          <span className="text-[24px] font-semibold tracking-tight text-[var(--sq-muted)] mr-1">$</span>
-          <input
-            type="number"
-            inputMode="decimal"
-            min={0}
-            step="0.01"
-            value={Number.isFinite(charge) ? charge : 0}
-            onChange={(e) => setCharge(parseFloat(e.target.value) || 0)}
-            className="flex-1 bg-transparent text-[24px] font-semibold tracking-tight focus:outline-none"
-          />
-        </div>
-        <div className="text-[11px] text-[var(--sq-muted)] mt-1.5 px-1">Enter the gross fee for this item.</div>
+            <div className="sq-card p-3 mt-2 flex items-center">
+              <span className="text-[24px] font-semibold tracking-tight text-[var(--sq-muted)] mr-1">$</span>
+              <input
+                type="number"
+                inputMode="decimal"
+                min={0}
+                step="0.01"
+                value={Number.isFinite(li.charge) ? li.charge : 0}
+                onChange={(e) => updateCharge(idx, parseFloat(e.target.value) || 0)}
+                className="flex-1 bg-transparent text-[24px] font-semibold tracking-tight focus:outline-none"
+              />
+            </div>
+          </div>
+        ))}
+
+        <button
+          onClick={addLine}
+          className="mt-3 w-full flex items-center justify-center gap-1.5 py-3 rounded-lg border border-dashed border-[var(--sq-line)] text-[13px] font-semibold text-[var(--sq-ink)] hover:bg-[var(--sq-surface)] transition"
+        >
+          <Plus className="w-4 h-4" strokeWidth={2.25} />
+          Add another service
+        </button>
 
         <div className="h-4" />
       </div>
