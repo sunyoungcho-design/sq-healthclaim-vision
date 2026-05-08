@@ -649,13 +649,14 @@ function Line({ label, value, muted }: { label: string; value: string; muted?: b
 
 /* ---------------- 5. TAP TO PAY ---------------- */
 function Tap({ amount, onPaid, onBack }: { amount: number; onPaid: () => void; onBack: () => void }) {
-  useEffect(() => {
-    const t = setTimeout(onPaid, 3200);
-    return () => clearTimeout(t);
-  }, [onPaid]);
-
   return (
-    <div className="absolute inset-0 bg-[#006AFF] text-white flex flex-col">
+    <div
+      onClick={onPaid}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") onPaid(); }}
+      className="absolute inset-0 bg-[#006AFF] text-white flex flex-col cursor-pointer"
+    >
       <div className="px-5 pt-4 flex items-center justify-between text-white">
         <button
           onClick={onBack}
