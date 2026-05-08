@@ -46,10 +46,10 @@ function Index() {
   const [amount, setAmount] = useState<number>(60);
   const [printed, setPrinted] = useState(false);
   const [cardCursor, setCardCursor] = useState(false);
-  const [patient, setPatient] = useState<Patient>(PATIENTS[0]);
-  const [lineItems, setLineItems] = useState<LineItem[]>([
-    { item: ITEM_CATALOG[4], charge: ITEM_CATALOG[4].defaultCharge },
-  ]);
+  const [selectedPatients, setSelectedPatients] = useState<Patient[]>([PATIENTS[0]]);
+  const [claimsByIrn, setClaimsByIrn] = useState<Record<string, LineItem[]>>({
+    [PATIENTS[0].irn]: [{ item: ITEM_CATALOG[4], charge: ITEM_CATALOG[4].defaultCharge }],
+  });
 
   // Preload the contactless icon and medicare card so they're cached before use
   useEffect(() => {
@@ -61,8 +61,9 @@ function Index() {
 
   const reset = () => { setAmount(60); setStep("scan"); setPrinted(false); };
 
-  // Compute benefits/gap from total charge (simple model for prototype)
-  const totalCharge = +lineItems.reduce((s, li) => s + (li.charge || 0), 0).toFixed(2);
+  // Compute benefits/gap from total charge across all patients (simple model)
+  const allLineItems: LineItem[] = selectedPatients.flatMap((p) => claimsByIrn[p.irn] ?? []);
+  const totalCharge = +allLineItems.reduce((s, li) => s + (li.charge || 0), 0).toFixed(2);
   const medicareBenefit = +(totalCharge * 0.18).toFixed(2);
   const fundRebate = +(totalCharge * 0.55).toFixed(2);
   const gap = Math.max(0, +(totalCharge - medicareBenefit - fundRebate).toFixed(2));
