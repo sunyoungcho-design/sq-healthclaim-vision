@@ -6,6 +6,7 @@ import nibLogo from "@/assets/insurers/nib.png";
 import medibankLogo from "@/assets/insurers/medibank.png";
 import hcfLogo from "@/assets/insurers/hcf.avif";
 import healthpointLogo from "@/assets/insurers/healthpoint.png";
+import contactlessIcon from "@/assets/contactless.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
