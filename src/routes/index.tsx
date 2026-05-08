@@ -480,7 +480,7 @@ function Done({ amount, selfClaim, onDone }: { amount: number; selfClaim: boolea
         <div className="sq-check">
           <Check className="w-10 h-10" strokeWidth={2.5} />
         </div>
-        <h2 className="mt-7 text-[26px] font-semibold tracking-tight">Payment Complete</h2>
+        <h2 className="mt-7 text-[26px] font-semibold tracking-tight">Printed!</h2>
         {selfClaim && (
           <p className="sq-sub mt-2">Submit your receipt to Medicare and your fund to claim back.</p>
         )}
