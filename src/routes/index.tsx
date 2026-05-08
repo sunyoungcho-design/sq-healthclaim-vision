@@ -89,7 +89,6 @@ function Scan({ onNext }: { onNext: () => void }) {
             </div>
             <div className="flex justify-between items-end relative z-10">
               <div className="text-[9px] font-medium tracking-wider text-[var(--sq-ink-2)]">MEMBER</div>
-              <div className="text-[9px] font-mono text-[var(--sq-muted)]">•••• 4821</div>
             </div>
           </div>
         </div>
