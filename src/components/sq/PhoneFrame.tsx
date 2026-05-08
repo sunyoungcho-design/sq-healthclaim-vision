@@ -15,7 +15,7 @@ export function PhoneFrame({ children, sideContent }: { children: ReactNode; sid
         }}
       >
         <div
-          className="absolute overflow-hidden bg-white"
+          className="absolute overflow-hidden bg-[#0f0f12]"
           style={{
             left: "14.23%",
             right: "16.73%",
