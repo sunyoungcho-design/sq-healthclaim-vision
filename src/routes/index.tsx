@@ -277,7 +277,7 @@ function Scan({ onNext, cardCursor }: { onNext: () => void; cardCursor?: boolean
 
       {cardCursor && pos && (
         <div
-          className="pointer-events-none absolute z-50 w-[88%]"
+          className="pointer-events-none absolute z-50 w-[60%]"
           style={{ left: pos.x, top: pos.y, transform: "translate(-50%, -50%) rotate(-8deg)" }}
         >
           <img
