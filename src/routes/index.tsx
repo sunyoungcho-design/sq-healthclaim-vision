@@ -310,7 +310,7 @@ function ClaimForm({
               <button
                 key={p.name}
                 onClick={() => setPatient(p)}
-                className={`w-full flex items-center justify-between px-3 py-2.5 transition text-left ${active ? "bg-[var(--sq-surface)] rounded border-0" : "rounded-md border border-transparent hover:bg-[var(--sq-surface)]"}`}
+                className={`w-full flex items-center justify-between px-3 py-2.5 transition text-left ${active ? "bg-[var(--sq-surface)] border-0 rounded" : "rounded-md border border-transparent hover:bg-[var(--sq-surface)]"}`}
               >
                 <div>
                   <div className="text-[14px] font-medium">{p.name}</div>
