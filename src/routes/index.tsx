@@ -188,10 +188,18 @@ function Verify({ onDone }: { onDone: () => void }) {
 
 /* ---------------- 3. SUMMARY ---------------- */
 function Summary({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const gapRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const t = setTimeout(() => {
+      gapRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 250);
+    return () => clearTimeout(t);
+  }, []);
   return (
     <>
       <TopBar onBack={onBack} title="Statement of Claim" />
-      <div className="flex-1 min-h-0 overflow-y-auto px-6 pt-2 pb-2">
+      <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto px-6 pt-2 pb-2">
         <div className="sq-card p-5">
           <div className="flex items-start justify-between">
             <div>
@@ -239,7 +247,7 @@ function Summary({ onNext, onBack }: { onNext: () => void; onBack: () => void })
             <Line label="Private Health Rebate" value="−$120.90" muted />
           </div>
           <div className="sq-divider my-4" />
-          <div className="rounded-lg bg-[var(--sq-surface)] p-4 flex items-center justify-between">
+          <div ref={gapRef} className="rounded-lg bg-[var(--sq-surface)] p-4 flex items-center justify-between">
             <div className="flex flex-col">
               <span className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)]">Gap Amount</span>
               <span className="text-[13px] font-medium text-[var(--sq-ink-2)] mt-1">Patient contribution</span>
