@@ -337,6 +337,8 @@ function ClaimForm({
   onBack: () => void;
   onSubmit: () => void;
 }) {
+  const [claimStep, setClaimStep] = useState<'patients' | 'items'>('patients');
+
   const valid =
     selectedPatients.length > 0 &&
     selectedPatients.every((p) => {
@@ -396,37 +398,41 @@ function ClaimForm({
   return (
     <>
       <TopBar
-        onBack={onBack}
+        onBack={claimStep === 'patients' ? onBack : () => setClaimStep('patients')}
         title="New Claim"
         subtitle={formTotal > 0 ? `Total $${formTotal.toFixed(2)}` : undefined}
       />
       <div className="flex-1 min-h-0 overflow-y-auto px-6 pt-2 pb-3">
-        <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mb-2">Patients on card</div>
-        <div className="sq-card p-2 space-y-1">
-          {PATIENTS.map((p) => {
-            const active = selectedPatients.some((s) => s.irn === p.irn);
-            return (
-              <button
-                key={p.name}
-                onClick={() => togglePatient(p)}
-                className={`w-full flex items-center justify-between px-3 py-2.5 transition text-left ${active ? "bg-[var(--sq-surface)] border-0 rounded" : "rounded-md border border-transparent hover:bg-[var(--sq-surface)]"}`}
-              >
-                <div>
-                  <div className="text-[14px] font-medium">{p.name}</div>
-                  <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">{p.relation} · IRN {p.irn} · DOB {p.dob}</div>
-                </div>
-                <div className={`w-5 h-5 rounded border flex items-center justify-center ${active ? "bg-[var(--sq-ink)] border-[var(--sq-ink)]" : "border-[var(--sq-line)]"}`}>
-                  {active && <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
-                </div>
-              </button>
-            );
-          })}
-        </div>
+        {claimStep === 'patients' && (
+          <>
+            <div className="text-[11px] font-semibold tracking-widest uppercase text-[var(--sq-muted)] mb-2">Patients on card</div>
+            <div className="sq-card p-2 space-y-1">
+              {PATIENTS.map((p) => {
+                const active = selectedPatients.some((s) => s.irn === p.irn);
+                return (
+                  <button
+                    key={p.name}
+                    onClick={() => togglePatient(p)}
+                    className={`w-full flex items-center justify-between px-3 py-2.5 transition text-left ${active ? "bg-[var(--sq-surface)] border-0 rounded" : "rounded-md border border-transparent hover:bg-[var(--sq-surface)]"}`}
+                  >
+                    <div>
+                      <div className="text-[14px] font-medium">{p.name}</div>
+                      <div className="text-[11px] text-[var(--sq-muted)] mt-0.5">{p.relation} · IRN {p.irn} · DOB {p.dob}</div>
+                    </div>
+                    <div className={`w-5 h-5 rounded border flex items-center justify-center ${active ? "bg-[var(--sq-ink)] border-[var(--sq-ink)]" : "border-[var(--sq-line)]"}`}>
+                      {active && <Check className="w-3.5 h-3.5 text-white" strokeWidth={3} />}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </>
+        )}
 
-        {selectedPatients.map((p) => {
+        {claimStep === 'items' && selectedPatients.map((p) => {
           const items = claimsByIrn[p.irn] ?? [];
           return (
-            <div key={p.irn} className="mt-6">
+            <div key={p.irn} className={p.irn === selectedPatients[0].irn ? "" : "mt-6"}>
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-7 h-7 rounded-full bg-[var(--sq-line)] text-[var(--sq-ink)] flex items-center justify-center text-[12px] font-medium">
                   {p.name.trim().charAt(0).toUpperCase()}
@@ -492,10 +498,24 @@ function ClaimForm({
         <div className="h-4" />
       </div>
 
-      <div className="px-5 pb-6 pt-4 border-t border-[var(--sq-line)] bg-white flex gap-3">
-        <button onClick={onBack} className="sq-btn sq-btn-secondary">Cancel</button>
-        <button onClick={onSubmit} disabled={!valid} className="sq-btn sq-btn-primary disabled:opacity-50">Submit claim</button>
-      </div>
+      {claimStep === 'patients' && (
+        <div className="px-5 pb-6 pt-4 border-t border-[var(--sq-line)] bg-white">
+          <button
+            onClick={() => setClaimStep('items')}
+            disabled={selectedPatients.length === 0}
+            className="sq-btn sq-btn-primary disabled:opacity-50 text-[15px]"
+          >
+            Continue
+          </button>
+        </div>
+      )}
+
+      {claimStep === 'items' && (
+        <div className="px-5 pb-6 pt-4 border-t border-[var(--sq-line)] bg-white flex gap-3">
+          <button onClick={onBack} className="sq-btn sq-btn-secondary text-[15px]">Cancel</button>
+          <button onClick={onSubmit} disabled={!valid} className="sq-btn sq-btn-primary disabled:opacity-50 text-[15px]">Submit claim</button>
+        </div>
+      )}
 
       {picker && (
         <div className="absolute inset-0 z-20 flex items-end">
@@ -506,7 +526,7 @@ function ClaimForm({
             aria-label="Close"
           />
           <div
-            className="relative w-full bg-white rounded-t-2xl shadow-2xl flex flex-col max-h-[80%]"
+            className="relative w-full bg-white rounded-t-2xl shadow-2xl flex flex-col max-h-[92%]"
             style={{ animation: "sq-sheet-up .25s ease-out" }}
           >
             <div className="mx-auto mt-2 mb-1 h-1 w-10 rounded-full bg-[var(--sq-line)]" />
