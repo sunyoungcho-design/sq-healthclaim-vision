@@ -451,19 +451,16 @@ function ClaimForm({
                       </button>
                     )}
                   </div>
-                  <div className="sq-card relative">
-                    <select
-                      value={li.item.code}
-                      onChange={(e) => updateItem(p.irn, idx, e.target.value)}
-                      className="w-full bg-transparent appearance-none pl-4 pr-10 py-3 text-[14px] font-medium focus:outline-none cursor-pointer"
-                    >
-                      <option value="" disabled>Select service item</option>
-                      {ITEM_CATALOG.map((i) => (
-                        <option key={i.code} value={i.code}>{i.code} — {i.description}</option>
-                      ))}
-                    </select>
+                  <button
+                    type="button"
+                    onClick={() => setPicker({ irn: p.irn, idx, currentCode: li.item.code })}
+                    className="sq-card relative w-full flex items-center pl-4 pr-10 py-3 text-left text-[14px] font-medium cursor-pointer hover:bg-[var(--sq-surface)] transition"
+                  >
+                    <span className={li.item.code ? "" : "text-[var(--sq-muted)]"}>
+                      {li.item.code ? `${li.item.code} — ${li.item.description}` : "Select service item"}
+                    </span>
                     <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--sq-muted)]" strokeWidth={2.25} />
-                  </div>
+                  </button>
 
                   <div className="sq-card p-3 mt-2 flex items-center">
                     <span className="text-[24px] font-semibold tracking-tight text-[var(--sq-muted)] mr-1">$</span>
