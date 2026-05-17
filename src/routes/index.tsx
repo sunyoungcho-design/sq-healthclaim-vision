@@ -337,6 +337,8 @@ function ClaimForm({
   onBack: () => void;
   onSubmit: () => void;
 }) {
+  const [claimStep, setClaimStep] = useState<'patients' | 'items'>('patients');
+
   const valid =
     selectedPatients.length > 0 &&
     selectedPatients.every((p) => {
