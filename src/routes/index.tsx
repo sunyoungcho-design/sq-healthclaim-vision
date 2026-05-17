@@ -197,7 +197,7 @@ function Scan({ onNext, cardCursor }: { onNext: () => void; cardCursor?: boolean
     >
       <TopBar />
       <div className="px-6 pt-2 text-center">
-        <h1 className="sq-h1">Check your cover</h1>
+        <h1 className="sq-h1">Check patient cover</h1>
         <h1 className="sq-h1">Insert, swipe or tap</h1>
         <h1 className="sq-h1">health card</h1>
       </div>
