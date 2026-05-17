@@ -526,7 +526,7 @@ function ClaimForm({
             aria-label="Close"
           />
           <div
-            className="relative w-full bg-white rounded-t-2xl shadow-2xl flex flex-col max-h-[80%]"
+            className="relative w-full bg-white rounded-t-2xl shadow-2xl flex flex-col max-h-[92%]"
             style={{ animation: "sq-sheet-up .25s ease-out" }}
           >
             <div className="mx-auto mt-2 mb-1 h-1 w-10 rounded-full bg-[var(--sq-line)]" />
