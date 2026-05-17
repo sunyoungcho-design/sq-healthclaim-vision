@@ -391,6 +391,8 @@ function ClaimForm({
     .flatMap((p) => claimsByIrn[p.irn] ?? [])
     .reduce((s, li) => s + (li.charge || 0), 0);
 
+  const [picker, setPicker] = useState<{ irn: string; idx: number; currentCode: string } | null>(null);
+
   return (
     <>
       <TopBar
@@ -449,19 +451,16 @@ function ClaimForm({
                       </button>
                     )}
                   </div>
-                  <div className="sq-card relative">
-                    <select
-                      value={li.item.code}
-                      onChange={(e) => updateItem(p.irn, idx, e.target.value)}
-                      className="w-full bg-transparent appearance-none pl-4 pr-10 py-3 text-[14px] font-medium focus:outline-none cursor-pointer"
-                    >
-                      <option value="" disabled>Select service item</option>
-                      {ITEM_CATALOG.map((i) => (
-                        <option key={i.code} value={i.code}>{i.code} — {i.description}</option>
-                      ))}
-                    </select>
+                  <button
+                    type="button"
+                    onClick={() => setPicker({ irn: p.irn, idx, currentCode: li.item.code })}
+                    className="sq-card relative w-full flex items-center pl-4 pr-10 py-3 text-left text-[14px] font-medium cursor-pointer hover:bg-[var(--sq-surface)] transition"
+                  >
+                    <span className={li.item.code ? "" : "text-[var(--sq-muted)]"}>
+                      {li.item.code ? `${li.item.code} — ${li.item.description}` : "Select service item"}
+                    </span>
                     <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[var(--sq-muted)]" strokeWidth={2.25} />
-                  </div>
+                  </button>
 
                   <div className="sq-card p-3 mt-2 flex items-center">
                     <span className="text-[24px] font-semibold tracking-tight text-[var(--sq-muted)] mr-1">$</span>
@@ -493,10 +492,56 @@ function ClaimForm({
         <div className="h-4" />
       </div>
 
-      <div className="px-6 pb-3 pt-3 border-t border-[var(--sq-line)] bg-white flex gap-2">
+      <div className="px-5 pb-6 pt-4 border-t border-[var(--sq-line)] bg-white flex gap-3">
         <button onClick={onBack} className="sq-btn sq-btn-secondary">Cancel</button>
         <button onClick={onSubmit} disabled={!valid} className="sq-btn sq-btn-primary disabled:opacity-50">Submit claim</button>
       </div>
+
+      {picker && (
+        <div className="absolute inset-0 z-20 flex items-end">
+          <button
+            type="button"
+            onClick={() => setPicker(null)}
+            className="absolute inset-0 bg-black/40 sq-fadein"
+            aria-label="Close"
+          />
+          <div
+            className="relative w-full bg-white rounded-t-2xl shadow-2xl flex flex-col max-h-[80%]"
+            style={{ animation: "sq-sheet-up .25s ease-out" }}
+          >
+            <div className="mx-auto mt-2 mb-1 h-1 w-10 rounded-full bg-[var(--sq-line)]" />
+            <div className="flex items-center justify-between px-5 pt-2 pb-2">
+              <div className="text-[15px] font-semibold">Select service item</div>
+              <button
+                type="button"
+                onClick={() => setPicker(null)}
+                className="text-[13px] font-semibold text-[var(--sq-muted)] hover:text-[var(--sq-ink)]"
+              >
+                Cancel
+              </button>
+            </div>
+            <div className="overflow-y-auto pb-3">
+              {ITEM_CATALOG.map((i) => {
+                const active = i.code === picker.currentCode;
+                return (
+                  <button
+                    key={i.code}
+                    type="button"
+                    onClick={() => {
+                      updateItem(picker.irn, picker.idx, i.code);
+                      setPicker(null);
+                    }}
+                    className={`w-full flex items-center justify-between px-5 py-3.5 text-left text-[15px] transition ${active ? "bg-[var(--sq-surface)] font-semibold" : "hover:bg-[var(--sq-surface)]"}`}
+                  >
+                    <span><span className="text-[var(--sq-muted)] mr-2">{i.code}</span>{i.description}</span>
+                    {active && <Check className="w-4 h-4 text-[var(--sq-ink)]" strokeWidth={2.5} />}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
