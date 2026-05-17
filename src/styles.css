@@ -236,4 +236,8 @@
     20%  { opacity: 0.8; }
     100% { transform: scale(1.45); opacity: 0; }
   }
+  @keyframes sq-sheet-up {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
 }
