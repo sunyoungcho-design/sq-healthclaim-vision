@@ -391,6 +391,8 @@ function ClaimForm({
     .flatMap((p) => claimsByIrn[p.irn] ?? [])
     .reduce((s, li) => s + (li.charge || 0), 0);
 
+  const [picker, setPicker] = useState<{ irn: string; idx: number; currentCode: string } | null>(null);
+
   return (
     <>
       <TopBar
