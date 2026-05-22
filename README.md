@@ -1,4 +1,4 @@
-# Square Health Claim Vision
+# Health Claim Vision
 
 AI-assisted operational tooling prototype exploring healthcare claims workflows, onboarding systems, transaction states, and payment infrastructure experiences.
 
