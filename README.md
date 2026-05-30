@@ -19,3 +19,11 @@ AI-assisted operational tooling prototype exploring healthcare claims workflows,
 
 ## Overview
 This prototype explores how complex healthcare payment and claims workflows can be transformed into clearer operational experiences for clinics and staff managing claims processing systems.
+
+# Health Claims Vision
+
+Live Demo:
+https://sq-healthclaim-vision.lovable.app
+
+GitHub Repository:
+https://github.com/sunyoungcho-design/sq-healthclaim-vision
